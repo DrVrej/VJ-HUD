@@ -1,0 +1,12 @@
+UnlitGeneric
+{
+	$basetexture	"crosshair/vj_crosshair9"
+	$translucent	1
+	"$vertexcolor" 		1
+	$distancealpha	1
+
+	$softedges		1
+	$edgesoftnessstart	0.9
+	$edgesoftnessend	1
+	$scaleedgesoftnessbasedonscreenres 1
+}
