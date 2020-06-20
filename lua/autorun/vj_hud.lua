@@ -33,7 +33,11 @@ if (SERVER) then
 				local npc_hm = (ent.VJ_IsHugeMonster == true and "1") or "0"
 				local npc_guard = (ent.IsGuard == true and "1") or "0"
 				local npc_medic = (ent.IsMedicSNPC == true and "1") or "0"
-				pl:SetNWString("vj_hud_tr_npc_info", npc_hm..ent:Disposition(pl)..npc_guard..npc_medic)
+				local npc_controlled = (ent.VJ_IsBeingControlled == true and "1") or "0"
+				local npc_followingply = (ent.FollowingPlayer == true and "1") or "0"
+				local npc_followingplyn = (ent.FollowingPlayer == true and ent.FollowPlayer_Entity:Nick()) or "Unknown"
+				if npc_followingplyn == pl:Nick() then npc_followingplyn = "You" end
+				pl:SetNWString("vj_hud_tr_npc_info", npc_hm..ent:Disposition(pl)..npc_guard..npc_medic..npc_controlled..npc_followingply..npc_followingplyn)
 			end
 		end
 	end)
@@ -72,12 +76,14 @@ local mat_car = Material("vj_hud/car.png")
 local mat_boss = Material("vj_hud/boss.png")
 local mat_guarding = Material("vj_hud/guarding.png")
 local mat_medic = Material("vj_hud/medic.png")
+local mat_controller = Material("vj_hud/controller.png")
+local mat_following = Material("vj_hud/following.png")
 
 -- Networked Values
 LocalPlayer():SetNWBool("vj_hud_godmode", false)
 LocalPlayer():SetNWInt("vj_hud_trhealth", 0)
 LocalPlayer():SetNWInt("vj_hud_trmaxhealth", 0)
-LocalPlayer():SetNWString("vj_hud_tr_npc_info", "00") -- IsHugeMonster | Disposition
+LocalPlayer():SetNWString("vj_hud_tr_npc_info", "00") -- IsHugeMonster | Disposition | IsGuard | IsMedic | Controlled | Following Player | The Player its following
 
 -- As function-en mechi abranknere 24 jam ge vazen
 local hud_enabled = GetConVarNumber("vj_hud_enabled")
@@ -584,7 +590,9 @@ hook.Add("HUDPaint", "vj_hud_traceinfo", function()
 				-- Guarding
 				if string.sub(npc_info, 3, 3) == "1" then
 					surface.SetMaterial(mat_guarding)
-					surface.SetDrawColor(npc_disp_color)
+					surface.SetDrawColor(color(50, 50, 50, 150))
+					surface.DrawTexturedRect(pos.x + npc_spacing - 2, pos.y + 55 - 2, 26, 26)
+					surface.SetDrawColor(color(102, 178, 255, 255))
 					surface.DrawTexturedRect(pos.x + npc_spacing, pos.y + 55, 22, 22)
 					npc_spacing = npc_spacing + 32
 				end
@@ -592,9 +600,31 @@ hook.Add("HUDPaint", "vj_hud_traceinfo", function()
 				-- Medic
 				if string.sub(npc_info, 4, 4) == "1" then
 					surface.SetMaterial(mat_medic)
-					surface.SetDrawColor(color(200, 255, 0, 255))
+					surface.SetDrawColor(color(50, 50, 50, 150))
+					surface.DrawTexturedRect(pos.x + npc_spacing - 2, pos.y + 55 - 2, 26, 26)
+					surface.SetDrawColor(color(200, 255, 153, 255))
 					surface.DrawTexturedRect(pos.x + npc_spacing, pos.y + 55, 22, 22)
 					npc_spacing = npc_spacing + 32
+				end
+				
+				-- Controlled
+				if string.sub(npc_info, 5, 5) == "1" then
+					surface.SetMaterial(mat_controller)
+					surface.SetDrawColor(color(50, 50, 50, 150))
+					surface.DrawTexturedRect(pos.x + npc_spacing - 2, pos.y + 55 - 2, 26, 26)
+					surface.SetDrawColor(color(255, 213, 0, 255))
+					surface.DrawTexturedRect(pos.x + npc_spacing, pos.y + 55, 22, 22)
+					npc_spacing = npc_spacing + 32
+				end
+				
+				-- Following Player
+				if string.sub(npc_info, 6, 6) == "1" then
+					surface.SetMaterial(mat_following)
+					surface.SetDrawColor(color(50, 50, 50, 150))
+					surface.DrawTexturedRect(pos.x - 2, pos.y + 68, 34, 34)
+					surface.SetDrawColor(color(221, 160, 221, 255))
+					surface.DrawTexturedRect(pos.x, pos.y + 70, 30, 30)
+					draw.SimpleText(string.sub(npc_info, 7, -1), "VJFont_Trebuchet24_SmallMedium", pos.x + 32, pos.y + 75, color(221, 160, 221, 255), 0, 0)
 				end
 			end
 			
