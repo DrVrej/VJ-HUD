@@ -566,7 +566,7 @@ hook.Add("HUDPaint", "vj_hud_traceinfo", function()
 					surface.DrawTexturedRect(pos.x - 30, pos.y + 27, 26, 26)
 				end
 				
-				local npc_spacing = 0
+				local npc_spacing = 0 -- How many spaces (left-right) should it move
 				-- Disposition
 				local npc_disp = tonumber(string.sub(npc_info, 2, 2))
 				local npc_disp_t = "Unknown"
