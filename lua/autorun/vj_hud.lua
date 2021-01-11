@@ -19,7 +19,7 @@ if (SERVER) then
 	util.AddNetworkString("vj_hud_godmode")
 	net.Receive("vj_hud_godmode", function(len, pl)
 		if IsValid(pl) then
-			pl:SetNWBool("vj_hud_godmode", pl:HasGodMode())
+			pl:SetNW2Bool("vj_hud_godmode", pl:HasGodMode())
 		end
 	end)
 	
@@ -27,8 +27,8 @@ if (SERVER) then
 	net.Receive("vj_hud_ent_info", function(len, pl)
 		local ent = net.ReadEntity()
 		if IsValid(pl) && IsValid(ent) then
-			pl:SetNWInt("vj_hud_trhealth", ent:Health())
-			pl:SetNWInt("vj_hud_trmaxhealth", ent:GetMaxHealth())
+			pl:SetNW2Int("vj_hud_trhealth", ent:Health())
+			pl:SetNW2Int("vj_hud_trmaxhealth", ent:GetMaxHealth())
 			if ent:IsNPC() then
 				local npc_hm = (ent.VJ_IsHugeMonster == true and "1") or "0"
 				local npc_guard = (ent.IsGuard == true and "1") or "0"
@@ -37,7 +37,7 @@ if (SERVER) then
 				local npc_followingply = (ent.FollowingPlayer == true and "1") or "0"
 				local npc_followingplyn = (ent.FollowingPlayer == true and ent.FollowPlayer_Entity:Nick()) or "Unknown"
 				if npc_followingplyn == pl:Nick() then npc_followingplyn = "You" end
-				pl:SetNWString("vj_hud_tr_npc_info", npc_hm..ent:Disposition(pl)..npc_guard..npc_medic..npc_controlled..npc_followingply..npc_followingplyn)
+				pl:SetNW2String("vj_hud_tr_npc_info", npc_hm..ent:Disposition(pl)..npc_guard..npc_medic..npc_controlled..npc_followingply..npc_followingplyn)
 			end
 		end
 	end)
@@ -80,10 +80,14 @@ local mat_controller = Material("vj_hud/controller.png")
 local mat_following = Material("vj_hud/following.png")
 
 -- Networked Values
-LocalPlayer():SetNWBool("vj_hud_godmode", false)
-LocalPlayer():SetNWInt("vj_hud_trhealth", 0)
-LocalPlayer():SetNWInt("vj_hud_trmaxhealth", 0)
-LocalPlayer():SetNWString("vj_hud_tr_npc_info", "00") -- IsHugeMonster | Disposition | IsGuard | IsMedic | Controlled | Following Player | The Player its following
+timer.Simple(0.1, function()
+	if IsValid(LocalPlayer()) then
+		LocalPlayer():SetNW2Bool("vj_hud_godmode", false)
+		LocalPlayer():SetNW2Int("vj_hud_trhealth", 0)
+		LocalPlayer():SetNW2Int("vj_hud_trmaxhealth", 0)
+		LocalPlayer():SetNW2String("vj_hud_tr_npc_info", "00") -- IsHugeMonster | Disposition | IsGuard | IsMedic | Controlled | Following Player | The Player its following
+	end
+end)
 
 -- As function-en mechi abranknere 24 jam ge vazen
 local hud_enabled = GetConVarNumber("vj_hud_enabled")
@@ -308,7 +312,7 @@ hook.Add("HUDPaint", "vj_hud_health", function()
 		lerp_armor = Lerp(5*FrameTime(), lerp_armor, ply:Armor())
 		net.Start("vj_hud_godmode")
 		net.SendToServer()
-		if ply:GetNWBool("vj_hud_godmode") == true then
+		if ply:GetNW2Bool("vj_hud_godmode") == true then
 			hp_r = 255
 			hp_g = 102
 			hp_b = 255
@@ -557,7 +561,7 @@ hook.Add("HUDPaint", "vj_hud_traceinfo", function()
 			draw.SimpleText(tostring(ent), "VJFont_Trebuchet24_Small", pos.x, pos.y + 10, color(255, 255, 255, 200), 0, 0)
 			
 			if ent:IsNPC() then -- NPC-ineroon hamar minag:
-				local npc_info = ply:GetNWString("vj_hud_tr_npc_info")
+				local npc_info = ply:GetNW2String("vj_hud_tr_npc_info")
 				
 				-- Boss Icon
 				if string.sub(npc_info, 1, 1) == "1" then
@@ -628,8 +632,8 @@ hook.Add("HUDPaint", "vj_hud_traceinfo", function()
 				end
 			end
 			
-			local ent_hp = ply:GetNWInt("vj_hud_trhealth")
-			local ent_hpm = ply:GetNWInt("vj_hud_trmaxhealth")
+			local ent_hp = ply:GetNW2Int("vj_hud_trhealth")
+			local ent_hpm = ply:GetNW2Int("vj_hud_trmaxhealth")
 			if !ent:IsWorld() && !ent:IsVehicle() && ent:Health() != 0 then
 				if lerp_trace_hp_entid != ent:EntIndex() then lerp_trace_hp = ent_hpm end
 				lerp_trace_hp_entid = ent:EntIndex()
