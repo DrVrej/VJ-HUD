@@ -15,7 +15,7 @@ Left = Negative
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------ SERVER ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-if (SERVER) then
+if SERVER then
 	util.AddNetworkString("vj_hud_godmode")
 	net.Receive("vj_hud_godmode", function(len, pl)
 		if IsValid(pl) then
@@ -391,13 +391,13 @@ hook.Add("HUDPaint", "vj_hud_localplayerinfo", function()
 	if GetConVarNumber("sv_Cheats") == 1 then
 	draw.SimpleText("Cheats: On","VJFont_Trebuchet24_Tiny", 160, ScrH()-124, color(255, 255, 255, 150), 0, 0) else
 	draw.SimpleText("Cheats: Off","VJFont_Trebuchet24_Tiny", 160, ScrH()-124, color(255, 255, 255, 150), 0, 0) end
-	if GetConVarNumber("ai_disabled") == 0 then
+	if GetConVar("ai_disabled"):GetInt() == 0 then
 	draw.SimpleText("NPC AI: On","VJFont_Trebuchet24_Tiny", 160, ScrH()-111, color(255, 255, 255, 150), 0, 0) else
 	draw.SimpleText("NPC AI: Off","VJFont_Trebuchet24_Tiny", 160, ScrH()-111, color(255, 255, 255, 150), 0, 0) end
-	if GetConVarNumber("ai_ignoreplayers") == 1 then
+	if GetConVar("ai_ignoreplayers"):GetInt() == 1 then
 	draw.SimpleText("IgnorePly: On","VJFont_Trebuchet24_Tiny", 160, ScrH()-98, color(255, 255, 255, 150), 0, 0) else
 	draw.SimpleText("IgnorePly: Off","VJFont_Trebuchet24_Tiny", 160, ScrH()-98, color(255, 255, 255, 150), 0, 0) end*/
-	/*if GetConVarNumber("ai_serverragdolls") == 1 then
+	/*if GetConVar("ai_serverragdolls"):GetInt() == 1 then
 	draw.SimpleText("Cropses: On","VJFont_Trebuchet24_Tiny", 160, ScrH()-90, color(255, 255, 255, 150), 0, 0) else
 	draw.SimpleText("Cropses: Off","VJFont_Trebuchet24_Tiny", 160, ScrH()-90, color(255, 255, 255, 150), 0, 0) end*/
 	//draw.SimpleText("Team: "..team.GetName( ply:Team() ),"VJFont_Trebuchet24_Tiny", 20, 842, color(255, 255, 255, 150), 0, 0)
