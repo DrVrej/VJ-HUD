@@ -7,10 +7,10 @@
 if (!file.Exists("autorun/vj_base_autorun.lua","LUA")) then return end
 /*----------------------------------------------------------
 	-- Screen Information --
-Down = Positive
-Up = Negative
-Right = Positive
-Left = Negative
+	Down = Positive
+	Up = Negative
+	Right = Positive
+	Left = Negative
 ----------------------------------------------------------*/
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------ SERVER ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -90,10 +90,11 @@ timer.Simple(0.1, function()
 end)
 
 -- As function-en mechi abranknere 24 jam ge vazen
-local hud_enabled = GetConVarNumber("vj_hud_enabled")
+local hud_enabled = false
+local hud_unitsystem = 0
 hook.Add("HUDPaint", "vj_hud_runvars", function()
-	hud_enabled = GetConVarNumber("vj_hud_enabled")
-	hud_unitsystem = GetConVarNumber("vj_hud_metric")
+	hud_enabled = GetConVar("vj_hud_enabled"):GetInt()
+	hud_unitsystem = GetConVar("vj_hud_metric"):GetInt()
 end)
 
 function VJ_ConvertToRealUnit(pos)
@@ -119,23 +120,23 @@ local GMOD_Crosshair = {
 	["CHudCrosshair"] = true
 }
 hook.Add("HUDShouldDraw", "vj_hud_hidegmod", function(name)
-	if GetConVarNumber("vj_hud_disablegmod") == 1 && GMOD_HUD[name] then return false end
-	if GetConVarNumber("vj_hud_disablegmodcross") == 1 && GMOD_Crosshair[name] then return false end
+	if GetConVar("vj_hud_disablegmod"):GetInt() == 1 && GMOD_HUD[name] then return false end
+	if GetConVar("vj_hud_disablegmodcross"):GetInt() == 1 && GMOD_Crosshair[name] then return false end
 end)
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------ Crosshair ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 hook.Add("HUDPaint", "vj_hud_crosshair", function()
 	local ply = LocalPlayer()
-	if !ply:Alive() or hud_enabled == 0 or GetConVarNumber("vj_hud_ch_enabled") == 0 then return end
-	if ply:InVehicle() && GetConVarNumber("vj_hud_ch_invehicle") == 0 then return end
+	if !ply:Alive() or hud_enabled == 0 or GetConVar("vj_hud_ch_enabled"):GetInt() == 0 then return end
+	if ply:InVehicle() && GetConVar("vj_hud_ch_invehicle"):GetInt() == 0 then return end
 	
-	local size = GetConVarNumber("vj_hud_ch_crosssize")
-	local garmir = GetConVarNumber("vj_hud_ch_r")
-	local ganach = GetConVarNumber("vj_hud_ch_g")
-	local gabouyd = GetConVarNumber("vj_hud_ch_b")
-	local opacity = GetConVarNumber("vj_hud_ch_opacity")
-	local mat = GetConVarNumber("vj_hud_ch_mat")
+	local size = GetConVar("vj_hud_ch_crosssize"):GetInt()
+	local garmir = GetConVar("vj_hud_ch_r"):GetInt()
+	local ganach = GetConVar("vj_hud_ch_g"):GetInt()
+	local gabouyd = GetConVar("vj_hud_ch_b"):GetInt()
+	local opacity = GetConVar("vj_hud_ch_opacity"):GetInt()
+	local mat = GetConVar("vj_hud_ch_mat"):GetInt()
 	
 	if mat == 0 then
 		surface.SetMaterial(mat_crossh1)
@@ -168,8 +169,8 @@ end)
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 hook.Add("HUDPaint", "vj_hud_ammo", function()
 	local ply = LocalPlayer()
-	if !ply:Alive() or hud_enabled == 0 or GetConVarNumber("vj_hud_ammo") == 0 then return end
-	if ply:InVehicle() && GetConVarNumber("vj_hud_ammo_invehicle") == 0 then return end
+	if !ply:Alive() or hud_enabled == 0 or GetConVar("vj_hud_ammo"):GetInt() == 0 then return end
+	if ply:InVehicle() && GetConVar("vj_hud_ammo_invehicle"):GetInt() == 0 then return end
 	
 	local curwep = ply:GetActiveWeapon()
 	if (!IsValid(curwep) or ply:GetActiveWeapon() == "Camera") then
@@ -296,7 +297,7 @@ local lerp_armor = 0
 
 hook.Add("HUDPaint", "vj_hud_health", function()
 	local ply = LocalPlayer()
-	if hud_enabled == 0 or GetConVarNumber("vj_hud_health") == 0 then return end
+	if hud_enabled == 0 or GetConVar("vj_hud_health"):GetInt() == 0 then return end
 	if !ply:Alive() then -- Meradz tsootsage
 		local deadhealth_blinka = math.abs(math.sin(CurTime() * 6) * 200)
 		local deadhealth_blinkb = math.abs(math.sin(CurTime() * 6) * 255)
@@ -380,7 +381,7 @@ local next_fps = 0
 
 hook.Add("HUDPaint", "vj_hud_localplayerinfo", function()
 	local ply = LocalPlayer()
-	if !ply:Alive() or hud_enabled == 0 or GetConVarNumber("vj_hud_playerinfo") == 0 then return end
+	if !ply:Alive() or hud_enabled == 0 or GetConVar("vj_hud_playerinfo"):GetInt() == 0 then return end
 	draw.RoundedBox(1, 260, ScrH()-130, 200, 95, color(0, 0, 0, 150))
 	//draw.RoundedBox( 8, ScrW()*0.01, ScrH()*0.01, 128, 46, color( 125, 125, 125, 125 ) )
 	//draw.RoundedBox( 8, ScrW()-1665, ScrH()-235, 185, 150, color( 0, 0, 0, 150 ) )
@@ -388,7 +389,7 @@ hook.Add("HUDPaint", "vj_hud_localplayerinfo", function()
 	/*if ply:IsAdmin() then
 	draw.SimpleText("Admin: Yes","VJFont_Trebuchet24_Tiny", 160, ScrH()-137, color(255, 255, 255, 150), 0, 0) else
 	draw.SimpleText("Admin: No","VJFont_Trebuchet24_Tiny", 160, ScrH()-137, color(255, 255, 255, 150), 0, 0) end
-	if GetConVarNumber("sv_Cheats") == 1 then
+	if GetConVar("sv_cheats"):GetInt() == 1 then
 	draw.SimpleText("Cheats: On","VJFont_Trebuchet24_Tiny", 160, ScrH()-124, color(255, 255, 255, 150), 0, 0) else
 	draw.SimpleText("Cheats: Off","VJFont_Trebuchet24_Tiny", 160, ScrH()-124, color(255, 255, 255, 150), 0, 0) end
 	if GetConVar("ai_disabled"):GetInt() == 0 then
@@ -485,7 +486,7 @@ end)
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 hook.Add("HUDPaint", "vj_hud_compass", function()
 	local ply = LocalPlayer()
-	if !ply:Alive() or hud_enabled == 0 or GetConVarNumber("vj_hud_compass") == 0 then return end
+	if !ply:Alive() or hud_enabled == 0 or GetConVar("vj_hud_compass"):GetInt() == 0 then return end
 	draw.RoundedBox(1, ScrW() / 2.015, 10, 60, 60, color(0, 0, 0, 150))
 	local ang = ply:GetAngles().y
 	local comp_dir = "Unknown!"
@@ -539,11 +540,11 @@ local lerp_trace_hp_entid = 0
 
 hook.Add("HUDPaint", "vj_hud_traceinfo", function()
 	local ply = LocalPlayer()
-	if !ply:Alive() or hud_enabled == 0 or GetConVarNumber("vj_hud_trace") == 0 then return end
+	if !ply:Alive() or hud_enabled == 0 or GetConVar("vj_hud_trace"):GetInt() == 0 then return end
 	local trace = util.TraceLine(util.GetPlayerTrace(ply))
 	if IsValid(trace.Entity) then
 		local ent = trace.Entity
-		if !ent:IsNPC() && !ent:IsPlayer() && GetConVarNumber("vj_hud_trace_limited") == 1 then return end -- Yete limited option terver e, mi sharnager
+		if !ent:IsNPC() && !ent:IsPlayer() && GetConVar("vj_hud_trace_limited"):GetInt() == 1 then return end -- Yete limited option terver e, mi sharnager
 		-- Don't trace the vehicle that the player is currently in
 		if IsValid(ply:GetVehicle()) then
 			if ent == ply:GetVehicle() then return end -- Yete oton trace-in abrankne, mi sharnager
@@ -704,7 +705,7 @@ local AbranknerVorKedne = {
 
 hook.Add("HUDPaint", "vj_hud_proximityscanner", function()
 	local ply = LocalPlayer()
-	if !ply:Alive() or hud_enabled == 0 or GetConVarNumber("vj_hud_scanner") == 0 then return end
+	if !ply:Alive() or hud_enabled == 0 or GetConVar("vj_hud_scanner"):GetInt() == 0 then return end
 	local kouyne_pes = math.abs(math.sin(CurTime() * 5) * 255)
 	for _, ent in pairs(ents.FindInSphere(ply:GetPos(), 320)) do
 		local v = AbranknerVorKedne[ent:GetClass()]
