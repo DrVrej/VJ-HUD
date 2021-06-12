@@ -12,7 +12,7 @@ local AutorunFile = "autorun/vj_hud_autorun.lua"
 -------------------------------------------------------
 local VJExists = file.Exists("lua/autorun/vj_base_autorun.lua","GAME")
 if VJExists == true then
-	include('autorun/vj_controls.lua')
+	include("autorun/vj_controls.lua")
 
 	if CLIENT then
 		-- Main Components
@@ -117,9 +117,34 @@ if VJExists == true then
 	VJ.AddAddonProperty(AddonName,AddonType)
 else
 	if CLIENT then
-		chat.AddText(Color(0,200,200),PublicAddonName,
-		Color(0,255,0)," was unable to install, you are missing ",
-		Color(255,100,0),"VJ Base!")
+		COLOR_0200200 = Color(0, 200, 200)
+		COLOR_02550 = Color(0,255,0)
+		COLOR_2551000 = Color(255,100,0)
+		COLOR_20000150 = Color(200,0,0,150)
+		COLOR_000150 = Color(0, 0, 0, 150)
+		COLOR_0255255150 = Color(0, 255, 255, 150)
+		COLOR_2551000150 = Color(255, 100, 0, 150)
+		COLOR_02550150 = Color(0, 255, 0, 150)
+		COLOR_255255255150 = Color(255, 255, 255, 150)
+		COLOR_255001 = Color(255, 0, 0, -1)
+		COLOR_025525540 = Color(0, 255, 255, 40)
+		COLOR_025525550 = Color(0,255,255,50)
+		COLOR_221160221255 = Color(221, 160, 221, 255)
+		COLOR_0255255150 = Color(0,255,255,150)
+		COLOR_0255255160 = Color(0, 255, 255, 160)
+		COLOR_0255255255 = Color(0, 255, 255, 255)
+		COLOR_2552130255 = Color(255, 213, 0, 255)
+		COLOR_505050150 = Color(50, 50, 50, 150)
+		COLOR_200255153255 = Color(200, 255, 153, 255)
+		COLOR_102178255255 = Color(102, 178, 255, 255)
+		COLOR_255255255200 = Color(255, 255, 255, 200)
+		COLOR_25500255 = Color(255, 0, 0, 255)
+		COLOR_2551500255 = Color(255, 150, 0, 255)
+		COLOR_02550255 = Color(0, 255, 0, 255)
+
+		chat.AddText(COLOR_0200200,PublicAddonName,
+		COLOR_02550," was unable to install, you are missing ",
+		COLOR_02550,"VJ Base!")
 	end
 	timer.Simple(1,function()
 		if not VJF then
@@ -130,7 +155,7 @@ else
 				VJF:SetPos((ScrW()-VJF:GetWide())/2,(ScrH()-VJF:GetTall())/2)
 				VJF:MakePopup()
 				VJF.Paint = function()
-					draw.RoundedBox(8,0,0,VJF:GetWide(),VJF:GetTall(),Color(200,0,0,150))
+					draw.RoundedBox(8,0,0,VJF:GetWide(),VJF:GetTall(),COLOR_20000150)
 				end
 				
 				local VJURL = vgui.Create("DHTML",VJF)
