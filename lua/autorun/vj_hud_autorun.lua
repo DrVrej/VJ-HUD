@@ -14,7 +14,7 @@ local VJExists = file.Exists("lua/autorun/vj_base_autorun.lua","GAME")
 if VJExists == true then
 	include('autorun/vj_controls.lua')
 
-	if CLIENT then
+	if (CLIENT) then
 		-- Main Components
 		VJ.AddClientConVar("vj_hud_enabled", 1) -- Enable VJ HUD
 		VJ.AddClientConVar("vj_hud_health", 1) -- Enable health and suit
@@ -44,71 +44,73 @@ if VJExists == true then
 		VJ.AddClientConVar("vj_hud_disablegmodcross", 1) -- Disable Garry's Mod Crosshair
 		
 		---------------------------------------------------------------------------------------------------------------------------
-		hook.Add("PopulateToolMenu", "VJ_ADDTOMENU_HUD_SETTINGS", function()	
-			spawnmenu.AddToolMenuOption("DrVrej", "HUDs", "VJ HUD Settings", "Client Settings", "", "", function(Panel)
-				Panel:ControlHelp(" ") -- Spacer
-				Panel:AddControl("Button",{Text = "#vjbase.menu.general.reset.everything", Command = "vj_hud_enabled 1\n vj_hud_disablegmod 1\n vj_hud_health 1\n vj_hud_ammo 1\n vj_hud_playerinfo 1\n vj_hud_trace 1\n vj_hud_compass 1\n vj_hud_scanner 1\n vj_hud_metric 0\n vj_hud_disablegmodcross 1\n vj_hud_ch_enabled 1\n vj_hud_ch_crosssize 50\n vj_hud_ch_opacity 255\n vj_hud_ch_r 0\n vj_hud_ch_g 255\n vj_hud_ch_b 0\n vj_hud_ch_mat 0\n vj_hud_ammo_invehicle 1\n vj_hud_ch_invehicle 1\n vj_hud_trace_limited 0"})
-				Panel:AddControl("Label", {Text = "Garry's Mod HUD:"})
-				Panel:AddControl("Checkbox", {Label = "Disable Garry's Mod HUD", Command = "vj_hud_disablegmod"})
-				Panel:AddControl("Checkbox", {Label = "Disable Garry's Mod Crosshair", Command = "vj_hud_disablegmodcross"})
-				
-				Panel:AddControl("Label", {Text = "HUD:"})
-				Panel:AddControl("Checkbox", {Label = "Enable VJ HUD", Command = "vj_hud_enabled"})
-				Panel:AddControl("Checkbox", {Label = "Enable Health and Suit", Command = "vj_hud_health"})
-				Panel:AddControl("Checkbox", {Label = "Enable Ammunition Counter", Command = "vj_hud_ammo"})
-				Panel:AddControl("Checkbox", {Label = "Enable Local Player Information", Command = "vj_hud_playerinfo"})
-				Panel:AddControl("Checkbox", {Label = "Enable Compass", Command = "vj_hud_compass"})
-				Panel:AddControl("Checkbox", {Label = "Enable Trace Information", Command = "vj_hud_trace"})
-				Panel:AddControl("Checkbox", {Label = "Enable Proximity Scanner", Command = "vj_hud_scanner"})
-				Panel:AddControl("Checkbox", {Label = "Enable Ammunition Counter in Vehicle", Command = "vj_hud_ammo_invehicle"})
-				Panel:AddControl("Checkbox", {Label = "Limited Trace Information", Command = "vj_hud_trace_limited"})
-				Panel:ControlHelp("Will only display for NPCs & Players")
-				Panel:AddControl("Checkbox", {Label = "Use Metric instead of Imperial", Command = "vj_hud_metric"})
-				
-				Panel:AddControl("Label", {Text = "Crosshair:"})
-				Panel:AddControl("Checkbox", {Label = "Enable Crosshair", Command = "vj_hud_ch_enabled"})
-				Panel:AddControl("Checkbox", {Label = "Enable Crosshair While in Vehicle", Command = "vj_hud_ch_invehicle"})
-				local vj_crossoption = {Options = {}, CVars = {}, Label = "Crosshair Material:", MenuButton = "0"}
-				vj_crossoption.Options["Arrow (Two, Default)"] = {
-					vj_hud_ch_mat = "0",
-				}
-				vj_crossoption.Options["Dot (Five, Small)"] = {
-					vj_hud_ch_mat = "1",
-				}
-				vj_crossoption.Options["Dot"] = {
-					vj_hud_ch_mat = "2",
-				}
-				vj_crossoption.Options["Dot (Five, Sniper)"] = {
-					vj_hud_ch_mat = "3",
-				}
-				vj_crossoption.Options["Circle (Dashed)"] = {
-					vj_hud_ch_mat = "4",
-				}
-				vj_crossoption.Options["Dot (Four)"] = {
-					vj_hud_ch_mat = "5",
-				}
-				vj_crossoption.Options["Circle"] = {
-					vj_hud_ch_mat = "6",
-				}
-				vj_crossoption.Options["Line (Four, Angled)"] = {
-					vj_hud_ch_mat = "7",
-				}
-				vj_crossoption.Options["Dot (Five, Large)"] = {
-					vj_hud_ch_mat = "8",
-				}
-				Panel:AddControl("ComboBox", vj_crossoption)
-				Panel:AddControl("Color",{ -- Color Picker
-					Label = "Crosshair Color:", 
-					Red = "vj_hud_ch_r", -- red
-					Green = "vj_hud_ch_g", -- green
-					Blue = "vj_hud_ch_b", -- blue
-					ShowAlpha = "0", 
-					ShowHSV = "1",
-					ShowRGB = "1"
-				})
-				Panel:AddControl("Slider", {Label = "Crosshair Size",min = 0,max = 1000,Command = "vj_hud_ch_crosssize"})
-				Panel:AddControl("Slider", {Label = "Crosshair Opacity",min = 0,max = 255,Command = "vj_hud_ch_opacity"})
-			end)
+		local function VJ_HUD_CLIENT_SETTINGS(Panel)
+			Panel:ControlHelp(" ") -- Spacer
+			Panel:AddControl("Button",{Text = "#vjhud.settings.reset.everything", Command = "vj_hud_enabled 1\n vj_hud_disablegmod 1\n vj_hud_health 1\n vj_hud_ammo 1\n vj_hud_playerinfo 1\n vj_hud_trace 1\n vj_hud_compass 1\n vj_hud_scanner 1\n vj_hud_metric 0\n vj_hud_disablegmodcross 1\n vj_hud_ch_enabled 1\n vj_hud_ch_crosssize 50\n vj_hud_ch_opacity 255\n vj_hud_ch_r 0\n vj_hud_ch_g 255\n vj_hud_ch_b 0\n vj_hud_ch_mat 0\n vj_hud_ammo_invehicle 1\n vj_hud_ch_invehicle 1\n vj_hud_trace_limited 0"})
+			Panel:AddControl("Label", {Text = "#vjhud.settings.gmod.hud"})
+			Panel:AddControl("Checkbox", {Label = "#vjhud.settings.disable.gmod.hud", Command = "vj_hud_disablegmod"})
+			Panel:AddControl("Checkbox", {Label = "#vjhud.settings.disable.gmod.crosshair", Command = "vj_hud_disablegmodcross"})
+			
+			Panel:AddControl("Label", {Text = "#vjhud.settings.hud"})
+			Panel:AddControl("Checkbox", {Label = "#vjhud.settings.enable.vj.hud", Command = "vj_hud_enabled"})
+			Panel:AddControl("Checkbox", {Label = "#vjhud.settings.enable.health.and.suit", Command = "vj_hud_health"})
+			Panel:AddControl("Checkbox", {Label = "#vjhud.settings.enable.ammunition.counter", Command = "vj_hud_ammo"})
+			Panel:AddControl("Checkbox", {Label = "#vjhud.settings.enable.local.player.information", Command = "vj_hud_playerinfo"})
+			Panel:AddControl("Checkbox", {Label = "#vjhud.settings.enable.compass", Command = "vj_hud_compass"})
+			Panel:AddControl("Checkbox", {Label = "#vjhud.settings.enable.trace.information", Command = "vj_hud_trace"})
+			Panel:AddControl("Checkbox", {Label = "#vjhud.settings.enable.proximity.scanner", Command = "vj_hud_scanner"})
+			Panel:AddControl("Checkbox", {Label = "#vjhud.settings.enable.ammunition.counter.in.vehicle", Command = "vj_hud_ammo_invehicle"})
+			Panel:AddControl("Checkbox", {Label = "#vjhud.settings.limited.trace.information", Command = "vj_hud_trace_limited"})
+			Panel:ControlHelp("#vjhud.settings.limited.trace.information.desc")
+			Panel:AddControl("Checkbox", {Label = "#vjhud.settings.use.metric.instead.of.imperial", Command = "vj_hud_metric"})
+			
+			Panel:AddControl("Label", {Text = "#vjhud.settings.crosshair"})
+			Panel:AddControl("Checkbox", {Label = "#vjhud.settings.enable.crosshair", Command = "vj_hud_ch_enabled"})
+			Panel:AddControl("Checkbox", {Label = "#vjhud.settings.enable.crosshair.in.vehicle", Command = "vj_hud_ch_invehicle"})
+			local vj_crossoption = {Options = {}, CVars = {}, Label = "#vjhud.settings.crosshair.material", MenuButton = "0"}
+			vj_crossoption.Options["#vjhud.settings.crosshair.material.arrow"] = {
+				vj_hud_ch_mat = "0",
+			}
+			vj_crossoption.Options["#vjhud.settings.crosshair.material.dot.small"] = {
+				vj_hud_ch_mat = "1",
+			}
+			vj_crossoption.Options["#vjhud.settings.crosshair.material.dot"] = {
+				vj_hud_ch_mat = "2",
+			}
+			vj_crossoption.Options["#vjhud.settings.crosshair.material.dot.sniper"] = {
+				vj_hud_ch_mat = "3",
+			}
+			vj_crossoption.Options["#vjhud.settings.crosshair.material.dot.circle.dashed"] = {
+				vj_hud_ch_mat = "4",
+			}
+			vj_crossoption.Options["#vjhud.settings.crosshair.material.dot.four"] = {
+				vj_hud_ch_mat = "5",
+			}
+			vj_crossoption.Options["#vjhud.settings.crosshair.material.dot.circle"] = {
+				vj_hud_ch_mat = "6",
+			}
+			vj_crossoption.Options["#vjhud.settings.crosshair.material.line"] = {
+				vj_hud_ch_mat = "7",
+			}
+			vj_crossoption.Options["#vjhud.settings.crosshair.material.dot.large"] = {
+				vj_hud_ch_mat = "8",
+			}
+			Panel:AddControl("ComboBox", vj_crossoption)
+			Panel:AddControl("Color",{ -- Color Picker
+				Label = "#vjhud.settings.crosshair.color", 
+				Red = "vj_hud_ch_r", -- red
+				Green = "vj_hud_ch_g", -- green
+				Blue = "vj_hud_ch_b", -- blue
+				ShowAlpha = "0", 
+				ShowHSV = "1",
+				ShowRGB = "1"
+			})
+			Panel:AddControl("Slider", {Label = "#vjhud.settings.crosshair.size",min = 0,max = 1000,Command = "vj_hud_ch_crosssize"})
+			Panel:AddControl("Slider", {Label = "#vjhud.settings.crosshair.opacity",min = 0,max = 255,Command = "vj_hud_ch_opacity"})
+		end
+		----=================================----
+		hook.Add("PopulateToolMenu", "VJ_ADDTOMENU_HUD_SETTINGS", function()
+			spawnmenu.AddToolMenuOption("DrVrej", "HUDs", "VJ HUD Settings", "#vjhud.settings.menu", "", "", VJ_HUD_CLIENT_SETTINGS, {})
 		end)
 	end
 	
@@ -116,14 +118,14 @@ if VJExists == true then
 	AddCSLuaFile(AutorunFile)
 	VJ.AddAddonProperty(AddonName,AddonType)
 else
-	if CLIENT then
+	if (CLIENT) then
 		chat.AddText(Color(0,200,200),PublicAddonName,
 		Color(0,255,0)," was unable to install, you are missing ",
 		Color(255,100,0),"VJ Base!")
 	end
 	timer.Simple(1,function()
 		if not VJF then
-			if CLIENT then
+			if (CLIENT) then
 				VJF = vgui.Create("DFrame")
 				VJF:SetTitle("ERROR!")
 				VJF:SetSize(790,560)
@@ -138,7 +140,7 @@ else
 				VJURL:Dock(FILL)
 				VJURL:SetAllowLua(true)
 				VJURL:OpenURL("https://sites.google.com/site/vrejgaming/vjbasemissing")
-			elseif SERVER then
+			elseif (SERVER) then
 				timer.Create("VJBASEMissing",5,0,function() print("VJ Base is Missing! Download it from the workshop!") end)
 			end
 		end
