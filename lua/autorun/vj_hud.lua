@@ -34,10 +34,10 @@ if SERVER then
 				local npc_guard = (ent.IsGuard == true and "1") or "0"
 				local npc_medic = (ent.IsMedicSNPC == true and "1") or "0"
 				local npc_controlled = (ent.VJ_IsBeingControlled == true and "1") or "0"
-				local npc_followingply = (ent.FollowingPlayer == true and "1") or "0"
-				local npc_followingplyn = (ent.FollowingPlayer == true and ent.FollowPlayer_Entity:Nick()) or "Unknown"
-				if npc_followingplyn == pl:Nick() then npc_followingplyn = "You" end
-				pl:SetNW2String("vj_hud_tr_npc_info", npc_hm..ent:Disposition(pl)..npc_guard..npc_medic..npc_controlled..npc_followingply..npc_followingplyn)
+				local npc_following = (ent.IsFollowing == true and "1") or "0"
+				local npc_followingn = (ent.IsFollowing == true and ent.FollowData.Ent:Nick()) or "Unknown"
+				if npc_followingn == pl:Nick() then npc_followingn = "You" end
+				pl:SetNW2String("vj_hud_tr_npc_info", npc_hm..ent:Disposition(pl)..npc_guard..npc_medic..npc_controlled..npc_following..npc_followingn)
 			end
 		end
 	end)
