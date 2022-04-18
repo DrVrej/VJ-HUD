@@ -34,8 +34,19 @@ if SERVER then
 				local npc_guard = (ent.IsGuard == true and "1") or "0"
 				local npc_medic = (ent.IsMedicSNPC == true and "1") or "0"
 				local npc_controlled = (ent.VJ_IsBeingControlled == true and "1") or "0"
-				local npc_following = (ent.IsFollowing == true and "1") or "0"
-				local npc_followingn = (ent.IsFollowing == true and ent.FollowData.Ent:Nick()) or "Unknown"
+				local npc_following = "0"
+				local npc_followingn = "Unknown"
+				if ent.IsFollowing then
+					npc_following = "1"
+					local followEnt = ent.FollowData.Ent
+					if followEnt:IsPlayer() then
+						npc_followingn = followEnt:Nick()
+					elseif followEnt:IsNPC() then
+						npc_followingn = list.Get("NPC")[followEnt:GetClass()].Name
+					else
+						npc_followingn = followEnt:GetClass()
+					end
+				end
 				if npc_followingn == pl:Nick() then npc_followingn = "You" end
 				pl:SetNW2String("vj_hud_tr_npc_info", npc_hm..ent:Disposition(pl)..npc_guard..npc_medic..npc_controlled..npc_following..npc_followingn)
 			end
