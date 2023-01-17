@@ -58,8 +58,15 @@ end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 if (!CLIENT) then return end
 
--- Static Values
+local math_round = math.Round
+local math_clamp = math.Clamp
+local math_abs = math.abs
+local math_sin = math.sin
+local math_ceil = math.ceil
+
+-- Color Values
 local color = Color
+local colorWhite = color(255, 255, 255, 255)
 
 -- Materials
 local mat_crossh1 = Material("Crosshair/vj_crosshair1.vtf")
@@ -108,12 +115,12 @@ hook.Add("HUDPaint", "vj_hud_runvars", function()
 	hud_unitsystem = GetConVar("vj_hud_metric"):GetInt()
 end)
 
-function VJ_ConvertToRealUnit(pos)
+local function convertToRealUnit(pos)
     local result;
 	if hud_unitsystem == 1 then
-		result = math.Round((pos / 16) / 3.281).." M"
+		result = math_round((pos / 16) / 3.281).." M"
 	else
-		result = math.Round(pos / 16).." FT"
+		result = math_round(pos / 16).." FT"
 	end
 	return result
 end
@@ -203,7 +210,7 @@ hook.Add("HUDPaint", "vj_hud_ammo", function()
 		surface.SetMaterial((flashlight and mat_flashlight_on) or mat_flashlight_off)
 		surface.DrawTexturedRectRotated(ScrW()-((flashlight and 230) or 235), ScrH()-54, 35, 35, 90)
 		//draw.RoundedBox(8, ScrW()-260, ScrH()-75, 60, 40, color(0, (ply:FlashlightIsOn() and 255) or 0, (ply:FlashlightIsOn() and 255) or 0, 50))
-		draw.RoundedBox(8, ScrW()-260, ScrH()-75, 60, 40, color(math.Clamp(255 - (suit_power * 2.55), 0, 150), 0, 0, 50 - (suit_power * 0.5)))
+		draw.RoundedBox(8, ScrW()-260, ScrH()-75, 60, 40, color(math_clamp(255 - (suit_power * 2.55), 0, 150), 0, 0, 50 - (suit_power * 0.5)))
 		draw.RoundedBox(8, ScrW()-260, ScrH()-75, 60, 40, color(0, 0, 0, 150))
 	end
 	
@@ -227,14 +234,14 @@ hook.Add("HUDPaint", "vj_hud_ammo", function()
 	local ammo_pri_c = color(0, 255, 0, 150)
 	local ammo_sec = sec_ammo
 	local ammo_sec_c = color(0, 255, 255, 150)
-	local empty_blink = math.abs(math.sin(CurTime() * 4) * 255)
+	local empty_blink = math_abs(math_sin(CurTime() * 4) * 255)
 	local max_ammo = curwep:GetMaxClip1()
 	
 	if max_ammo == nil or max_ammo == 0 or max_ammo == -1 then max_ammo = false end
 	if pri_clip <= 0 && pri_extra <= 0 then hasammo = false end
 	
 	if max_ammo != false then // If the current weapon has a proper clip size, then continue...
-		local perc_left = math.Clamp((pri_clip / max_ammo) * 255, 2, 255) -- Find the percentage of the mag left in respect to the max ammo (proportional) | Clamp at min: 2, max: 255
+		local perc_left = math_clamp((pri_clip / max_ammo) * 255, 2, 255) -- Find the percentage of the mag left in respect to the max ammo (proportional) | Clamp at min: 2, max: 255
 		if perc_left <= 127.5 then // 127.5  = 50% of 255
 			ammo_pri_c = color(255, 40 + perc_left, 0, 255)
 		end
@@ -288,12 +295,12 @@ hook.Add("HUDPaint", "vj_hud_ammo", function()
 		local model_vm = ply:GetViewModel()
 		if ply:GetActiveWeapon().CW_VM then model_vm = ply:GetActiveWeapon().CW_VM end -- For CW 2.0 weapons
 		if (model_vm:GetSequenceActivity(model_vm:GetSequence()) == ACT_VM_RELOAD or string.match(model_vm:GetSequenceName(model_vm:GetSequence()), "reload") != nil) then
-			local anim_perc = math.ceil(model_vm:GetCycle() * 100) -- Get the percentage of how long it will take until it finished reloading
+			local anim_perc = math_ceil(model_vm:GetCycle() * 100) -- Get the percentage of how long it will take until it finished reloading
 			local anim_dur = model_vm:SequenceDuration() - (model_vm:SequenceDuration() * model_vm:GetCycle()) -- Get the number of seconds until it finishes reloading
-			anim_dur = string.format("%.1f", math.Round(anim_dur, 1)) -- Round to 1 decimal point and format it to keep a 0 (if applicable)
+			anim_dur = string.format("%.1f", math_round(anim_dur, 1)) -- Round to 1 decimal point and format it to keep a 0 (if applicable)
 			if anim_perc < 100 then
 				draw.RoundedBox(8, ScrW()-195, ScrH()-160, 180, 25, color(0, 255, 255, 40))
-				draw.RoundedBox(8, ScrW()-195, ScrH()-160, math.Clamp(anim_perc, 0, 100)*1.8, 25, color(0, 255, 255, 160))
+				draw.RoundedBox(8, ScrW()-195, ScrH()-160, math_clamp(anim_perc, 0, 100)*1.8, 25, color(0, 255, 255, 160))
 				draw.RoundedBox(8, ScrW()-195, ScrH()-160, 180, 25, color(0, 0, 0, 150))
 				draw.SimpleText(anim_dur.."s ("..anim_perc.."%)", "VJFont_Trebuchet24_SmallMedium", ScrW()-137, ScrH()-156, color(225, 255, 255, 150), 0, 0)
 			end
@@ -310,8 +317,8 @@ hook.Add("HUDPaint", "vj_hud_health", function()
 	local ply = LocalPlayer()
 	if hud_enabled == 0 or GetConVar("vj_hud_health"):GetInt() == 0 then return end
 	if !ply:Alive() then -- Meradz tsootsage
-		local deadhealth_blinka = math.abs(math.sin(CurTime() * 6) * 200)
-		local deadhealth_blinkb = math.abs(math.sin(CurTime() * 6) * 255)
+		local deadhealth_blinka = math_abs(math_sin(CurTime() * 6) * 200)
+		local deadhealth_blinkb = math_abs(math_sin(CurTime() * 6) * 255)
 		draw.RoundedBox(8, 70, ScrH()-80, 142, 30, color(150, 0, 0, deadhealth_blinka))
 		draw.SimpleText("USER DEAD", "VJFont_Trebuchet24_Medium", 85, ScrH()-77, color(255, 255, 0, deadhealth_blinkb), 0, 0)
 	else
@@ -319,7 +326,7 @@ hook.Add("HUDPaint", "vj_hud_health", function()
 		local hp_r = 0
 		local hp_g = 255
 		local hp_b = 0
-		local hp_blink = math.abs(math.sin(CurTime() * 2) * 255)
+		local hp_blink = math_abs(math_sin(CurTime() * 2) * 255)
 		lerp_hp = Lerp(5*FrameTime(), lerp_hp, ply:Health())
 		lerp_armor = Lerp(5*FrameTime(), lerp_armor, ply:Armor())
 		net.Start("vj_hud_godmode")
@@ -333,21 +340,21 @@ hook.Add("HUDPaint", "vj_hud_health", function()
 		else
 			local warning = 0
 			if lerp_hp <= 35 then
-				hp_blink = math.abs(math.sin(CurTime() * 4) * 255)
+				hp_blink = math_abs(math_sin(CurTime() * 4) * 255)
 				hp_r = 255
 				hp_g = 0 + (5 * ply:Health())
 				warning = 1
 			end
 			if lerp_hp <= 20 then -- Low Health Warning
-				hp_blink = math.abs(math.sin(CurTime() * 6) * 255)
+				hp_blink = math_abs(math_sin(CurTime() * 6) * 255)
 				warning = 2
 			end
 			if warning == 1 then
-				draw.RoundedBox(8, 15, ScrH()-160, 180, 25, color(150, 0, 0, math.abs(math.sin(CurTime() * 4) * 200)))
-				draw.SimpleText("WARNING: Low Health!", "VJFont_Trebuchet24_SmallMedium", 25, ScrH()-156, color(255, 153, 0, math.abs(math.sin(CurTime() * 4) * 255)), 0, 0)
+				draw.RoundedBox(8, 15, ScrH()-160, 180, 25, color(150, 0, 0, math_abs(math_sin(CurTime() * 4) * 200)))
+				draw.SimpleText("WARNING: Low Health!", "VJFont_Trebuchet24_SmallMedium", 25, ScrH()-156, color(255, 153, 0, math_abs(math_sin(CurTime() * 4) * 255)), 0, 0)
 			elseif warning == 2 then
-				draw.RoundedBox(8, 15, ScrH()-160, 220, 25, color(150, 0, 0, math.abs(math.sin(CurTime() * 6) * 200)))
-				draw.SimpleText("WARNING: Death Imminent!", "VJFont_Trebuchet24_SmallMedium", 25, ScrH()-156, color(255, 153, 0, math.abs(math.sin(CurTime() * 6) * 255)), 0, 0)
+				draw.RoundedBox(8, 15, ScrH()-160, 220, 25, color(150, 0, 0, math_abs(math_sin(CurTime() * 6) * 200)))
+				draw.SimpleText("WARNING: Death Imminent!", "VJFont_Trebuchet24_SmallMedium", 25, ScrH()-156, color(255, 153, 0, math_abs(math_sin(CurTime() * 6) * 255)), 0, 0)
 			end
 		end
 		
@@ -357,7 +364,7 @@ hook.Add("HUDPaint", "vj_hud_health", function()
 		surface.DrawTexturedRect(22, ScrH()-127, 40, 45)
 		draw.SimpleText(string.format("%.0f", lerp_hp).."%", "VJFont_Trebuchet24_Medium", 70, ScrH()-128, color(hp_r, hp_g, hp_b, 255), 0, 0)
 		draw.RoundedBox(0, 70, ScrH()-105, 180, 15, color(hp_r, hp_g, hp_b, 40))
-		draw.RoundedBox(0, 70, ScrH()-105, math.Clamp(lerp_hp,0,100)*1.8, 15, color(hp_r, hp_g, hp_b, 255))
+		draw.RoundedBox(0, 70, ScrH()-105, math_clamp(lerp_hp,0,100)*1.8, 15, color(hp_r, hp_g, hp_b, 255))
 		surface.SetDrawColor(hp_r, hp_g, hp_b, 255)
 		surface.DrawOutlinedRect(70, ScrH()-105, 180, 15)
 		
@@ -367,7 +374,7 @@ hook.Add("HUDPaint", "vj_hud_health", function()
 		surface.DrawTexturedRect(22, ScrH()-80, 40, 40)
 		draw.SimpleText(string.format("%.0f", lerp_armor).."%", "VJFont_Trebuchet24_Medium", 70, ScrH()-83, color(0, 255, 255, 160), 0, 0)
 		draw.RoundedBox(0, 70, ScrH()-60, 180, 15, color(0, 255, 255, 40))
-		draw.RoundedBox(0, 70, ScrH()-60, math.Clamp(lerp_armor, 0, 100)*1.8, 15, color(0, 255, 255, 160))
+		draw.RoundedBox(0, 70, ScrH()-60, math_clamp(lerp_armor, 0, 100)*1.8, 15, color(0, 255, 255, 160))
 		surface.SetDrawColor(0, 150, 150, 255)
 		surface.DrawOutlinedRect(70, ScrH()-60, 180, 15)
 		
@@ -377,7 +384,7 @@ hook.Add("HUDPaint", "vj_hud_health", function()
 			local suit_r = 255 - (suit_power * 2.55)
 			local suit_g = suit_power * 2.55
 			draw.RoundedBox(0, 100, ScrH()-89, 150, 8, color(suit_r, suit_g, 0, 40))
-			draw.RoundedBox(0, 100, ScrH()-89, math.Clamp(suit_power, 0, 100)*1.5, 8, color(suit_r, suit_g, 0, 160))
+			draw.RoundedBox(0, 100, ScrH()-89, math_clamp(suit_power, 0, 100)*1.5, 8, color(suit_r, suit_g, 0, 160))
 			surface.SetDrawColor(suit_r, suit_g, 0, 255)
 			surface.DrawOutlinedRect(100, ScrH()-89, 150, 8)
 			draw.SimpleText("SUIT", "VJFont_Trebuchet24_Tiny", 70, ScrH()-89, color(suit_r, suit_g, 0, 255), 0, 0)
@@ -438,10 +445,10 @@ hook.Add("HUDPaint", "vj_hud_localplayerinfo", function()
 	elseif ply:Deaths() == 0 then
 		kd = ply:Frags()
 	else
-		kd = math.Round(ply:Frags() / ply:Deaths(), 2)
+		kd = math_round(ply:Frags() / ply:Deaths(), 2)
 	end
 	if kd < 0 then kd = 0 end
-	if kd > 10 then kd = math.Round(kd, 1) end
+	if kd > 10 then kd = math_round(kd, 1) end
 	surface.SetMaterial(mat_kd)
 	surface.SetDrawColor(color(255, 255, 255, 150))
 	surface.DrawTexturedRect(260, ScrH()-65, 28, 28)
@@ -450,9 +457,9 @@ hook.Add("HUDPaint", "vj_hud_localplayerinfo", function()
 	-- Movement speed
     local speed;
 	if hud_unitsystem == 1 then
-		speed = math.Round((ply:GetVelocity():Length() * 0.04263382283) * 1.6093).."KPH"
+		speed = math_round((ply:GetVelocity():Length() * 0.04263382283) * 1.6093).."KPH"
 	else
-		speed = math.Round(ply:GetVelocity():Length() * 0.04263382283).."mph"
+		speed = math_round(ply:GetVelocity():Length() * 0.04263382283).."mph"
 	end
 	surface.SetMaterial(mat_run)
 	surface.SetDrawColor(color(255, 255, 255, 150))
@@ -461,7 +468,7 @@ hook.Add("HUDPaint", "vj_hud_localplayerinfo", function()
 	
 	-- FPS
 	if CurTime() > next_fps then
-		fps = tostring(math.ceil(1 / FrameTime()))
+		fps = tostring(math_ceil(1 / FrameTime()))
 		next_fps = CurTime() + 0.5
 	end
 	surface.SetMaterial(mat_fps)
@@ -482,9 +489,9 @@ hook.Add("HUDPaint", "vj_hud_localplayerinfo", function()
 		draw.RoundedBox(1, 320, ScrH()-160, 140, 30, color(0, 0, 0, 150))
 		local speedcalc = (IsValid(ply:GetVehicle():GetParent()) and ply:GetVehicle():GetParent():GetVelocity():Length()) or ply:GetVehicle():GetVelocity():Length()
 		if hud_unitsystem == 1 then
-			speedcalc = math.Round((speedcalc * 0.04263382283) * 1.6093).."kph"
+			speedcalc = math_round((speedcalc * 0.04263382283) * 1.6093).."kph"
 		else
-			speedcalc = math.Round(speedcalc * 0.04263382283).."mph"
+			speedcalc = math_round(speedcalc * 0.04263382283).."mph"
 		end
 		surface.SetMaterial(mat_car)
 		surface.SetDrawColor(color(255, 255, 255, 150))
@@ -524,17 +531,17 @@ hook.Add("HUDPaint", "vj_hud_compass", function()
 	end
 	draw.SimpleText(comp_dir, "VJFont_Trebuchet24_Large", ScrW() / 1.955, 26, color(0, 255, 255, 255), 1, 1)
 	local trace = util.TraceLine(util.GetPlayerTrace(ply))
-    local distrl = VJ_ConvertToRealUnit(ply:GetPos():Distance(trace.HitPos))
+    local distrl = convertToRealUnit(ply:GetPos():Distance(trace.HitPos))
 	local distrllen = string.len(tostring(distrl))
   	local move_ft = 0
 	if distrllen > 4 then
 		move_ft = move_ft - (0.007*(distrllen-4))
 	end
 	draw.SimpleText(distrl, "VJFont_Trebuchet24_Small", ScrW() / (1.985 - move_ft), 40, color(255, 255, 255, 200), 0, 0)
-	local dist = math.Round(ply:GetPos():Distance(trace.HitPos),2)
+	local dist = math_round(ply:GetPos():Distance(trace.HitPos),2)
 	local distlen = string.len(tostring(dist))
 	if distlen >= 7 then
-		dist = math.Round(ply:GetPos():Distance(trace.HitPos))
+		dist = math_round(ply:GetPos():Distance(trace.HitPos))
 		distlen = string.len(tostring(dist))
 	end
   	local move_wu = 0
@@ -563,13 +570,13 @@ hook.Add("HUDPaint", "vj_hud_traceinfo", function()
 		end
 		local pos = ent:LocalToWorld(ent:OBBMaxs()):ToScreen()
 		if (pos.visible) then
-			local distrl = VJ_ConvertToRealUnit(ply:GetPos():Distance(trace.HitPos))
-			local dist = math.Round(ply:GetPos():Distance(trace.HitPos),2)
+			local distrl = convertToRealUnit(ply:GetPos():Distance(trace.HitPos))
+			local dist = math_round(ply:GetPos():Distance(trace.HitPos),2)
 			net.Start("vj_hud_ent_info")
 			net.WriteEntity(ent)
 			net.SendToServer()
 			draw.SimpleText(distrl.."("..dist.." WU)", "VJFont_Trebuchet24_SmallMedium", pos.x, pos.y - 26, color(0, 255, 255, 255), 0, 0)
-			draw.SimpleText(language.GetPhrase(ent:GetClass()), "VJFont_Trebuchet24_Medium", pos.x, pos.y - 12, color(255, 255, 255, 255), 0, 0)
+			draw.SimpleText(language.GetPhrase(ent:GetClass()), "VJFont_Trebuchet24_Medium", pos.x, pos.y - 12, colorWhite, 0, 0)
 			draw.SimpleText(tostring(ent), "VJFont_Trebuchet24_Small", pos.x, pos.y + 10, color(255, 255, 255, 200), 0, 0)
 			
 			if ent:IsNPC() then -- NPC-ineroon hamar minag:
@@ -586,7 +593,7 @@ hook.Add("HUDPaint", "vj_hud_traceinfo", function()
 				-- Disposition
 				local npc_disp = tonumber(string.sub(npc_info, 2, 2))
 				local npc_disp_t = "Unknown"
-				local npc_disp_color = color(255, 255, 255, 255)
+				local npc_disp_color = colorWhite
 				if npc_disp == 1 then
 					npc_disp_color = color(255, 0, 0, 255)
 					npc_disp_t = "Hostile"
@@ -650,12 +657,12 @@ hook.Add("HUDPaint", "vj_hud_traceinfo", function()
 				if lerp_trace_hp_entid != ent:EntIndex() then lerp_trace_hp = ent_hpm end
 				lerp_trace_hp_entid = ent:EntIndex()
 				lerp_trace_hp = Lerp(8*FrameTime(),lerp_trace_hp,ent_hp)
-				local hp_box = (190*math.Clamp(lerp_trace_hp,0,ent_hpm))/ent_hpm
+				local hp_box = (190*math_clamp(lerp_trace_hp,0,ent_hpm))/ent_hpm
 				local hp_num = (surface.GetTextSize(ent_hp.."/"..ent_hpm))/2
 				local hp_numformat = "/"..ent_hpm
 				
 				if ent:IsPlayer() then
-					hp_box = math.Clamp(lerp_trace_hp,0,100)*1.9
+					hp_box = math_clamp(lerp_trace_hp,0,100)*1.9
 					hp_num = (surface.GetTextSize(ent_hp.."/100"))/2
 					hp_numformat = "%"
 				end
@@ -664,7 +671,7 @@ hook.Add("HUDPaint", "vj_hud_traceinfo", function()
 				surface.SetDrawColor(0,255,255,150)
 				surface.DrawOutlinedRect(pos.x,pos.y+30,190,20)
 				draw.RoundedBox(1,pos.x,pos.y+30,hp_box,20,color(0,255,255,150))
-				draw.SimpleText(string.format("%.0f", lerp_trace_hp)..hp_numformat, "VJFont_Trebuchet24_Small",(pos.x+105)-hp_num,pos.y+31,color(255, 255, 255, 255))
+				draw.SimpleText(string.format("%.0f", lerp_trace_hp)..hp_numformat, "VJFont_Trebuchet24_Small",(pos.x+105)-hp_num,pos.y+31,colorWhite)
 			end
 		end
 	end
@@ -717,20 +724,20 @@ local AbranknerVorKedne = {
 hook.Add("HUDPaint", "vj_hud_proximityscanner", function()
 	local ply = LocalPlayer()
 	if !ply:Alive() or hud_enabled == 0 or GetConVar("vj_hud_scanner"):GetInt() == 0 then return end
-	local kouyne_pes = math.abs(math.sin(CurTime() * 5) * 255)
-	for _, ent in pairs(ents.FindInSphere(ply:GetPos(), 320)) do
+	local kouyne_pes = math_abs(math_sin(CurTime() * 5) * 255)
+	local plyPos = ply:GetPos()
+	for _, ent in ipairs(ents.FindInSphere(plyPos, 320)) do
 		local v = AbranknerVorKedne[ent:GetClass()]
 		if v then
 			local pos = ent:LocalToWorld(ent:OBBCenter()):ToScreen()
-			if math.Round(ply:GetPos():Distance(ent:GetPos())) < v.Heravorutyoun then
-				local kouyne_poon_pare = v.DariKouyn
-				if v.DariKouyn.a == -1 then kouyne_poon_pare = color(v.DariKouyn.r, v.DariKouyn.g, v.DariKouyn.b, kouyne_pes) end
-				draw.SimpleText(v.Anoon, v.DariDesag,pos.x + 1, pos.y + 1, kouyne_poon_pare, 0, 0)
-				draw.SimpleText(VJ_ConvertToRealUnit(ply:GetPos():Distance(ent:GetPos())), "HudHintTextLarge", pos.x + 30, pos.y + 25, color(255, 255, 255, 255), 0, 0)
+			local dist = plyPos:Distance(ent:GetPos())
+			if math_round(dist) < v.Heravorutyoun then
+				draw.SimpleText(v.Anoon, v.DariDesag,pos.x + 1, pos.y + 1, (v.DariKouyn.a == -1 and color(v.DariKouyn.r, v.DariKouyn.g, v.DariKouyn.b, kouyne_pes)) or v.DariKouyn, 0, 0)
+				draw.SimpleText(convertToRealUnit(dist), "HudHintTextLarge", pos.x + 30, pos.y + 25, colorWhite, 0, 0)
 				
 				-- Hin abrank (Goghme negar ge tsetsen e)
 				//surface.SetTexture(surface.GetTextureID(v.Negar))
-				//surface.SetDrawColor(color(255, 255, 255, 255))
+				//surface.SetDrawColor(colorWhite)
 				//surface.DrawTexturedRect(pos.x-(20), pos.y-(20), 25, 25)
 			end
 		end
