@@ -457,7 +457,7 @@ hook.Add("HUDPaint", "vj_hud_localplayerinfo", function()
 	-- Movement speed
     local speed;
 	if hud_unitsystem == 1 then
-		speed = math_round((ply:GetVelocity():Length() * 0.04263382283) * 1.6093).."KPH"
+		speed = math_round((ply:GetVelocity():Length() * 0.04263382283) * 1.6093).."kph"
 	else
 		speed = math_round(ply:GetVelocity():Length() * 0.04263382283).."mph"
 	end
