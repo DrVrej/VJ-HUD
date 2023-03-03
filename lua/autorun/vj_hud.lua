@@ -17,18 +17,18 @@ if (!file.Exists("autorun/vj_base_autorun.lua","LUA")) then return end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 if SERVER then
 	util.AddNetworkString("vj_hud_godmode")
-	net.Receive("vj_hud_godmode", function(len, pl)
-		if IsValid(pl) then
-			pl:SetNW2Bool("vj_hud_godmode", pl:HasGodMode())
+	net.Receive("vj_hud_godmode", function(len, ply)
+		if IsValid(ply) then
+			ply:SetNW2Bool("vj_hud_godmode", ply:HasGodMode())
 		end
 	end)
 	
 	util.AddNetworkString("vj_hud_ent_info")
-	net.Receive("vj_hud_ent_info", function(len, pl)
+	net.Receive("vj_hud_ent_info", function(len, ply)
 		local ent = net.ReadEntity()
-		if IsValid(pl) && IsValid(ent) then
-			pl:SetNW2Int("vj_hud_trhealth", ent:Health())
-			pl:SetNW2Int("vj_hud_trmaxhealth", ent:GetMaxHealth())
+		if IsValid(ply) && IsValid(ent) then
+			ply:SetNW2Int("vj_hud_trhealth", ent:Health())
+			ply:SetNW2Int("vj_hud_trmaxhealth", ent:GetMaxHealth())
 			if ent:IsNPC() then
 				local npc_hm = (ent.VJ_IsHugeMonster == true and "1") or "0"
 				local npc_guard = (ent.IsGuard == true and "1") or "0"
@@ -36,6 +36,7 @@ if SERVER then
 				local npc_controlled = (ent.VJ_IsBeingControlled == true and "1") or "0"
 				local npc_following = "0"
 				local npc_followingn = "Unknown"
+				local npc_iscontroller = ((ply.IsControlingNPC and IsValid(ply.VJ_TheControllerEntity.VJCE_NPC) and ply.VJ_TheControllerEntity.VJCE_NPC == ent) and "1") or "0"
 				if ent.IsFollowing then
 					npc_following = "1"
 					local followEnt = ent.FollowData.Ent
@@ -47,8 +48,8 @@ if SERVER then
 						npc_followingn = followEnt:GetClass()
 					end
 				end
-				if npc_followingn == pl:Nick() then npc_followingn = "You" end
-				pl:SetNW2String("vj_hud_tr_npc_info", npc_hm..ent:Disposition(pl)..npc_guard..npc_medic..npc_controlled..npc_following..npc_followingn)
+				if npc_followingn == ply:Nick() then npc_followingn = "You" end
+				ply:SetNW2String("vj_hud_tr_npc_info", npc_hm..ent:Disposition(ply)..npc_guard..npc_medic..npc_controlled..npc_iscontroller..npc_following..npc_followingn)
 			end
 		end
 	end)
@@ -103,7 +104,7 @@ timer.Simple(0.1, function()
 		LocalPlayer():SetNW2Bool("vj_hud_godmode", false)
 		LocalPlayer():SetNW2Int("vj_hud_trhealth", 0)
 		LocalPlayer():SetNW2Int("vj_hud_trmaxhealth", 0)
-		LocalPlayer():SetNW2String("vj_hud_tr_npc_info", "00") -- IsHugeMonster | Disposition | IsGuard | IsMedic | Controlled | Following Player | The Player its following
+		LocalPlayer():SetNW2String("vj_hud_tr_npc_info", "00") -- IsHugeMonster | Disposition | IsGuard | IsMedic | Controlled | If traced NPC is being controlled by local player | Following Player | The Player its following
 	end
 end)
 
@@ -575,12 +576,14 @@ hook.Add("HUDPaint", "vj_hud_traceinfo", function()
 			net.Start("vj_hud_ent_info")
 			net.WriteEntity(ent)
 			net.SendToServer()
-			draw.SimpleText(distrl.."("..dist.." WU)", "VJFont_Trebuchet24_SmallMedium", pos.x, pos.y - 26, color(0, 255, 255, 255), 0, 0)
-			draw.SimpleText(language.GetPhrase(ent:GetClass()), "VJFont_Trebuchet24_Medium", pos.x, pos.y - 12, colorWhite, 0, 0)
-			draw.SimpleText(tostring(ent), "VJFont_Trebuchet24_Small", pos.x, pos.y + 10, color(255, 255, 255, 200), 0, 0)
 			
 			if ent:IsNPC() then -- NPC-ineroon hamar minag:
 				local npc_info = ply:GetNW2String("vj_hud_tr_npc_info")
+				
+				-- Don't trace the NPC we are controlling!
+				if string.sub(npc_info, 6, 6) == "1" then
+					return
+				end
 				
 				-- Boss Icon
 				if string.sub(npc_info, 1, 1) == "1" then
@@ -641,15 +644,19 @@ hook.Add("HUDPaint", "vj_hud_traceinfo", function()
 				end
 				
 				-- Following Player
-				if string.sub(npc_info, 6, 6) == "1" then
+				if string.sub(npc_info, 7, 7) == "1" then
 					surface.SetMaterial(mat_following)
 					surface.SetDrawColor(color(50, 50, 50, 150))
 					surface.DrawTexturedRect(pos.x - 2, pos.y + 68, 34, 34)
 					surface.SetDrawColor(color(221, 160, 221, 255))
 					surface.DrawTexturedRect(pos.x, pos.y + 70, 30, 30)
-					draw.SimpleText(string.sub(npc_info, 7, -1), "VJFont_Trebuchet24_SmallMedium", pos.x + 32, pos.y + 75, color(221, 160, 221, 255), 0, 0)
+					draw.SimpleText(string.sub(npc_info, 8, -1), "VJFont_Trebuchet24_SmallMedium", pos.x + 32, pos.y + 75, color(221, 160, 221, 255), 0, 0)
 				end
 			end
+			
+			draw.SimpleText(distrl.."("..dist.." WU)", "VJFont_Trebuchet24_SmallMedium", pos.x, pos.y - 26, color(0, 255, 255, 255), 0, 0)
+			draw.SimpleText(language.GetPhrase(ent:GetClass()), "VJFont_Trebuchet24_Medium", pos.x, pos.y - 12, colorWhite, 0, 0)
+			draw.SimpleText(tostring(ent), "VJFont_Trebuchet24_Small", pos.x, pos.y + 10, color(255, 255, 255, 200), 0, 0)
 			
 			local ent_hp = ply:GetNW2Int("vj_hud_trhealth")
 			local ent_hpm = ply:GetNW2Int("vj_hud_trmaxhealth")
