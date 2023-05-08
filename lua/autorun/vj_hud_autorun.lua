@@ -10,7 +10,7 @@ local AddonName = "VJ HUD"
 local AddonType = "HUD"
 local AutorunFile = "autorun/vj_hud_autorun.lua"
 -------------------------------------------------------
-local VJExists = file.Exists("lua/autorun/vj_base_autorun.lua","GAME")
+local VJExists = file.Exists("lua/autorun/vj_base_autorun.lua", "GAME")
 if VJExists == true then
 	include('autorun/vj_controls.lua')
 
