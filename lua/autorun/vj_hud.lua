@@ -14,13 +14,6 @@
 ------ SERVER ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 if SERVER then
-	util.AddNetworkString("vj_hud_godmode")
-	net.Receive("vj_hud_godmode", function(len, ply)
-		if IsValid(ply) then
-			ply:SetNW2Bool("vj_hud_godmode", ply:HasGodMode())
-		end
-	end)
-	
 	util.AddNetworkString("vj_hud_ent_info")
 	net.Receive("vj_hud_ent_info", function(len, ply)
 		local ent = net.ReadEntity()
@@ -99,7 +92,6 @@ local mat_following = Material("vj_hud/following.png")
 -- Networked Values
 timer.Simple(0.1, function()
 	if IsValid(LocalPlayer()) then
-		LocalPlayer():SetNW2Bool("vj_hud_godmode", false)
 		LocalPlayer():SetNW2Int("vj_hud_trhealth", 0)
 		LocalPlayer():SetNW2Int("vj_hud_trmaxhealth", 0)
 		LocalPlayer():SetNW2String("vj_hud_tr_npc_info", "00") -- IsHugeMonster | Disposition | IsGuard | IsMedic | Controlled | If traced NPC is being controlled by local player | Following Player | The Player its following
@@ -328,9 +320,7 @@ hook.Add("HUDPaint", "vj_hud_health", function()
 		local hp_blink = math_abs(math_sin(CurTime() * 2) * 255)
 		lerp_hp = Lerp(5*FrameTime(), lerp_hp, ply:Health())
 		lerp_armor = Lerp(5*FrameTime(), lerp_armor, ply:Armor())
-		net.Start("vj_hud_godmode")
-		net.SendToServer()
-		if ply:GetNW2Bool("vj_hud_godmode") == true then
+		if ply:HasGodMode() then
 			hp_r = 255
 			hp_g = 102
 			hp_b = 255
