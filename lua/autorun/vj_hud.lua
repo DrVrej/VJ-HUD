@@ -27,7 +27,7 @@ if SERVER then
 				local npc_controlled = (ent.VJ_IsBeingControlled == true and "1") or "0"
 				local npc_following = "0"
 				local npc_followingn = "Unknown"
-				local npc_iscontroller = ((ply.IsControlingNPC and IsValid(ply.VJ_TheControllerEntity.VJCE_NPC) and ply.VJ_TheControllerEntity.VJCE_NPC == ent) and "1") or "0"
+				local npc_iscontroller = ((ply.VJTag_IsControllingNPC and IsValid(ply.VJ_TheControllerEntity.VJCE_NPC) and ply.VJ_TheControllerEntity.VJCE_NPC == ent) and "1") or "0"
 				if ent.IsFollowing then
 					npc_following = "1"
 					local followEnt = ent.FollowData.Ent
