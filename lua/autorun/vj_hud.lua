@@ -73,6 +73,7 @@ local mat_crossh9 = Material("Crosshair/vj_crosshair9.vtf")
 local mat_flashlight_on = Material("vj_hud/flashlight_on.png")
 local mat_flashlight_off = Material("vj_hud/flashlight_off.png")
 local mat_grenade = Material("vj_hud/grenade.png")
+local mat_ammoBox = Material("vj_hud/ammobox.png")
 local mat_secondary = Material("vj_hud/secondary.png")
 local mat_health = Material("vj_hud/hp.png")
 local mat_armor = Material("vj_hud/armor.png")
@@ -88,6 +89,7 @@ local mat_guarding = Material("vj_hud/guarding.png")
 local mat_medic = Material("vj_hud/medic.png")
 local mat_controller = Material("vj_hud/controller.png")
 local mat_following = Material("vj_hud/following.png")
+local mat_info = Material("vj_hud/info.png")
 
 -- Networked Values
 timer.Simple(0.1, function()
@@ -676,45 +678,41 @@ end)
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local AbranknerVorKedne = {
 	-- Barz Abrankner --
-	gmod_button={Anoon = "Button", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 300, DariKouyn = color(255, 255, 255, 150)},
-	edit_sky={Anoon = "Sky Editor", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 300, DariKouyn = color(255, 255, 255, 150)},
-	edit_sun={Anoon = "Sun Editor", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 300, DariKouyn = color(255, 255, 255, 150)},
-	edit_fog={Anoon = "Fog Editor", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 300, DariKouyn = color(255, 255, 255, 150)},
+	gmod_button = {Anoon = "Button", Heravorutyoun = 300, DariKouyn = color(255, 255, 255, 150), Negar = mat_info},
+	edit_sky = {Anoon = "Sky Editor", Heravorutyoun = 300, DariKouyn = color(255, 255, 255, 150), Negar = mat_info},
+	edit_sun = {Anoon = "Sun Editor", Heravorutyoun = 300, DariKouyn = color(255, 255, 255, 150), Negar = mat_info},
+	edit_fog = {Anoon = "Fog Editor", Heravorutyoun = 300, DariKouyn = color(255, 255, 255, 150), Negar = mat_info},
 	
 	-- Aroghchoutyoun yev Bashbanelik --
-	item_healthkit={Anoon = "Health Kit", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 400, DariKouyn = color(0, 255, 0, 150)},
-	item_healthvial={Anoon = "Health Vial", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 400, DariKouyn = color(0, 255, 0, 150)},
-	item_battery={Anoon = "Suit Battery", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 400, DariKouyn = color(0, 255, 0, 150)},
-	item_suitcharger={Anoon = "Suit Charger", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 400, DariKouyn = color(0, 255, 0, 150)},
-	item_healthcharger={Anoon = "Health Charger", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 400, DariKouyn = color(0, 255, 0, 150)},
-	item_suit={Anoon = "HEV Suit", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 400, DariKouyn = color(0, 255, 0, 150)},
+	item_healthkit = {Anoon = "Health Kit", Heravorutyoun = 400, DariKouyn = color(0, 255, 0, 150), Negar = mat_medic},
+	item_healthvial = {Anoon = "Health Vial", Heravorutyoun = 400, DariKouyn = color(0, 255, 0, 150), Negar = mat_medic},
+	item_battery = {Anoon = "Suit Battery", Heravorutyoun = 400, DariKouyn = color(0, 255, 0, 150), Negar = mat_armor},
+	item_suitcharger = {Anoon = "Suit Charger", Heravorutyoun = 400, DariKouyn = color(0, 255, 0, 150), Negar = mat_armor},
+	item_healthcharger = {Anoon = "Health Charger", Heravorutyoun = 400, DariKouyn = color(0, 255, 0, 150), Negar = mat_medic},
+	item_suit = {Anoon = "HEV Suit", Heravorutyoun = 400, DariKouyn = color(0, 255, 0, 150), Negar = mat_armor},
 	
 	-- Panpousht --
-	item_ammo_ar2={Anoon = "AR2 Ammo", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 300, DariKouyn = color(0, 255, 255, 150)},
-	item_ammo_ar2_large={Anoon = "Large AR2 Ammo", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 300, DariKouyn = color(0, 255, 255, 150)},
-	item_ammo_pistol={Anoon = "Pistol Ammo", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 300, DariKouyn = color(0, 255, 255, 150)},
-	item_ammo_pistol_large={Anoon = "Large Pistol Ammo", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 300, DariKouyn = color(0, 255, 255, 150)},
-	item_box_buckshot={Anoon = "Shotgun Ammo", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 300, DariKouyn = color(0, 255, 255, 150)},
-	item_ammo_357={Anoon = ".357 Ammo", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 300, DariKouyn = color(0, 255, 255, 150)},
-	item_ammo_357_large={Anoon = "Large .357 Ammo", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 300, DariKouyn = color(0, 255, 255, 150)},
-	item_ammo_smg1={Anoon = "SMG Ammo", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 300, DariKouyn = color(0, 255, 255, 150)},
-	item_ammo_smg1_large={Anoon = "Large SMG Ammo", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 300, DariKouyn = color(0, 255, 255, 150)},
-	item_ammo_ar2_altfire={Anoon = "Combine Ball Ammo", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 300, DariKouyn = color(0, 255, 255, 150)},
-	item_ammo_crossbow={Anoon = "Crossbow Bolts Ammo", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 300, DariKouyn = color(0, 255, 255, 150)},
-	item_ammo_smg1_grenade={Anoon = "SMG Grenade Ammo", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 300, DariKouyn = color(0, 255, 255, 150)},
-	item_rpg_round={Anoon = "RPG Ammo", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 300, DariKouyn = color(0, 255, 255, 150)},
+	item_ammo_ar2 = {Anoon = "AR2 Ammo", Heravorutyoun = 300, DariKouyn = color(0, 255, 255, 150), Negar = mat_ammoBox},
+	item_ammo_ar2_large = {Anoon = "Large AR2 Ammo", Heravorutyoun = 300, DariKouyn = color(0, 255, 255, 150), Negar = mat_ammoBox},
+	item_ammo_pistol = {Anoon = "Pistol Ammo", Heravorutyoun = 300, DariKouyn = color(0, 255, 255, 150), Negar = mat_ammoBox},
+	item_ammo_pistol_large = {Anoon = "Large Pistol Ammo", Heravorutyoun = 300, DariKouyn = color(0, 255, 255, 150), Negar = mat_ammoBox},
+	item_box_buckshot = {Anoon = "Shotgun Ammo", Heravorutyoun = 300, DariKouyn = color(0, 255, 255, 150), Negar = mat_ammoBox},
+	item_ammo_357 = {Anoon = ".357 Ammo", Heravorutyoun = 300, DariKouyn = color(0, 255, 255, 150), Negar = mat_ammoBox},
+	item_ammo_357_large = {Anoon = "Large .357 Ammo", Heravorutyoun = 300, DariKouyn = color(0, 255, 255, 150), Negar = mat_ammoBox},
+	item_ammo_smg1 = {Anoon = "SMG Ammo", Heravorutyoun = 300, DariKouyn = color(0, 255, 255, 150), Negar = mat_ammoBox},
+	item_ammo_smg1_large = {Anoon = "Large SMG Ammo", Heravorutyoun = 300, DariKouyn = color(0, 255, 255, 150), Negar = mat_ammoBox},
+	item_ammo_ar2_altfire = {Anoon = "Combine Ball Ammo", Heravorutyoun = 300, DariKouyn = color(0, 255, 255, 150), Negar = mat_ammoBox},
+	item_ammo_crossbow = {Anoon = "Crossbow Bolts Ammo", Heravorutyoun = 300, DariKouyn = color(0, 255, 255, 150), Negar = mat_ammoBox},
+	item_ammo_smg1_grenade = {Anoon = "SMG Grenade Ammo", Heravorutyoun = 300, DariKouyn = color(0, 255, 255, 150), Negar = mat_ammoBox},
+	item_rpg_round = {Anoon = "RPG Ammo", Heravorutyoun = 300, DariKouyn = color(0, 255, 255, 150), Negar = mat_ammoBox},
 	
 	-- Vdankavor --
-	combine_mine={Anoon = "Mine!", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 400, DariKouyn = color(255, 0, 0, -1)},
-	prop_combine_ball={Anoon = "Combine Ball!", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 400, DariKouyn = color(255, 0, 0, -1)},
-	npc_rollermine={Anoon = "RollerMine!", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 400, DariKouyn = color(255, 0, 0, -1)},
-	grenade_helicopter={Anoon = "Bomb!", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 400, DariKouyn = color(255, 0, 0, -1)},
-	npc_grenade_frag={Anoon = "Grenade!", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 400, DariKouyn = color(255, 0, 0, -1)},
-	obj_vj_grenade={Anoon = "Grenade!", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 400, DariKouyn = color(255, 0, 0, -1)},
-	fas2_thrown_m67={Anoon = "Grenade!", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 400, DariKouyn = color(255, 0, 0, -1)},
-	doom3_grenade={Anoon = "Grenade!", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 400, DariKouyn = color(255, 0, 0, -1)},
-	cw_grenade_thrown={Anoon = "Grenade!", Negar = "negar/negar", DariDesag = "VJFont_Trebuchet24_Medium", Heravorutyoun = 400, DariKouyn = color(255, 0, 0, -1)},
+	combine_mine = {Anoon = "Mine!", Heravorutyoun = 400, DariKouyn = color(255, 0, 0, -1), Negar = mat_skull},
+	prop_combine_ball = {Anoon = "Combine Ball!", Heravorutyoun = 400, DariKouyn = color(255, 0, 0, -1), Negar = mat_skull},
+	npc_rollermine = {Anoon = "RollerMine!", Heravorutyoun = 400, DariKouyn = color(255, 0, 0, -1), Negar = mat_skull},
+	grenade_helicopter = {Anoon = "Bomb!", Heravorutyoun = 400, DariKouyn = color(255, 0, 0, -1), Negar = mat_skull},
 }
+local grenadeObj = {Anoon = "Grenade!", Heravorutyoun = 400, DariKouyn = color(255, 0, 0, -1), Negar = mat_grenade}
 
 hook.Add("HUDPaint", "vj_hud_proximityscanner", function()
 	local ply = LocalPlayer()
@@ -723,17 +721,21 @@ hook.Add("HUDPaint", "vj_hud_proximityscanner", function()
 	local plyPos = ply:GetPos()
 	for _, ent in ipairs(ents.FindInSphere(plyPos, 320)) do
 		local v = AbranknerVorKedne[ent:GetClass()]
+		if ent.VJTag_ID_Grenade && !v then -- If its tagged as a grenade and no entity was found then label it as a grenade!
+			v = grenadeObj
+		end
 		if v then
-			local pos = ent:LocalToWorld(ent:OBBCenter()):ToScreen()
 			local dist = plyPos:Distance(ent:GetPos())
 			if math_round(dist) < v.Heravorutyoun then
-				draw.SimpleText(v.Anoon, v.DariDesag,pos.x + 1, pos.y + 1, (v.DariKouyn.a == -1 and color(v.DariKouyn.r, v.DariKouyn.g, v.DariKouyn.b, kouyne_pes)) or v.DariKouyn, 0, 0)
-				draw.SimpleText(convertToRealUnit(dist), "HudHintTextLarge", pos.x + 30, pos.y + 25, colorWhite, 0, 0)
+				local startPos = ent:LocalToWorld(ent:OBBCenter()):ToScreen()
+				local matColor = (v.DariKouyn.a == -1 and color(v.DariKouyn.r, v.DariKouyn.g, v.DariKouyn.b, kouyne_pes)) or v.DariKouyn
+				draw.SimpleText(v.Anoon, "VJFont_Trebuchet24_Medium", startPos.x + 1, startPos.y + 1, matColor, 0, 0)
+				draw.SimpleText(convertToRealUnit(dist), "HudHintTextLarge", startPos.x + 30, startPos.y + 25, colorWhite, 0, 0)
 				
-				-- Hin abrank (Goghme negar ge tsetsen e)
-				//surface.SetTexture(surface.GetTextureID(v.Negar))
-				//surface.SetDrawColor(colorWhite)
-				//surface.DrawTexturedRect(pos.x-(20), pos.y-(20), 25, 25)
+				-- Goghme negar ge tsetsen e
+				surface.SetMaterial(v.Negar)
+				surface.SetDrawColor(matColor)
+				surface.DrawTexturedRect(startPos.x - 32, startPos.y, 30, 30)
 			end
 		end
 	end
