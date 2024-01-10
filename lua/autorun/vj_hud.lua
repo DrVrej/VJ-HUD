@@ -1,5 +1,5 @@
 /*--------------------------------------------------
-	*** Copyright (c) 2012-2023 by DrVrej, All rights reserved. ***
+	*** Copyright (c) 2012-2024 by DrVrej, All rights reserved. ***
 	No parts of this code or any of its contents may be reproduced, copied, modified or adapted,
 	without the prior written consent of the author, unless otherwise indicated for stand-alone materials.
 --------------------------------------------------*/
@@ -401,10 +401,10 @@ hook.Add("HUDPaint", "vj_hud_localplayerinfo", function()
 	if GetConVar("sv_cheats"):GetInt() == 1 then
 	draw.SimpleText("Cheats: On","VJFont_Trebuchet24_Tiny", 160, ScrH()-124, color(255, 255, 255, 150), 0, 0) else
 	draw.SimpleText("Cheats: Off","VJFont_Trebuchet24_Tiny", 160, ScrH()-124, color(255, 255, 255, 150), 0, 0) end
-	if GetConVar("ai_disabled"):GetInt() == 0 then
+	if VJ_CVAR_AI_ENABLED then
 	draw.SimpleText("NPC AI: On","VJFont_Trebuchet24_Tiny", 160, ScrH()-111, color(255, 255, 255, 150), 0, 0) else
 	draw.SimpleText("NPC AI: Off","VJFont_Trebuchet24_Tiny", 160, ScrH()-111, color(255, 255, 255, 150), 0, 0) end
-	if GetConVar("ai_ignoreplayers"):GetInt() == 1 then
+	if VJ_CVAR_IGNOREPLAYERS then
 	draw.SimpleText("IgnorePly: On","VJFont_Trebuchet24_Tiny", 160, ScrH()-98, color(255, 255, 255, 150), 0, 0) else
 	draw.SimpleText("IgnorePly: Off","VJFont_Trebuchet24_Tiny", 160, ScrH()-98, color(255, 255, 255, 150), 0, 0) end*/
 	/*if GetConVar("ai_serverragdolls"):GetInt() == 1 then
