@@ -58,6 +58,17 @@ local math_ceil = math.ceil
 
 local usingMetric = 0
 
+local defaultHUD_Elements = {
+    ["CHudHealth"] = true,
+    ["CHudBattery"] = true,
+	["CHudSuitPower"] = true,
+    ["CHudAmmo"] = true,
+	["CHudSecondaryAmmo"] = true,
+}
+local defaultCH_Elements = {
+	["CHudCrosshair"] = true
+}
+
 -- Color Values
 local color = Color
 local colorWhite = color(255, 255, 255, 255)
@@ -94,33 +105,19 @@ local mat_following = Material("vj_hud/following.png")
 local mat_info = Material("vj_hud/info.png")
 
 -- ConVars
-local cv_hud_disablegmod = GetConVar("vj_hud_disablegmod")
-local cv_hud_disablegmodcross = GetConVar("vj_hud_disablegmodcross")
-local cv_hud_enabled = GetConVar("vj_hud_enabled")
-local cv_hud_unitsystem = GetConVar("vj_hud_metric")
-local cv_hud_health = GetConVar("vj_hud_health")
-local cv_hud_ammo = GetConVar("vj_hud_ammo")
-local cv_hud_compass = GetConVar("vj_hud_compass")
-local cv_hud_playerinfo = GetConVar("vj_hud_playerinfo")
-local cv_hud_trace = GetConVar("vj_hud_trace")
-local cv_hud_trace_limited = GetConVar("vj_hud_trace_limited")
-local cv_hud_scanner = GetConVar("vj_hud_scanner")
-local cv_ch_enabled = GetConVar("vj_hud_ch_enabled")
-local cv_ch_invehicle = GetConVar("vj_hud_ch_invehicle")
-local cv_ch_crosssize = GetConVar("vj_hud_ch_crosssize")
-local cv_ch_opacity = GetConVar("vj_hud_ch_opacity")
-local cv_ch_r = GetConVar("vj_hud_ch_r")
-local cv_ch_g = GetConVar("vj_hud_ch_g")
-local cv_ch_b = GetConVar("vj_hud_ch_b")
-local cv_ch_mat = GetConVar("vj_hud_ch_mat")
+local cv_hud_disablegmod, cv_hud_disablegmodcross, cv_hud_enabled, cv_hud_unitsystem, cv_hud_health, cv_hud_ammo, cv_hud_compass, cv_hud_playerinfo, cv_hud_trace, cv_hud_trace_limited, cv_hud_scanner, cv_ch_enabled, cv_ch_invehicle, cv_ch_crosssize, cv_ch_opacity, cv_ch_r, cv_ch_g, cv_ch_b, cv_ch_mat;
 
--- Networked Values
-timer.Simple(0.1, function()
-	if IsValid(LocalPlayer()) then
-		LocalPlayer():SetNW2Int("vj_hud_trhealth", 0)
-		LocalPlayer():SetNW2Int("vj_hud_trmaxhealth", 0)
-		LocalPlayer():SetNW2String("vj_hud_tr_npc_info", "00") -- IsHugeMonster | Disposition | IsGuard | IsMedic | Controlled | If traced NPC is being controlled by local player | Following Player | The Player its following
+-- Handle initialize and default HUD elements
+hook.Add("HUDShouldDraw", "vj_hud_init", function()
+	local ply = LocalPlayer()
+	-- Run it until local player exists then set everything and delete itself
+	if IsValid(ply) then
+		-- Networked Values
+		ply:SetNW2Int("vj_hud_trhealth", 0)
+		ply:SetNW2Int("vj_hud_trmaxhealth", 0)
+		ply:SetNW2String("vj_hud_tr_npc_info", "00") -- IsHugeMonster | Disposition | IsGuard | IsMedic | Controlled | If traced NPC is being controlled by local player | Following Player | The Player its following
 		
+		-- Initialize the ConVars
 		cv_hud_disablegmod = GetConVar("vj_hud_disablegmod")
 		cv_hud_disablegmodcross = GetConVar("vj_hud_disablegmodcross")
 		cv_hud_enabled = GetConVar("vj_hud_enabled")
@@ -134,12 +131,19 @@ timer.Simple(0.1, function()
 		cv_hud_scanner = GetConVar("vj_hud_scanner")
 		cv_ch_enabled = GetConVar("vj_hud_ch_enabled")
 		cv_ch_invehicle = GetConVar("vj_hud_ch_invehicle")
-		cv_ch_crosssize = GetConVar("vj_hud_ch_crosssize")
+		cv_ch_crosssize = GetConVar("vj_hud_ch_size")
 		cv_ch_opacity = GetConVar("vj_hud_ch_opacity")
 		cv_ch_r = GetConVar("vj_hud_ch_r")
 		cv_ch_g = GetConVar("vj_hud_ch_g")
 		cv_ch_b = GetConVar("vj_hud_ch_b")
 		cv_ch_mat = GetConVar("vj_hud_ch_mat")
+		
+		-- Change the hook
+		hook.Remove("HUDShouldDraw", "vj_hud_init") -- Remove this hook, we only wanna run it once!
+		hook.Add("HUDShouldDraw", "vj_hud_hidegmod", function(name)
+			if cv_hud_disablegmod:GetInt() == 1 && defaultHUD_Elements[name] then return false end
+			if cv_hud_disablegmodcross:GetInt() == 1 && defaultCH_Elements[name] then return false end
+		end)
 	end
 end)
 
@@ -151,23 +155,6 @@ local function convertToRealUnit(worldUnit)
 		return math_round(worldUnit / 16).." FT"
 	end
 end
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
------- Hide HL2 Elements ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-local GMOD_HUD = {
-    ["CHudHealth"] = true,
-    ["CHudBattery"] = true,
-	["CHudSuitPower"] = true,
-    ["CHudAmmo"] = true,
-	["CHudSecondaryAmmo"] = true,
-}
-local GMOD_Crosshair = {
-	["CHudCrosshair"] = true
-}
-hook.Add("HUDShouldDraw", "vj_hud_hidegmod", function(name)
-	if cv_hud_disablegmod:GetInt() == 1 && GMOD_HUD[name] then return false end
-	if cv_hud_disablegmodcross:GetInt() == 1 && GMOD_Crosshair[name] then return false end
-end)
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------ Crosshair ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -775,7 +762,6 @@ hook.Add("HUDPaint", "vj_hud", function()
 		local ply = LocalPlayer()
 		local plyAlive = ply:Alive()
 		usingMetric = cv_hud_unitsystem:GetInt()
-		
 		if plyAlive then
 			VJ_HUD_Crosshair(ply)
 			VJ_HUD_Ammo(ply)
