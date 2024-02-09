@@ -17,7 +17,6 @@ if VJExists == true then
 		VJ.AddClientConVar("vj_hud_enabled", 1) -- Enable VJ HUD
 		VJ.AddClientConVar("vj_hud_health", 1) -- Enable health and suit
 		VJ.AddClientConVar("vj_hud_ammo", 1) -- Enable ammo
-		VJ.AddClientConVar("vj_hud_ammo_invehicle", 1) -- Should the ammo be enabled in the vehicle?
 		VJ.AddClientConVar("vj_hud_compass", 1) -- Enable compass
 		VJ.AddClientConVar("vj_hud_playerinfo", 1) -- Enable local player information
 		VJ.AddClientConVar("vj_hud_trace", 1) -- Enable trace information
@@ -45,7 +44,7 @@ if VJExists == true then
 		hook.Add("PopulateToolMenu", "VJ_ADDTOMENU_HUD_SETTINGS", function()	
 			spawnmenu.AddToolMenuOption("DrVrej", "HUDs", "VJ HUD Settings", "Client Settings", "", "", function(Panel)
 				Panel:ControlHelp(" ") -- Spacer
-				Panel:AddControl("Button",{Text = "#vjbase.menu.general.reset.everything", Command = "vj_hud_enabled 1\n vj_hud_disablegmod 1\n vj_hud_health 1\n vj_hud_ammo 1\n vj_hud_playerinfo 1\n vj_hud_trace 1\n vj_hud_compass 1\n vj_hud_scanner 1\n vj_hud_metric 0\n vj_hud_disablegmodcross 1\n vj_hud_ch_enabled 1\n vj_hud_ch_crosssize 50\n vj_hud_ch_opacity 255\n vj_hud_ch_r 0\n vj_hud_ch_g 255\n vj_hud_ch_b 0\n vj_hud_ch_mat 0\n vj_hud_ammo_invehicle 1\n vj_hud_ch_invehicle 1\n vj_hud_trace_limited 0"})
+				Panel:AddControl("Button",{Text = "#vjbase.menu.general.reset.everything", Command = "vj_hud_enabled 1\n vj_hud_disablegmod 1\n vj_hud_health 1\n vj_hud_ammo 1\n vj_hud_playerinfo 1\n vj_hud_trace 1\n vj_hud_compass 1\n vj_hud_scanner 1\n vj_hud_metric 0\n vj_hud_disablegmodcross 1\n vj_hud_ch_enabled 1\n vj_hud_ch_crosssize 50\n vj_hud_ch_opacity 255\n vj_hud_ch_r 0\n vj_hud_ch_g 255\n vj_hud_ch_b 0\n vj_hud_ch_mat 0\n vj_hud_ch_invehicle 1\n vj_hud_trace_limited 0"})
 				Panel:AddControl("Label", {Text = "Garry's Mod HUD:"})
 				Panel:AddControl("Checkbox", {Label = "Disable Garry's Mod HUD", Command = "vj_hud_disablegmod"})
 				Panel:AddControl("Checkbox", {Label = "Disable Garry's Mod Crosshair", Command = "vj_hud_disablegmodcross"})
@@ -58,7 +57,6 @@ if VJExists == true then
 				Panel:AddControl("Checkbox", {Label = "Enable Compass", Command = "vj_hud_compass"})
 				Panel:AddControl("Checkbox", {Label = "Enable Trace Information", Command = "vj_hud_trace"})
 				Panel:AddControl("Checkbox", {Label = "Enable Proximity Scanner", Command = "vj_hud_scanner"})
-				Panel:AddControl("Checkbox", {Label = "Enable Ammunition Counter in Vehicle", Command = "vj_hud_ammo_invehicle"})
 				Panel:AddControl("Checkbox", {Label = "Limited Trace Information", Command = "vj_hud_trace_limited"})
 				Panel:ControlHelp("Will only display for NPCs & Players")
 				Panel:AddControl("Checkbox", {Label = "Use Metric instead of Imperial", Command = "vj_hud_metric"})
