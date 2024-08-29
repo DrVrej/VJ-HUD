@@ -21,7 +21,7 @@ if SERVER then
 			ply:SetNW2Int("vj_hud_trhealth", ent:Health())
 			ply:SetNW2Int("vj_hud_trmaxhealth", ent:GetMaxHealth())
 			if ent:IsNPC() then
-				local npc_hm = (ent.VJ_IsHugeMonster == true and "1") or "0"
+				local npc_hm = (ent.VJTag_ID_Boss == true and "1") or "0"
 				local npc_guard = (ent.IsGuard == true and "1") or "0"
 				local npc_medic = (ent.IsMedicSNPC == true and "1") or "0"
 				local npc_controlled = (ent.VJ_IsBeingControlled == true and "1") or "0"
