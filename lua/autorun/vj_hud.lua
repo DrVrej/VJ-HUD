@@ -23,7 +23,7 @@ if SERVER then
 			if ent:IsNPC() then
 				local npc_hm = (ent.VJTag_ID_Boss == true and "1") or "0"
 				local npc_guard = (ent.IsGuard == true and "1") or "0"
-				local npc_medic = (ent.IsMedicSNPC == true and "1") or "0"
+				local npc_medic = (ent.IsMedic == true and "1") or "0"
 				local npc_controlled = (ent.VJ_IsBeingControlled == true and "1") or "0"
 				local npc_following = "0"
 				local npc_followingn = "Unknown"
