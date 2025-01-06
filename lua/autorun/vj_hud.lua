@@ -1,5 +1,5 @@
 /*--------------------------------------------------
-	*** Copyright (c) 2012-2024 by DrVrej, All rights reserved. ***
+	*** Copyright (c) 2012-2025 by DrVrej, All rights reserved. ***
 	No parts of this code or any of its contents may be reproduced, copied, modified or adapted,
 	without the prior written consent of the author, unless otherwise indicated for stand-alone materials.
 --------------------------------------------------*/
@@ -21,13 +21,13 @@ if SERVER then
 			ply:SetNW2Int("vj_hud_trhealth", ent:Health())
 			ply:SetNW2Int("vj_hud_trmaxhealth", ent:GetMaxHealth())
 			if ent:IsNPC() then
-				local npc_hm = (ent.VJTag_ID_Boss == true and "1") or "0"
+				local npc_hm = (ent.VJ_ID_Boss == true and "1") or "0"
 				local npc_guard = (ent.IsGuard == true and "1") or "0"
 				local npc_medic = (ent.IsMedic == true and "1") or "0"
 				local npc_controlled = (ent.VJ_IsBeingControlled == true and "1") or "0"
 				local npc_following = "0"
 				local npc_followingn = "Unknown"
-				local npc_iscontroller = ((ply.VJTag_IsControllingNPC and IsValid(ply.VJ_TheControllerEntity.VJCE_NPC) and ply.VJ_TheControllerEntity.VJCE_NPC == ent) and "1") or "0"
+				local npc_iscontroller = ((ply.VJ_IsControllingNPC and IsValid(ply.VJ_TheControllerEntity.VJCE_NPC) and ply.VJ_TheControllerEntity.VJCE_NPC == ent) and "1") or "0"
 				if ent.IsFollowing then
 					npc_following = "1"
 					local followEnt = ent.FollowData.Ent
@@ -735,7 +735,7 @@ local function VJ_HUD_Scanner(ply)
 	local plyPos = ply:GetPos()
 	for _, ent in ipairs(ents.FindInSphere(plyPos, 320)) do
 		local v = AbranknerVorKedne[ent:GetClass()]
-		if ent.VJTag_ID_Grenade && !v then -- If its tagged as a grenade and no entity was found then label it as a grenade!
+		if ent.VJ_ID_Grenade && !v then -- If its tagged as a grenade and no entity was found then label it as a grenade!
 			v = grenadeObj
 		end
 		if v then
