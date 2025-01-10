@@ -106,6 +106,7 @@ local mat_info = Material("vj_hud/info.png")
 
 -- ConVars
 local cv_hud_disablegmod, cv_hud_disablegmodcross, cv_hud_enabled, cv_hud_unitsystem, cv_hud_health, cv_hud_ammo, cv_hud_compass, cv_hud_playerinfo, cv_hud_trace, cv_hud_trace_limited, cv_hud_scanner, cv_ch_enabled, cv_ch_invehicle, cv_ch_crosssize, cv_ch_opacity, cv_ch_r, cv_ch_g, cv_ch_b, cv_ch_mat;
+local cl_drawhud = GetConVar("cl_drawhud")
 
 -- Handle initialize and default HUD elements
 hook.Add("HUDShouldDraw", "vj_hud_init", function()
@@ -758,7 +759,7 @@ end
 ------ Main ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 hook.Add("HUDPaint", "vj_hud", function()
-	if cv_hud_enabled:GetInt() != 0 then
+	if cv_hud_enabled:GetInt() != 0 && cl_drawhud:GetInt() == 1 then
 		local ply = LocalPlayer()
 		local plyAlive = ply:Alive()
 		usingMetric = cv_hud_unitsystem:GetInt()
