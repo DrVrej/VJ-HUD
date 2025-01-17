@@ -210,7 +210,7 @@ local function VJ_HUD_Ammo(ply)
 	
 	-- Poon abranknere
 	draw.RoundedBox(1, ScrW()-195, ScrH()-130, 180, 95, color(0, 0, 0, 150))
-	//draw.SimpleText("Weapons - "..table.Count(ply:GetWeapons()),"VJFont_Trebuchet24_Small", ScrW()-340, ScrH()-95, color(255, 255, 255, 150), 0, 0) -- Kani had zenk oones
+	//draw.SimpleText("Weapons - "..table.Count(ply:GetWeapons()),"VJBaseSmall", ScrW()-340, ScrH()-95, color(255, 255, 255, 150), 0, 0) -- Kani had zenk oones
 	local pri_clip = curwep:Clip1() -- Remaining ammunition for the clip
 	local pri_extra = ply:GetAmmoCount(curwep:GetPrimaryAmmoType()) -- Remaining primary fire ammunition (Reserve, not counting current clip!)
 	local sec_ammo = ply:GetAmmoCount(curwep:GetSecondaryAmmoType()) -- Remaining secondary fire ammunition
@@ -231,14 +231,14 @@ local function VJ_HUD_Ammo(ply)
 	surface.SetMaterial(mat_grenade)
 	surface.SetDrawColor(0, 255, 255, 150)
 	surface.DrawTexturedRect(ScrW()-95, ScrH()-70, 25, 25)
-	draw.SimpleText(ply:GetAmmoCount("grenade"),"VJFont_Trebuchet24_MediumLarge", ScrW()-70, ScrH()-70, color(0, 255, 255, 150), 0, 0)
+	draw.SimpleText(ply:GetAmmoCount("grenade"),"VJBaseMediumLarge", ScrW()-70, ScrH()-70, color(0, 255, 255, 150), 0, 0)
 	
 	if curwep:IsWeapon() then
 		local wepname = curwep:GetPrintName()
 		if string.len(wepname) > 22 then
 			wepname = string.sub(curwep:GetPrintName(),1,20).."..."
 		end
-		draw.SimpleText(wepname,"VJFont_Trebuchet24_Small", ScrW()-185, ScrH()-125, color(225, 255, 255, 150), 0, 0)
+		draw.SimpleText(wepname,"VJBaseSmall", ScrW()-185, ScrH()-125, color(225, 255, 255, 150), 0, 0)
 	end
 	
 	local hasammo = true
@@ -297,11 +297,11 @@ local function VJ_HUD_Ammo(ply)
 	if ammo_pri_len > 1 then
 		ammo_pri_pos = ammo_pri_pos + (6.5*ammo_pri_len)
 	end
-	draw.SimpleText(ammo_pri, "VJFont_Trebuchet24_Large", ScrW()-ammo_pri_pos, ScrH()-108, ammo_pri_c, 0, 0)
+	draw.SimpleText(ammo_pri, "VJBaseLarge", ScrW()-ammo_pri_pos, ScrH()-108, ammo_pri_c, 0, 0)
 	surface.SetMaterial(mat_secondary)
 	surface.SetDrawColor(ammo_sec_c)
 	surface.DrawTexturedRect(ScrW()-190, ScrH()-70, 25, 25)
-	draw.SimpleText(ammo_sec, "VJFont_Trebuchet24_MediumLarge", ScrW()-163, ScrH()-70, ammo_sec_c, 0, 0)
+	draw.SimpleText(ammo_sec, "VJBaseMediumLarge", ScrW()-163, ScrH()-70, ammo_sec_c, 0, 0)
 	
 	-- Reloading bar
 	if ammo_not_use == false then
@@ -315,7 +315,7 @@ local function VJ_HUD_Ammo(ply)
 				draw.RoundedBox(8, ScrW()-195, ScrH()-160, 180, 25, color(0, 255, 255, 40))
 				draw.RoundedBox(8, ScrW()-195, ScrH()-160, math_clamp(anim_perc, 0, 100)*1.8, 25, color(0, 255, 255, 160))
 				draw.RoundedBox(8, ScrW()-195, ScrH()-160, 180, 25, color(0, 0, 0, 150))
-				draw.SimpleText(anim_dur.."s ("..anim_perc.."%)", "VJFont_Trebuchet24_SmallMedium", ScrW()-137, ScrH()-156, color(225, 255, 255, 150), 0, 0)
+				draw.SimpleText(anim_dur.."s ("..anim_perc.."%)", "VJBaseSmallMedium", ScrW()-137, ScrH()-156, color(225, 255, 255, 150), 0, 0)
 			end
 		end
 	end
@@ -332,7 +332,7 @@ local function VJ_HUD_Health(ply, plyAlive)
 		local deadhealth_blinka = math_abs(math_sin(CurTime() * 6) * 200)
 		local deadhealth_blinkb = math_abs(math_sin(CurTime() * 6) * 255)
 		draw.RoundedBox(8, 70, ScrH()-80, 142, 30, color(150, 0, 0, deadhealth_blinka))
-		draw.SimpleText("USER DEAD", "VJFont_Trebuchet24_Medium", 85, ScrH()-77, color(255, 255, 0, deadhealth_blinkb), 0, 0)
+		draw.SimpleText("USER DEAD", "VJBaseMedium", 85, ScrH()-77, color(255, 255, 0, deadhealth_blinkb), 0, 0)
 	else
 		draw.RoundedBox(1, 15, ScrH()-130, 245, 95, color(0, 0, 0, 150))
 		local hp_r = 0
@@ -346,7 +346,7 @@ local function VJ_HUD_Health(ply, plyAlive)
 			hp_g = 102
 			hp_b = 255
 			draw.RoundedBox(8, 15, ScrH()-160, 155, 25, color(0, 0, 0, 150))
-			draw.SimpleText("God Mode Enabled!", "VJFont_Trebuchet24_SmallMedium", 25, ScrH()-156, color(hp_r, hp_g, hp_b, 255), 0, 0)
+			draw.SimpleText("God Mode Enabled!", "VJBaseSmallMedium", 25, ScrH()-156, color(hp_r, hp_g, hp_b, 255), 0, 0)
 		else
 			local warning = 0
 			if lerp_hp <= 35 then
@@ -361,10 +361,10 @@ local function VJ_HUD_Health(ply, plyAlive)
 			end
 			if warning == 1 then
 				draw.RoundedBox(8, 15, ScrH()-160, 180, 25, color(150, 0, 0, math_abs(math_sin(CurTime() * 4) * 200)))
-				draw.SimpleText("WARNING: Low Health!", "VJFont_Trebuchet24_SmallMedium", 25, ScrH()-156, color(255, 153, 0, math_abs(math_sin(CurTime() * 4) * 255)), 0, 0)
+				draw.SimpleText("WARNING: Low Health!", "VJBaseSmallMedium", 25, ScrH()-156, color(255, 153, 0, math_abs(math_sin(CurTime() * 4) * 255)), 0, 0)
 			elseif warning == 2 then
 				draw.RoundedBox(8, 15, ScrH()-160, 220, 25, color(150, 0, 0, math_abs(math_sin(CurTime() * 6) * 200)))
-				draw.SimpleText("WARNING: Death Imminent!", "VJFont_Trebuchet24_SmallMedium", 25, ScrH()-156, color(255, 153, 0, math_abs(math_sin(CurTime() * 6) * 255)), 0, 0)
+				draw.SimpleText("WARNING: Death Imminent!", "VJBaseSmallMedium", 25, ScrH()-156, color(255, 153, 0, math_abs(math_sin(CurTime() * 6) * 255)), 0, 0)
 			end
 		end
 		
@@ -372,7 +372,7 @@ local function VJ_HUD_Health(ply, plyAlive)
 		surface.SetMaterial(mat_health)
 		surface.SetDrawColor(color(hp_r, hp_g, hp_b, hp_blink))
 		surface.DrawTexturedRect(22, ScrH()-127, 40, 45)
-		draw.SimpleText(string.format("%.0f", lerp_hp).."%", "VJFont_Trebuchet24_Medium", 70, ScrH()-128, color(hp_r, hp_g, hp_b, 255), 0, 0)
+		draw.SimpleText(string.format("%.0f", lerp_hp).."%", "VJBaseMedium", 70, ScrH()-128, color(hp_r, hp_g, hp_b, 255), 0, 0)
 		draw.RoundedBox(0, 70, ScrH()-105, 180, 15, color(hp_r, hp_g, hp_b, 40))
 		draw.RoundedBox(0, 70, ScrH()-105, math_clamp(lerp_hp,0,100)*1.8, 15, color(hp_r, hp_g, hp_b, 255))
 		surface.SetDrawColor(hp_r, hp_g, hp_b, 255)
@@ -382,7 +382,7 @@ local function VJ_HUD_Health(ply, plyAlive)
 		surface.SetMaterial(mat_armor)
 		surface.SetDrawColor(color(0, 255, 255, 150))
 		surface.DrawTexturedRect(22, ScrH()-80, 40, 40)
-		draw.SimpleText(string.format("%.0f", lerp_armor).."%", "VJFont_Trebuchet24_Medium", 70, ScrH()-83, color(0, 255, 255, 160), 0, 0)
+		draw.SimpleText(string.format("%.0f", lerp_armor).."%", "VJBaseMedium", 70, ScrH()-83, color(0, 255, 255, 160), 0, 0)
 		draw.RoundedBox(0, 70, ScrH()-60, 180, 15, color(0, 255, 255, 40))
 		draw.RoundedBox(0, 70, ScrH()-60, math_clamp(lerp_armor, 0, 100)*1.8, 15, color(0, 255, 255, 160))
 		surface.SetDrawColor(0, 150, 150, 255)
@@ -397,7 +397,7 @@ local function VJ_HUD_Health(ply, plyAlive)
 			draw.RoundedBox(0, 100, ScrH()-89, math_clamp(suit_power, 0, 100)*1.5, 8, color(suit_r, suit_g, 0, 160))
 			surface.SetDrawColor(suit_r, suit_g, 0, 255)
 			surface.DrawOutlinedRect(100, ScrH()-89, 150, 8)
-			draw.SimpleText("SUIT", "VJFont_Trebuchet24_Tiny", 70, ScrH()-89, color(suit_r, suit_g, 0, 255), 0, 0)
+			draw.SimpleText("SUIT", "VJBaseTiny", 70, ScrH()-89, color(suit_r, suit_g, 0, 255), 0, 0)
 		end
 	end
 end
@@ -414,38 +414,38 @@ local function VJ_HUD_PlayerInfo(ply)
 	//draw.RoundedBox( 8, ScrW()-1665, ScrH()-235, 185, 150, color( 0, 0, 0, 150 ) )
 	//draw.RoundedBox( 8, ScrW()-1665, ScrH()-235, 185, 40, color( 0, 0, 0, 100 ) )
 	/*if ply:IsAdmin() then
-	draw.SimpleText("Admin: Yes","VJFont_Trebuchet24_Tiny", 160, ScrH()-137, color(255, 255, 255, 150), 0, 0) else
-	draw.SimpleText("Admin: No","VJFont_Trebuchet24_Tiny", 160, ScrH()-137, color(255, 255, 255, 150), 0, 0) end
+	draw.SimpleText("Admin: Yes","VJBaseTiny", 160, ScrH()-137, color(255, 255, 255, 150), 0, 0) else
+	draw.SimpleText("Admin: No","VJBaseTiny", 160, ScrH()-137, color(255, 255, 255, 150), 0, 0) end
 	if GetConVar("sv_cheats"):GetInt() == 1 then
-	draw.SimpleText("Cheats: On","VJFont_Trebuchet24_Tiny", 160, ScrH()-124, color(255, 255, 255, 150), 0, 0) else
-	draw.SimpleText("Cheats: Off","VJFont_Trebuchet24_Tiny", 160, ScrH()-124, color(255, 255, 255, 150), 0, 0) end
+	draw.SimpleText("Cheats: On","VJBaseTiny", 160, ScrH()-124, color(255, 255, 255, 150), 0, 0) else
+	draw.SimpleText("Cheats: Off","VJBaseTiny", 160, ScrH()-124, color(255, 255, 255, 150), 0, 0) end
 	if VJ_CVAR_AI_ENABLED then
-	draw.SimpleText("NPC AI: On","VJFont_Trebuchet24_Tiny", 160, ScrH()-111, color(255, 255, 255, 150), 0, 0) else
-	draw.SimpleText("NPC AI: Off","VJFont_Trebuchet24_Tiny", 160, ScrH()-111, color(255, 255, 255, 150), 0, 0) end
+	draw.SimpleText("NPC AI: On","VJBaseTiny", 160, ScrH()-111, color(255, 255, 255, 150), 0, 0) else
+	draw.SimpleText("NPC AI: Off","VJBaseTiny", 160, ScrH()-111, color(255, 255, 255, 150), 0, 0) end
 	if VJ_CVAR_IGNOREPLAYERS then
-	draw.SimpleText("IgnorePly: On","VJFont_Trebuchet24_Tiny", 160, ScrH()-98, color(255, 255, 255, 150), 0, 0) else
-	draw.SimpleText("IgnorePly: Off","VJFont_Trebuchet24_Tiny", 160, ScrH()-98, color(255, 255, 255, 150), 0, 0) end*/
+	draw.SimpleText("IgnorePly: On","VJBaseTiny", 160, ScrH()-98, color(255, 255, 255, 150), 0, 0) else
+	draw.SimpleText("IgnorePly: Off","VJBaseTiny", 160, ScrH()-98, color(255, 255, 255, 150), 0, 0) end*/
 	/*if GetConVar("ai_serverragdolls"):GetInt() == 1 then
-	draw.SimpleText("Cropses: On","VJFont_Trebuchet24_Tiny", 160, ScrH()-90, color(255, 255, 255, 150), 0, 0) else
-	draw.SimpleText("Cropses: Off","VJFont_Trebuchet24_Tiny", 160, ScrH()-90, color(255, 255, 255, 150), 0, 0) end*/
-	//draw.SimpleText("Team: "..team.GetName( ply:Team() ),"VJFont_Trebuchet24_Tiny", 20, 842, color(255, 255, 255, 150), 0, 0)
-	//draw.SimpleText("Map: "..game.GetMap(), "VJFont_Trebuchet24_Tiny", 30, ScrH()-143, color(255, 255, 255, 150),0,0)
-	//draw.SimpleText("Gamemode: "..gmod.GetGamemode().Name, "VJFont_Trebuchet24_Tiny", 30, ScrH()-130, color(255, 255, 255, 150),0,0)
+	draw.SimpleText("Cropses: On","VJBaseTiny", 160, ScrH()-90, color(255, 255, 255, 150), 0, 0) else
+	draw.SimpleText("Cropses: Off","VJBaseTiny", 160, ScrH()-90, color(255, 255, 255, 150), 0, 0) end*/
+	//draw.SimpleText("Team: "..team.GetName( ply:Team() ),"VJBaseTiny", 20, 842, color(255, 255, 255, 150), 0, 0)
+	//draw.SimpleText("Map: "..game.GetMap(), "VJBaseTiny", 30, ScrH()-143, color(255, 255, 255, 150),0,0)
+	//draw.SimpleText("Gamemode: "..gmod.GetGamemode().Name, "VJBaseTiny", 30, ScrH()-130, color(255, 255, 255, 150),0,0)
 	
-	//draw.SimpleText(os.date("%a,%I:%M:%S %p"), "VJFont_Trebuchet24_SmallMedium", 330, ScrH()-125, color(0, 255, 255, 150),0,0)
-	//draw.SimpleText(os.date("%m/%d/20%y"), "VJFont_Trebuchet24_SmallMedium", 350, ScrH()-110, color(0, 255, 255, 150),0,0)
+	//draw.SimpleText(os.date("%a,%I:%M:%S %p"), "VJBaseSmallMedium", 330, ScrH()-125, color(0, 255, 255, 150),0,0)
+	//draw.SimpleText(os.date("%m/%d/20%y"), "VJBaseSmallMedium", 350, ScrH()-110, color(0, 255, 255, 150),0,0)
 	
 	-- Number of kills
 	surface.SetMaterial(mat_knife)
 	surface.SetDrawColor(color(255, 255, 255, 150))
 	surface.DrawTexturedRect(260, ScrH()-125, 28, 28)
-	draw.SimpleText(ply:Frags(), "VJFont_Trebuchet24_Medium", 293, ScrH()-125, color(255, 255, 255, 150), 100, 100)
+	draw.SimpleText(ply:Frags(), "VJBaseMedium", 293, ScrH()-125, color(255, 255, 255, 150), 100, 100)
 	
 	-- Number of deaths
 	surface.SetMaterial(mat_skull)
 	surface.SetDrawColor(color(255, 255, 255, 150))
 	surface.DrawTexturedRect(260, ScrH()-95, 28, 28)
-	draw.SimpleText(ply:Deaths(), "VJFont_Trebuchet24_Medium", 293, ScrH()-93, color(255, 255, 255, 150), 100, 100)
+	draw.SimpleText(ply:Deaths(), "VJBaseMedium", 293, ScrH()-93, color(255, 255, 255, 150), 100, 100)
 	
 	-- Kill / death ratio
 	local kd;
@@ -461,7 +461,7 @@ local function VJ_HUD_PlayerInfo(ply)
 	surface.SetMaterial(mat_kd)
 	surface.SetDrawColor(color(255, 255, 255, 150))
 	surface.DrawTexturedRect(260, ScrH()-65, 28, 28)
-	draw.SimpleText(kd, "VJFont_Trebuchet24_Medium", 293, ScrH()-63, color(255, 255, 255, 150), 100, 100)
+	draw.SimpleText(kd, "VJBaseMedium", 293, ScrH()-63, color(255, 255, 255, 150), 100, 100)
 	
 	-- Movement speed
     local speed;
@@ -473,7 +473,7 @@ local function VJ_HUD_PlayerInfo(ply)
 	surface.SetMaterial(mat_run)
 	surface.SetDrawColor(color(255, 255, 255, 150))
 	surface.DrawTexturedRect(340, ScrH()-125, 28, 28)
-	draw.SimpleText(speed, "VJFont_Trebuchet24_Medium", 373, ScrH()-125, color(255, 255, 255, 150), 100, 100)
+	draw.SimpleText(speed, "VJBaseMedium", 373, ScrH()-125, color(255, 255, 255, 150), 100, 100)
 	
 	-- FPS
 	if CurTime() > next_fps then
@@ -483,7 +483,7 @@ local function VJ_HUD_PlayerInfo(ply)
 	surface.SetMaterial(mat_fps)
 	surface.SetDrawColor(color(255, 255, 255, 150))
 	surface.DrawTexturedRect(340, ScrH()-95, 28, 28)
-	draw.SimpleText(fps.."fps", "VJFont_Trebuchet24_Medium", 373, ScrH()-93, color(255, 255, 255, 150),0,0)
+	draw.SimpleText(fps.."fps", "VJBaseMedium", 373, ScrH()-93, color(255, 255, 255, 150),0,0)
 	
 	-- Ping
 	local ping = ply:Ping()
@@ -491,7 +491,7 @@ local function VJ_HUD_PlayerInfo(ply)
 	surface.SetMaterial(mat_ping)
 	surface.SetDrawColor(color(255, ping_calc, ping_calc, 150))
 	surface.DrawTexturedRect(340, ScrH()-65, 28, 28)
-	draw.SimpleText(ping.."ms", "VJFont_Trebuchet24_Medium", 373, ScrH()-63, color(255, ping_calc, ping_calc, 150),0,0)
+	draw.SimpleText(ping.."ms", "VJBaseMedium", 373, ScrH()-63, color(255, ping_calc, ping_calc, 150),0,0)
 	
 	-- Vehicle speed
 	if IsValid(ply:GetVehicle()) then
@@ -505,7 +505,7 @@ local function VJ_HUD_PlayerInfo(ply)
 		surface.SetMaterial(mat_car)
 		surface.SetDrawColor(color(255, 255, 255, 150))
 		surface.DrawTexturedRect(320, ScrH()-170, 50, 50)
-		draw.SimpleText(speedcalc, "VJFont_Trebuchet24_Medium", 373, ScrH()-155, color(255, 255, 255, 150), 100, 100)
+		draw.SimpleText(speedcalc, "VJBaseMedium", 373, ScrH()-155, color(255, 255, 255, 150), 100, 100)
 	end
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -537,7 +537,7 @@ local function VJ_HUD_Compass(ply)
 	elseif ang < -108 and ang > -162 then
 		comp_dir = "SE"
 	end
-	draw.SimpleText(comp_dir, "VJFont_Trebuchet24_Large", ScrW() / 1.955, 26, color(0, 255, 255, 255), 1, 1)
+	draw.SimpleText(comp_dir, "VJBaseLarge", ScrW() / 1.955, 26, color(0, 255, 255, 255), 1, 1)
 	local trace = util.TraceLine(util.GetPlayerTrace(ply))
     local distrl = convertToRealUnit(ply:GetPos():Distance(trace.HitPos))
 	local distrllen = string.len(tostring(distrl))
@@ -545,7 +545,7 @@ local function VJ_HUD_Compass(ply)
 	if distrllen > 4 then
 		move_ft = move_ft - (0.007*(distrllen-4))
 	end
-	draw.SimpleText(distrl, "VJFont_Trebuchet24_Small", ScrW() / (1.985 - move_ft), 40, color(255, 255, 255, 200), 0, 0)
+	draw.SimpleText(distrl, "VJBaseSmall", ScrW() / (1.985 - move_ft), 40, color(255, 255, 255, 200), 0, 0)
 	local dist = math_round(ply:GetPos():Distance(trace.HitPos),2)
 	local distlen = string.len(tostring(dist))
 	if distlen >= 7 then
@@ -556,7 +556,7 @@ local function VJ_HUD_Compass(ply)
 	if distlen > 1 then
 		move_wu = move_wu - (0.007*(distlen-1))
 	end
-	draw.SimpleText(dist.." WU", "VJFont_Trebuchet24_Tiny", ScrW()/(1.975-move_wu), 55, color(0, 255, 255, 255), 0, 0)
+	draw.SimpleText(dist.." WU", "VJBaseTiny", ScrW()/(1.975-move_wu), 55, color(0, 255, 255, 255), 0, 0)
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------ Trace Information ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -616,7 +616,7 @@ local function VJ_HUD_TraceInfo(ply)
 					npc_disp_color = color(255, 150, 0, 255)
 					npc_disp_t = "Neutral"
 				end
-				npc_spacing = draw.SimpleText(npc_disp_t, "VJFont_Trebuchet24_SmallMedium", pos.x, pos.y + 50, npc_disp_color, 0, 0)
+				npc_spacing = draw.SimpleText(npc_disp_t, "VJBaseSmallMedium", pos.x, pos.y + 50, npc_disp_color, 0, 0)
 				npc_spacing = npc_spacing + 10
 				
 				-- Guarding
@@ -656,13 +656,13 @@ local function VJ_HUD_TraceInfo(ply)
 					surface.DrawTexturedRect(pos.x - 2, pos.y + 68, 34, 34)
 					surface.SetDrawColor(color(221, 160, 221, 255))
 					surface.DrawTexturedRect(pos.x, pos.y + 70, 30, 30)
-					draw.SimpleText(string.sub(npc_info, 8, -1), "VJFont_Trebuchet24_SmallMedium", pos.x + 32, pos.y + 75, color(221, 160, 221, 255), 0, 0)
+					draw.SimpleText(string.sub(npc_info, 8, -1), "VJBaseSmallMedium", pos.x + 32, pos.y + 75, color(221, 160, 221, 255), 0, 0)
 				end
 			end
 			
-			draw.SimpleText(distrl.."("..dist.." WU)", "VJFont_Trebuchet24_SmallMedium", pos.x, pos.y - 26, color(0, 255, 255, 255), 0, 0)
-			draw.SimpleText(language.GetPhrase(ent:GetClass()), "VJFont_Trebuchet24_Medium", pos.x, pos.y - 12, colorWhite, 0, 0)
-			draw.SimpleText(tostring(ent), "VJFont_Trebuchet24_Small", pos.x, pos.y + 10, color(255, 255, 255, 200), 0, 0)
+			draw.SimpleText(distrl.."("..dist.." WU)", "VJBaseSmallMedium", pos.x, pos.y - 26, color(0, 255, 255, 255), 0, 0)
+			draw.SimpleText(language.GetPhrase(ent:GetClass()), "VJBaseMedium", pos.x, pos.y - 12, colorWhite, 0, 0)
+			draw.SimpleText(tostring(ent), "VJBaseSmall", pos.x, pos.y + 10, color(255, 255, 255, 200), 0, 0)
 			
 			local ent_hp = ply:GetNW2Int("vj_hud_trhealth")
 			local ent_hpm = ply:GetNW2Int("vj_hud_trmaxhealth")
@@ -684,7 +684,7 @@ local function VJ_HUD_TraceInfo(ply)
 				surface.SetDrawColor(0,255,255,150)
 				surface.DrawOutlinedRect(pos.x,pos.y+30,190,20)
 				draw.RoundedBox(1,pos.x,pos.y+30,hp_box,20,color(0,255,255,150))
-				draw.SimpleText(string.format("%.0f", lerp_trace_hp)..hp_numformat, "VJFont_Trebuchet24_Small",(pos.x+105)-hp_num,pos.y+31,colorWhite)
+				draw.SimpleText(string.format("%.0f", lerp_trace_hp)..hp_numformat, "VJBaseSmall",(pos.x+105)-hp_num,pos.y+31,colorWhite)
 			end
 		end
 	end
@@ -744,7 +744,7 @@ local function VJ_HUD_Scanner(ply)
 			if math_round(dist) < v.Heravorutyoun then
 				local startPos = ent:LocalToWorld(ent:OBBCenter()):ToScreen()
 				local matColor = (v.DariKouyn.a == -1 and color(v.DariKouyn.r, v.DariKouyn.g, v.DariKouyn.b, kouyne_pes)) or v.DariKouyn
-				draw.SimpleText(v.Anoon, "VJFont_Trebuchet24_Medium", startPos.x + 1, startPos.y + 1, matColor, 0, 0)
+				draw.SimpleText(v.Anoon, "VJBaseMedium", startPos.x + 1, startPos.y + 1, matColor, 0, 0)
 				draw.SimpleText(convertToRealUnit(dist), "HudHintTextLarge", startPos.x + 30, startPos.y + 25, colorWhite, 0, 0)
 				
 				-- Goghme negar ge tsetsen e

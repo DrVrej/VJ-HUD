@@ -42,8 +42,7 @@ if VJExists == true then
 		
 		---------------------------------------------------------------------------------------------------------------------------
 		hook.Add("PopulateToolMenu", "VJ_ADDTOMENU_HUD_SETTINGS", function()	
-			spawnmenu.AddToolMenuOption("DrVrej", "HUDs", "VJ HUD Settings", "Client Settings", "", "", function(Panel)
-				Panel:ControlHelp(" ") -- Spacer
+			spawnmenu.AddToolMenuOption("DrVrej", "HUDs", "VJ HUD Settings", "Settings", "", "", function(Panel)
 				Panel:AddControl("Button",{Text = "#vjbase.menu.general.reset.everything", Command = "vj_hud_enabled 1\n vj_hud_disablegmod 1\n vj_hud_health 1\n vj_hud_ammo 1\n vj_hud_playerinfo 1\n vj_hud_trace 1\n vj_hud_compass 1\n vj_hud_scanner 1\n vj_hud_metric 0\n vj_hud_disablegmodcross 1\n vj_hud_ch_enabled 1\n vj_hud_ch_size 50\n vj_hud_ch_opacity 255\n vj_hud_ch_r 0\n vj_hud_ch_g 255\n vj_hud_ch_b 0\n vj_hud_ch_mat 0\n vj_hud_ch_invehicle 1\n vj_hud_trace_limited 0"})
 				Panel:AddControl("Label", {Text = "Garry's Mod HUD:"})
 				Panel:AddControl("Checkbox", {Label = "Disable Garry's Mod HUD", Command = "vj_hud_disablegmod"})
