@@ -84,7 +84,7 @@ VJ.AddClientConVar("vj_hud_disablegmodcross", 1) -- Disable Garry's Mod Crosshai
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 hook.Add("PopulateToolMenu", "VJ_ADDTOMENU_HUD_SETTINGS", function()
 	spawnmenu.AddToolMenuOption("DrVrej", "HUDs", "VJ HUD Settings", "Settings", "", "", function(Panel)
-		Panel:AddControl("Button",{Text = "#vjbase.menu.general.reset.everything", Command = "vj_hud_enabled 1\n vj_hud_disablegmod 1\n vj_hud_health 1\n vj_hud_ammo 1\n vj_hud_playerinfo 1\n vj_hud_trace 1\n vj_hud_compass 1\n vj_hud_scanner 1\n vj_hud_metric 0\n vj_hud_disablegmodcross 1\n vj_hud_ch_enabled 1\n vj_hud_ch_size 50\n vj_hud_ch_opacity 255\n vj_hud_ch_r 0\n vj_hud_ch_g 255\n vj_hud_ch_b 0\n vj_hud_ch_mat 0\n vj_hud_ch_invehicle 1\n vj_hud_trace_limited 0"})
+		Panel:AddControl("Button", {Text = "#vjbase.menu.general.reset.everything", Command = "vj_hud_enabled 1\n vj_hud_disablegmod 1\n vj_hud_health 1\n vj_hud_ammo 1\n vj_hud_playerinfo 1\n vj_hud_trace 1\n vj_hud_compass 1\n vj_hud_scanner 1\n vj_hud_metric 0\n vj_hud_disablegmodcross 1\n vj_hud_ch_enabled 1\n vj_hud_ch_size 50\n vj_hud_ch_opacity 255\n vj_hud_ch_r 0\n vj_hud_ch_g 255\n vj_hud_ch_b 0\n vj_hud_ch_mat 0\n vj_hud_ch_invehicle 1\n vj_hud_trace_limited 0"})
 		Panel:AddControl("Label", {Text = "Garry's Mod HUD:"})
 		Panel:AddControl("Checkbox", {Label = "Disable Garry's Mod HUD", Command = "vj_hud_disablegmod"})
 		Panel:AddControl("Checkbox", {Label = "Disable Garry's Mod Crosshair", Command = "vj_hud_disablegmodcross"})
@@ -142,8 +142,8 @@ hook.Add("PopulateToolMenu", "VJ_ADDTOMENU_HUD_SETTINGS", function()
 			ShowHSV = "1",
 			ShowRGB = "1"
 		})
-		Panel:AddControl("Slider", {Label = "Crosshair Size",min = 0,max = 1000,Command = "vj_hud_ch_size"})
-		Panel:AddControl("Slider", {Label = "Crosshair Opacity",min = 0,max = 255,Command = "vj_hud_ch_opacity"})
+		Panel:AddControl("Slider", {Label = "Crosshair Size", min = 0, max = 1000, Command = "vj_hud_ch_size"})
+		Panel:AddControl("Slider", {Label = "Crosshair Opacity", min = 0, max = 255, Command = "vj_hud_ch_opacity"})
 	end)
 end)
 
@@ -317,7 +317,7 @@ local function VJ_HUD_Ammo(ply, curTime, srcW, srcH)
 	
 	-- Poon abranknere
 	draw.RoundedBox(1, srcW-195, srcH-130, 180, 95, color_box)
-	//draw.SimpleText("Weapons - "..table.Count(ply:GetWeapons()),"VJBaseSmall", srcW-340, srcH-95, color_white_muted, 0, 0) -- Kani had zenk oones
+	//draw.SimpleText("Weapons - "..table.Count(ply:GetWeapons()), "VJBaseSmall", srcW-340, srcH-95, color_white_muted, 0, 0) -- Kani had zenk oones
 	local pri_clip = curwep:Clip1() -- Remaining ammunition for the clip
 	local pri_extra = ply:GetAmmoCount(curwep:GetPrimaryAmmoType()) -- Remaining primary fire ammunition (Reserve, not counting current clip!)
 	local sec_ammo = ply:GetAmmoCount(curwep:GetSecondaryAmmoType()) -- Remaining secondary fire ammunition
@@ -338,14 +338,14 @@ local function VJ_HUD_Ammo(ply, curTime, srcW, srcH)
 	surface.SetMaterial(mat_grenade)
 	surface.SetDrawColor(0, 255, 255, 150)
 	surface.DrawTexturedRect(srcW-95, srcH-70, 25, 25)
-	draw.SimpleText(ply:GetAmmoCount("grenade"),"VJBaseMediumLarge", srcW-70, srcH-70, color_cyan_muted, 0, 0)
+	draw.SimpleText(ply:GetAmmoCount("grenade"), "VJBaseMediumLarge", srcW-70, srcH-70, color_cyan_muted, 0, 0)
 	
 	if curwep:IsWeapon() then
 		local wepname = curwep:GetPrintName()
 		if string.len(wepname) > 22 then
-			wepname = string.sub(curwep:GetPrintName(),1,20).."..."
+			wepname = string.sub(curwep:GetPrintName(), 1, 20).."..."
 		end
-		draw.SimpleText(wepname,"VJBaseSmall", srcW-185, srcH-125, color_white_muted, 0, 0)
+		draw.SimpleText(wepname, "VJBaseSmall", srcW-185, srcH-125, color_white_muted, 0, 0)
 	end
 	
 	local hasammo = true
@@ -479,7 +479,7 @@ local function VJ_HUD_Health(ply, curTime, srcW, srcH, plyAlive)
 		surface.DrawTexturedRect(22, srcH-127, 40, 45)
 		draw.SimpleText(string.format("%.0f", lerp_hp).."%", "VJBaseMedium", 70, srcH-128, color(hp_r, hp_g, hp_b, 255), 0, 0)
 		draw.RoundedBox(0, 70, srcH-105, 180, 15, color(hp_r, hp_g, hp_b, 40))
-		draw.RoundedBox(0, 70, srcH-105, math_clamp(lerp_hp,0,100)*1.8, 15, color(hp_r, hp_g, hp_b, 255))
+		draw.RoundedBox(0, 70, srcH-105, math_clamp(lerp_hp, 0, 100)*1.8, 15, color(hp_r, hp_g, hp_b, 255))
 		surface.SetDrawColor(hp_r, hp_g, hp_b, 255)
 		surface.DrawOutlinedRect(70, srcH-105, 180, 15)
 		
@@ -564,7 +564,7 @@ local function VJ_HUD_PlayerInfo(ply, curTime, srcW, srcH)
 	surface.SetMaterial(mat_fps)
 	surface.SetDrawColor(color_white_muted)
 	surface.DrawTexturedRect(340, srcH-95, 28, 28)
-	draw.SimpleText(fps.."fps", "VJBaseMedium", 373, srcH-93, color_white_muted,0,0)
+	draw.SimpleText(fps.."fps", "VJBaseMedium", 373, srcH-93, color_white_muted, 0, 0)
 	
 	-- Ping
 	local ping = ply:Ping()
@@ -572,7 +572,7 @@ local function VJ_HUD_PlayerInfo(ply, curTime, srcW, srcH)
 	surface.SetMaterial(mat_ping)
 	surface.SetDrawColor(color(255, ping_calc, ping_calc, 150))
 	surface.DrawTexturedRect(340, srcH-65, 28, 28)
-	draw.SimpleText(ping.."ms", "VJBaseMedium", 373, srcH-63, color(255, ping_calc, ping_calc, 150),0,0)
+	draw.SimpleText(ping.."ms", "VJBaseMedium", 373, srcH-63, color(255, ping_calc, ping_calc, 150), 0, 0)
 	
 	-- Vehicle speed
 	if IsValid(ply:GetVehicle()) then
@@ -627,7 +627,7 @@ local function VJ_HUD_Compass(ply, curTime, srcW, srcH)
 		move_ft = move_ft - (0.007*(distrllen-4))
 	end
 	draw.SimpleText(distrl, "VJBaseSmall", srcW / (1.985 - move_ft), 38, color_white, 0, 0)
-	local dist = math_round(ply:GetPos():Distance(trace.HitPos),2)
+	local dist = math_round(ply:GetPos():Distance(trace.HitPos), 2)
 	local distlen = string.len(tostring(dist))
 	if distlen >= 7 then
 		dist = math_round(ply:GetPos():Distance(trace.HitPos))
@@ -659,7 +659,7 @@ local function VJ_HUD_TraceInfo(ply, curTime, srcW, srcH)
 		local pos = ent:LocalToWorld(ent:OBBMaxs()):ToScreen()
 		if (pos.visible) then
 			local distrl = convertToRealUnit(ply:GetPos():Distance(trace.HitPos))
-			local dist = math_round(ply:GetPos():Distance(trace.HitPos),2)
+			local dist = math_round(ply:GetPos():Distance(trace.HitPos), 2)
 			net.Start("vj_hud_ent_info")
 			net.WriteEntity(ent)
 			net.SendToServer()
@@ -750,23 +750,23 @@ local function VJ_HUD_TraceInfo(ply, curTime, srcW, srcH)
 			if !ent:IsWorld() && !ent:IsVehicle() && ent:Health() != 0 then
 				if lerp_trace_hp_entid != ent:EntIndex() then lerp_trace_hp = ent_hpm end
 				lerp_trace_hp_entid = ent:EntIndex()
-				lerp_trace_hp = Lerp(8*FrameTime(),lerp_trace_hp,ent_hp)
-				local hp_box = (190*math_clamp(lerp_trace_hp,0,ent_hpm))/ent_hpm
+				lerp_trace_hp = Lerp(8*FrameTime(), lerp_trace_hp, ent_hp)
+				local hp_box = (190*math_clamp(lerp_trace_hp, 0, ent_hpm))/ent_hpm
 				local hp_num = (surface.GetTextSize(ent_hp.."/"..ent_hpm))/2
 				local hp_numformat = "/"..ent_hpm
 				
 				if ent:IsPlayer() then
-					hp_box = math_clamp(lerp_trace_hp,0,100)*1.9
+					hp_box = math_clamp(lerp_trace_hp, 0, 100)*1.9
 					hp_num = (surface.GetTextSize(ent_hp.."/100"))/2
 					hp_numformat = "%"
 				end
 
 				-- Health box
-				draw.RoundedBox(1, pos.x, pos.y+30, 190, 20, color_cyan_under)
+				draw.RoundedBox(1, pos.x, pos.y + 30, 190, 20, color_cyan_under)
 				surface.SetDrawColor(0, 255, 255, 150)
-				surface.DrawOutlinedRect(pos.x, pos.y+30, 190, 20)
-				draw.RoundedBox(1, pos.x, pos.y+30, hp_box, 20, color_cyan_muted)
-				draw.SimpleText(string.format("%.0f",  lerp_trace_hp)..hp_numformat,  "VJBaseSmall", (pos.x+105)-hp_num, pos.y+31, color_white)
+				surface.DrawOutlinedRect(pos.x, pos.y + 30, 190, 20)
+				draw.RoundedBox(1, pos.x, pos.y + 30, hp_box, 20, color_cyan_muted)
+				draw.SimpleText(string.format("%.0f",  lerp_trace_hp)..hp_numformat,  "VJBaseSmall", (pos.x + 105)-hp_num, pos.y + 31, color_white)
 			end
 		end
 	end
