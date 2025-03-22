@@ -83,27 +83,27 @@ VJ.AddClientConVar("vj_hud_disablegmodcross", 1) -- Disable Garry's Mod Crosshai
 ------ Menu ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 hook.Add("PopulateToolMenu", "VJ_ADDTOMENU_HUD_SETTINGS", function()
-	spawnmenu.AddToolMenuOption("DrVrej", "HUDs", "VJ HUD Settings", "Settings", "", "", function(Panel)
-		Panel:AddControl("Button", {Text = "#vjbase.menu.general.reset.everything", Command = "vj_hud_enabled 1\n vj_hud_disablegmod 1\n vj_hud_health 1\n vj_hud_ammo 1\n vj_hud_playerinfo 1\n vj_hud_trace 1\n vj_hud_compass 1\n vj_hud_scanner 1\n vj_hud_metric 0\n vj_hud_disablegmodcross 1\n vj_hud_ch_enabled 1\n vj_hud_ch_size 50\n vj_hud_ch_opacity 255\n vj_hud_ch_r 0\n vj_hud_ch_g 255\n vj_hud_ch_b 0\n vj_hud_ch_mat 0\n vj_hud_ch_invehicle 1\n vj_hud_trace_limited 0"})
-		Panel:AddControl("Label", {Text = "Garry's Mod HUD:"})
-		Panel:AddControl("Checkbox", {Label = "Disable Garry's Mod HUD", Command = "vj_hud_disablegmod"})
-		Panel:AddControl("Checkbox", {Label = "Disable Garry's Mod Crosshair", Command = "vj_hud_disablegmodcross"})
+	spawnmenu.AddToolMenuOption("DrVrej", "HUDs", "VJ HUD Settings", "Settings", "", "", function(panel)
+		panel:AddControl("Button", {Text = "#vjbase.menu.general.reset.everything", Command = "vj_hud_enabled 1\n vj_hud_disablegmod 1\n vj_hud_health 1\n vj_hud_ammo 1\n vj_hud_playerinfo 1\n vj_hud_trace 1\n vj_hud_compass 1\n vj_hud_scanner 1\n vj_hud_metric 0\n vj_hud_disablegmodcross 1\n vj_hud_ch_enabled 1\n vj_hud_ch_size 50\n vj_hud_ch_opacity 255\n vj_hud_ch_r 0\n vj_hud_ch_g 255\n vj_hud_ch_b 0\n vj_hud_ch_mat 0\n vj_hud_ch_invehicle 1\n vj_hud_trace_limited 0"})
+		panel:Help("Garry's Mod HUD:")
+		panel:CheckBox("Disable Garry's Mod HUD", "vj_hud_disablegmod")
+		panel:CheckBox("Disable Garry's Mod Crosshair", "vj_hud_disablegmodcross")
 		
-		Panel:AddControl("Label", {Text = "HUD:"})
-		Panel:AddControl("Checkbox", {Label = "Enable VJ HUD", Command = "vj_hud_enabled"})
-		Panel:AddControl("Checkbox", {Label = "Enable Health and Suit", Command = "vj_hud_health"})
-		Panel:AddControl("Checkbox", {Label = "Enable Ammunition Counter", Command = "vj_hud_ammo"})
-		Panel:AddControl("Checkbox", {Label = "Enable Local Player Information", Command = "vj_hud_playerinfo"})
-		Panel:AddControl("Checkbox", {Label = "Enable Compass", Command = "vj_hud_compass"})
-		Panel:AddControl("Checkbox", {Label = "Enable Trace Information", Command = "vj_hud_trace"})
-		Panel:AddControl("Checkbox", {Label = "Enable Proximity Scanner", Command = "vj_hud_scanner"})
-		Panel:AddControl("Checkbox", {Label = "Limited Trace Information", Command = "vj_hud_trace_limited"})
-		Panel:ControlHelp("Will only display for NPCs & Players")
-		Panel:AddControl("Checkbox", {Label = "Use Metric instead of Imperial", Command = "vj_hud_metric"})
+		panel:Help("HUD:")
+		panel:CheckBox("Enable VJ HUD", "vj_hud_enabled")
+		panel:CheckBox("Enable Health and Suit", "vj_hud_health")
+		panel:CheckBox("Enable Ammunition Counter", "vj_hud_ammo")
+		panel:CheckBox("Enable Local Player Information", "vj_hud_playerinfo")
+		panel:CheckBox("Enable Compass", "vj_hud_compass")
+		panel:CheckBox("Enable Trace Information", "vj_hud_trace")
+		panel:CheckBox("Enable Proximity Scanner", "vj_hud_scanner")
+		panel:CheckBox("Limited Trace Information", "vj_hud_trace_limited")
+		panel:ControlHelp("Will only display for NPCs & Players")
+		panel:CheckBox("Use Metric instead of Imperial", "vj_hud_metric")
 		
-		Panel:AddControl("Label", {Text = "Crosshair:"})
-		Panel:AddControl("Checkbox", {Label = "Enable Crosshair", Command = "vj_hud_ch_enabled"})
-		Panel:AddControl("Checkbox", {Label = "Enable Crosshair While in Vehicle", Command = "vj_hud_ch_invehicle"})
+		panel:Help("Crosshair:")
+		panel:CheckBox("Enable Crosshair", "vj_hud_ch_enabled")
+		panel:CheckBox("Enable Crosshair While in Vehicle", "vj_hud_ch_invehicle")
 		local vj_crossoption = {Options = {}, CVars = {}, Label = "Crosshair Material:", MenuButton = "0"}
 		vj_crossoption.Options["Arrow (Two, Default)"] = {
 			vj_hud_ch_mat = "0",
@@ -132,18 +132,16 @@ hook.Add("PopulateToolMenu", "VJ_ADDTOMENU_HUD_SETTINGS", function()
 		vj_crossoption.Options["Dot (Five, Large)"] = {
 			vj_hud_ch_mat = "8",
 		}
-		Panel:AddControl("ComboBox", vj_crossoption)
-		Panel:AddControl("Color", { -- Color Picker
-			Label = "Crosshair Color:",
-			Red = "vj_hud_ch_r", -- red
-			Green = "vj_hud_ch_g", -- green
-			Blue = "vj_hud_ch_b", -- blue
-			ShowAlpha = "0",
-			ShowHSV = "1",
-			ShowRGB = "1"
-		})
-		Panel:AddControl("Slider", {Label = "Crosshair Size", min = 0, max = 1000, Command = "vj_hud_ch_size"})
-		Panel:AddControl("Slider", {Label = "Crosshair Opacity", min = 0, max = 255, Command = "vj_hud_ch_opacity"})
+		panel:AddControl("ComboBox", vj_crossoption)
+		local colorPicker = vgui.Create("CtrlColor", panel) -- Color Picker
+			colorPicker.Mixer:SetAlphaBar(false)
+			colorPicker:SetLabel("Crosshair Color:")
+			colorPicker:SetConVarR("vj_hud_ch_r")
+			colorPicker:SetConVarG("vj_hud_ch_g")
+			colorPicker:SetConVarB("vj_hud_ch_b")
+		panel:AddItem(colorPicker)
+		panel:NumSlider("Crosshair Size", "vj_hud_ch_size", 0, 1000, 0)
+		panel:NumSlider("Crosshair Opacity", "vj_hud_ch_opacity", 0, 255, 0)
 	end)
 end)
 
