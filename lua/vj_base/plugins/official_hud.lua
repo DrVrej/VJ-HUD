@@ -3,7 +3,7 @@
 	No parts of this code or any of its contents may be reproduced, copied, modified or adapted,
 	without the prior written consent of the author, unless otherwise indicated for stand-alone materials.
 --------------------------------------------------*/
-VJ.AddPlugin("VJ HUD", "HUD")
+VJ.AddPlugin("VJ HUD", "HUD", "1.2.0")
 
 /*----------------------------------------------------------
 	-- Screen Information --
