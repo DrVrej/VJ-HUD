@@ -42,7 +42,7 @@ if SERVER then
 					end
 				end
 				if npc_followingn == ply:Nick() then npc_followingn = "You" end
-				ply:SetNW2String("vj_hud_tr_npc_info", npc_hm..ent:Disposition(ply)..npc_guard..npc_medic..npc_controlled..npc_iscontroller..npc_following..npc_followingn)
+				ply:SetNW2String("vj_hud_tr_npc_info", npc_hm .. ent:Disposition(ply) .. npc_guard .. npc_medic .. npc_controlled .. npc_iscontroller .. npc_following .. npc_followingn)
 			end
 		end
 	end)
@@ -256,9 +256,9 @@ end)
 -- Convert given Source world unit to a real world unit (meters / feet)
 local function convertToRealUnit(worldUnit)
 	if usingMetric == 1 then
-		return math_round((worldUnit / 16) / 3.281).." M"
+		return math_round((worldUnit / 16) / 3.281) .. " M"
 	else
-		return math_round(worldUnit / 16).." FT"
+		return math_round(worldUnit / 16) .. " FT"
 	end
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -315,7 +315,7 @@ local function VJ_HUD_Ammo(ply, curTime, srcW, srcH)
 	
 	-- Poon abranknere
 	draw.RoundedBox(1, srcW-195, srcH-130, 180, 95, color_box)
-	//draw.SimpleText("Weapons - "..table.Count(ply:GetWeapons()), "VJBaseSmall", srcW-340, srcH-95, color_white_muted, 0, 0) -- Kani had zenk oones
+	//draw.SimpleText("Weapons - " .. table.Count(ply:GetWeapons()), "VJBaseSmall", srcW-340, srcH-95, color_white_muted, 0, 0) -- Kani had zenk oones
 	local pri_clip = curwep:Clip1() -- Remaining ammunition for the clip
 	local pri_extra = ply:GetAmmoCount(curwep:GetPrimaryAmmoType()) -- Remaining primary fire ammunition (Reserve, not counting current clip!)
 	local sec_ammo = ply:GetAmmoCount(curwep:GetSecondaryAmmoType()) -- Remaining secondary fire ammunition
@@ -341,14 +341,14 @@ local function VJ_HUD_Ammo(ply, curTime, srcW, srcH)
 	if curwep:IsWeapon() then
 		local wepname = curwep:GetPrintName()
 		if string.len(wepname) > 22 then
-			wepname = string.sub(curwep:GetPrintName(), 1, 20).."..."
+			wepname = string.sub(curwep:GetPrintName(), 1, 20) .. "..."
 		end
 		draw.SimpleText(wepname, "VJBaseSmall", srcW-185, srcH-125, color_white_muted, 0, 0)
 	end
 	
 	local hasammo = true
 	local ammo_not_use = false -- Does it use ammo? = true for things like gravity gun or physgun
-	local ammo_pri = pri_clip.." / "..pri_extra
+	local ammo_pri = pri_clip .. " / " .. pri_extra
 	local ammo_pri_c = color_green_muted
 	local ammo_sec = sec_ammo
 	local ammo_sec_c = color_cyan_muted
@@ -366,7 +366,7 @@ local function VJ_HUD_Ammo(ply, curTime, srcW, srcH)
 	end
 		
 	if hasammo == true && pri_clip <= 0 then -- Mag is empty but has reserve
-		ammo_pri = "--- / "..pri_extra
+		ammo_pri = "--- / " .. pri_extra
 		ammo_pri_c = color(255, 0, 0, empty_blink)
 	end
 	if pri_clip == -1 && curwep:GetSecondaryAmmoType() == -1 then -- Uses primary only with no ammo reserve, ex: "weapon_rpg" or "weapon_frag"
@@ -420,7 +420,7 @@ local function VJ_HUD_Ammo(ply, curTime, srcW, srcH)
 				draw.RoundedBox(8, srcW-195, srcH-160, 180, 25, color_cyan_under)
 				draw.RoundedBox(8, srcW-195, srcH-160, math_clamp(anim_perc, 0, 100)*1.8, 25, color_cyan_muted)
 				draw.RoundedBox(8, srcW-195, srcH-160, 180, 25, color_box)
-				draw.SimpleText(anim_dur.."s ("..anim_perc.."%)", "VJBaseSmallMedium", srcW-137, srcH-156, color_white_muted, 0, 0)
+				draw.SimpleText(anim_dur .. "s (" .. anim_perc .. "%)", "VJBaseSmallMedium", srcW-137, srcH-156, color_white_muted, 0, 0)
 			end
 		end
 	end
@@ -475,7 +475,7 @@ local function VJ_HUD_Health(ply, curTime, srcW, srcH, plyAlive)
 		surface.SetMaterial(mat_health)
 		surface.SetDrawColor(color(hp_r, hp_g, hp_b, hp_blink))
 		surface.DrawTexturedRect(22, srcH-127, 40, 45)
-		draw.SimpleText(string.format("%.0f", lerp_hp).."%", "VJBaseMedium", 70, srcH-128, color(hp_r, hp_g, hp_b, 255), 0, 0)
+		draw.SimpleText(string.format("%.0f", lerp_hp) .. "%", "VJBaseMedium", 70, srcH-128, color(hp_r, hp_g, hp_b, 255), 0, 0)
 		draw.RoundedBox(0, 70, srcH-105, 180, 15, color(hp_r, hp_g, hp_b, 40))
 		draw.RoundedBox(0, 70, srcH-105, math_clamp(lerp_hp, 0, 100)*1.8, 15, color(hp_r, hp_g, hp_b, 255))
 		surface.SetDrawColor(hp_r, hp_g, hp_b, 255)
@@ -485,7 +485,7 @@ local function VJ_HUD_Health(ply, curTime, srcW, srcH, plyAlive)
 		surface.SetMaterial(mat_armor)
 		surface.SetDrawColor(color_cyan_muted)
 		surface.DrawTexturedRect(22, srcH-80, 40, 40)
-		draw.SimpleText(string.format("%.0f", lerp_armor).."%", "VJBaseMedium", 70, srcH-83, color_cyan_muted, 0, 0)
+		draw.SimpleText(string.format("%.0f", lerp_armor) .. "%", "VJBaseMedium", 70, srcH-83, color_cyan_muted, 0, 0)
 		draw.RoundedBox(0, 70, srcH-60, 180, 15, color_cyan_under)
 		draw.RoundedBox(0, 70, srcH-60, math_clamp(lerp_armor, 0, 100)*1.8, 15, color_cyan_muted)
 		surface.SetDrawColor(0, 150, 150, 255)
@@ -545,9 +545,9 @@ local function VJ_HUD_PlayerInfo(ply, curTime, srcW, srcH)
 	-- Movement speed
     local speed;
 	if usingMetric == 1 then
-		speed = math_round((ply:GetVelocity():Length() * 0.04263382283) * 1.6093).."kph"
+		speed = math_round((ply:GetVelocity():Length() * 0.04263382283) * 1.6093) .. "kph"
 	else
-		speed = math_round(ply:GetVelocity():Length() * 0.04263382283).."mph"
+		speed = math_round(ply:GetVelocity():Length() * 0.04263382283) .. "mph"
 	end
 	surface.SetMaterial(mat_run)
 	surface.SetDrawColor(color_white_muted)
@@ -562,7 +562,7 @@ local function VJ_HUD_PlayerInfo(ply, curTime, srcW, srcH)
 	surface.SetMaterial(mat_fps)
 	surface.SetDrawColor(color_white_muted)
 	surface.DrawTexturedRect(340, srcH-95, 28, 28)
-	draw.SimpleText(fps.."fps", "VJBaseMedium", 373, srcH-93, color_white_muted, 0, 0)
+	draw.SimpleText(fps .. "fps", "VJBaseMedium", 373, srcH-93, color_white_muted, 0, 0)
 	
 	-- Ping
 	local ping = ply:Ping()
@@ -570,16 +570,16 @@ local function VJ_HUD_PlayerInfo(ply, curTime, srcW, srcH)
 	surface.SetMaterial(mat_ping)
 	surface.SetDrawColor(color(255, ping_calc, ping_calc, 150))
 	surface.DrawTexturedRect(340, srcH-65, 28, 28)
-	draw.SimpleText(ping.."ms", "VJBaseMedium", 373, srcH-63, color(255, ping_calc, ping_calc, 150), 0, 0)
+	draw.SimpleText(ping .. "ms", "VJBaseMedium", 373, srcH-63, color(255, ping_calc, ping_calc, 150), 0, 0)
 	
 	-- Vehicle speed
 	if IsValid(ply:GetVehicle()) then
 		draw.RoundedBox(1, 320, srcH-160, 140, 30, color_box)
 		local speedcalc = (IsValid(ply:GetVehicle():GetParent()) and ply:GetVehicle():GetParent():GetVelocity():Length()) or ply:GetVehicle():GetVelocity():Length()
 		if usingMetric == 1 then
-			speedcalc = math_round((speedcalc * 0.04263382283) * 1.6093).."kph"
+			speedcalc = math_round((speedcalc * 0.04263382283) * 1.6093) .. "kph"
 		else
-			speedcalc = math_round(speedcalc * 0.04263382283).."mph"
+			speedcalc = math_round(speedcalc * 0.04263382283) .. "mph"
 		end
 		surface.SetMaterial(mat_car)
 		surface.SetDrawColor(color_white_muted)
@@ -635,7 +635,7 @@ local function VJ_HUD_Compass(ply, curTime, srcW, srcH)
 	if distlen > 1 then
 		move_wu = move_wu - (0.007*(distlen-1))
 	end
-	draw.SimpleText(dist.." WU", "VJBaseTiny", srcW/(1.975-move_wu), 55, color_cyan, 0, 0)
+	draw.SimpleText(dist .. " WU", "VJBaseTiny", srcW/(1.975-move_wu), 55, color_cyan, 0, 0)
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------ Trace Information ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -739,7 +739,7 @@ local function VJ_HUD_TraceInfo(ply, curTime, srcW, srcH)
 				end
 			end
 			
-			draw.SimpleText(distrl.."("..dist.." WU)", "VJBaseSmallMedium", pos.x, pos.y - 26, color_cyan, 0, 0)
+			draw.SimpleText(distrl .. "(" .. dist .. " WU)", "VJBaseSmallMedium", pos.x, pos.y - 26, color_cyan, 0, 0)
 			draw.SimpleText(language.GetPhrase(ent:GetClass()), "VJBaseMedium", pos.x, pos.y - 12, color_white, 0, 0)
 			draw.SimpleText(tostring(ent), "VJBaseSmall", pos.x, pos.y + 10, color_white_muted, 0, 0)
 			
@@ -750,12 +750,12 @@ local function VJ_HUD_TraceInfo(ply, curTime, srcW, srcH)
 				lerp_trace_hp_entid = ent:EntIndex()
 				lerp_trace_hp = Lerp(8*FrameTime(), lerp_trace_hp, ent_hp)
 				local hp_box = (190*math_clamp(lerp_trace_hp, 0, ent_hpm))/ent_hpm
-				local hp_num = (surface.GetTextSize(ent_hp.."/"..ent_hpm))/2
-				local hp_numformat = "/"..ent_hpm
+				local hp_num = (surface.GetTextSize(ent_hp .. "/" .. ent_hpm))/2
+				local hp_numformat = "/" .. ent_hpm
 				
 				if ent:IsPlayer() then
 					hp_box = math_clamp(lerp_trace_hp, 0, 100)*1.9
-					hp_num = (surface.GetTextSize(ent_hp.."/100"))/2
+					hp_num = (surface.GetTextSize(ent_hp .. "/100"))/2
 					hp_numformat = "%"
 				end
 
@@ -764,7 +764,7 @@ local function VJ_HUD_TraceInfo(ply, curTime, srcW, srcH)
 				surface.SetDrawColor(0, 255, 255, 150)
 				surface.DrawOutlinedRect(pos.x, pos.y + 30, 190, 20)
 				draw.RoundedBox(1, pos.x, pos.y + 30, hp_box, 20, color_cyan_muted)
-				draw.SimpleText(string.format("%.0f",  lerp_trace_hp)..hp_numformat,  "VJBaseSmall", (pos.x + 105)-hp_num, pos.y + 31, color_white)
+				draw.SimpleText(string.format("%.0f",  lerp_trace_hp) .. hp_numformat,  "VJBaseSmall", (pos.x + 105)-hp_num, pos.y + 31, color_white)
 			end
 		end
 	end
