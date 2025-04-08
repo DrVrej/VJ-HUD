@@ -104,35 +104,35 @@ hook.Add("PopulateToolMenu", "VJ_ADDTOMENU_HUD_SETTINGS", function()
 		panel:Help("Crosshair:")
 		panel:CheckBox("Enable Crosshair", "vj_hud_ch_enabled")
 		panel:CheckBox("Enable Crosshair While in Vehicle", "vj_hud_ch_invehicle")
-		local vj_crossoption = {Options = {}, CVars = {}, Label = "Crosshair Material:", MenuButton = "0"}
-		vj_crossoption.Options["Arrow (Two, Default)"] = {
+		local crosshairComboBox = {Options = {}, CVars = {}, Label = "Crosshair Material:", MenuButton = "0"}
+		crosshairComboBox.Options["Arrow (Two, Default)"] = {
 			vj_hud_ch_mat = "0",
 		}
-		vj_crossoption.Options["Dot (Five, Small)"] = {
+		crosshairComboBox.Options["Dot (Five, Small)"] = {
 			vj_hud_ch_mat = "1",
 		}
-		vj_crossoption.Options["Dot"] = {
+		crosshairComboBox.Options["Dot"] = {
 			vj_hud_ch_mat = "2",
 		}
-		vj_crossoption.Options["Dot (Five, Sniper)"] = {
+		crosshairComboBox.Options["Dot (Five, Sniper)"] = {
 			vj_hud_ch_mat = "3",
 		}
-		vj_crossoption.Options["Circle (Dashed)"] = {
+		crosshairComboBox.Options["Circle (Dashed)"] = {
 			vj_hud_ch_mat = "4",
 		}
-		vj_crossoption.Options["Dot (Four)"] = {
+		crosshairComboBox.Options["Dot (Four)"] = {
 			vj_hud_ch_mat = "5",
 		}
-		vj_crossoption.Options["Circle"] = {
+		crosshairComboBox.Options["Circle"] = {
 			vj_hud_ch_mat = "6",
 		}
-		vj_crossoption.Options["Line (Four, Angled)"] = {
+		crosshairComboBox.Options["Line (Four, Angled)"] = {
 			vj_hud_ch_mat = "7",
 		}
-		vj_crossoption.Options["Dot (Five, Large)"] = {
+		crosshairComboBox.Options["Dot (Five, Large)"] = {
 			vj_hud_ch_mat = "8",
 		}
-		panel:AddControl("ComboBox", vj_crossoption)
+		panel:AddControl("ComboBox", crosshairComboBox)
 		local colorPicker = vgui.Create("CtrlColor", panel) -- Color Picker
 			colorPicker.Mixer:SetAlphaBar(false)
 			colorPicker:SetLabel("Crosshair Color:")
@@ -179,15 +179,15 @@ local color_cyan_under = color(0, 255, 255, 40)
 local color_box = color(0, 0, 0, 150)
 
 -- Materials
-local mat_crossh1 = Material("Crosshair/vj_crosshair1.vtf")
-local mat_crossh2 = Material("Crosshair/vj_crosshair2.vtf")
-local mat_crossh3 = Material("Crosshair/vj_crosshair3.vtf")
-local mat_crossh4 = Material("Crosshair/vj_crosshair4.vtf")
-local mat_crossh5 = Material("Crosshair/vj_crosshair5.vtf")
-local mat_crossh6 = Material("Crosshair/vj_crosshair6.vtf")
-local mat_crossh7 = Material("Crosshair/vj_crosshair7.vtf")
-local mat_crossh8 = Material("Crosshair/vj_crosshair8.vtf")
-local mat_crossh9 = Material("Crosshair/vj_crosshair9.vtf")
+local mat_crossh1 = Material("vj_hud/crosshair/crosshair1.vtf")
+local mat_crossh2 = Material("vj_hud/crosshair/crosshair2.vtf")
+local mat_crossh3 = Material("vj_hud/crosshair/crosshair3.vtf")
+local mat_crossh4 = Material("vj_hud/crosshair/crosshair4.vtf")
+local mat_crossh5 = Material("vj_hud/crosshair/crosshair5.vtf")
+local mat_crossh6 = Material("vj_hud/crosshair/crosshair6.vtf")
+local mat_crossh7 = Material("vj_hud/crosshair/crosshair7.vtf")
+local mat_crossh8 = Material("vj_hud/crosshair/crosshair8.vtf")
+local mat_crossh9 = Material("vj_hud/crosshair/crosshair9.vtf")
 local mat_flashlight_on = Material("vj_hud/flashlight_on.png")
 local mat_flashlight_off = Material("vj_hud/flashlight_off.png")
 local mat_grenade = Material("vj_hud/grenade.png")

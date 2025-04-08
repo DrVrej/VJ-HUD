@@ -1,6 +1,6 @@
 UnlitGeneric
 {
-	$basetexture	"crosshair/vj_crosshair7"
+	$basetexture	"vj_hud/crosshair/crosshair7"
 	$translucent	1
 	$distancealpha	0
 	"$vertexcolor" 		1
