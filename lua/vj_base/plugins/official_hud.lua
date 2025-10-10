@@ -716,6 +716,7 @@ local function VJ_HUD_TraceInfo(ply, curTime, srcW, srcH)
 		local ent_hpMax = ply:GetNW2Int("vj_hud_trmaxhealth")
 		local ent_hpDraw = !ent:IsWorld() && !ent:IsVehicle() && ent_hp != 0
 		local ent_isNPC = ent:IsNPC()
+		local ent_class = ent:GetClass()
 		
 		local npc_info = string_Explode("|", ply:GetNW2String("vj_hud_tr_npc_info"))
 		local npc_boss = npc_info[1]
@@ -732,7 +733,12 @@ local function VJ_HUD_TraceInfo(ply, curTime, srcW, srcH)
 			return
 		end
 		
-		draw.SimpleText(language.GetPhrase(ent:GetClass()), "VJBaseMedium", pos.x, pos.y - 12, color_white, 0, 0)
+		-- Attempt to get the entity name
+		local ent_name = language.GetPhrase(ent_class)
+		if ent_name == ent_class && ent.PrintName && ent.PrintName != "" then
+			ent_name = ent.PrintName
+		end
+		draw.SimpleText(ent_name, "VJBaseMedium", pos.x, pos.y - 12, color_white, 0, 0)
 		draw.SimpleText(tostring(ent), "VJBaseSmall", pos.x, pos.y + 10, color_white_muted, 0, 0)
 		
 		-- Move the position up if we are not drawing the health bar
