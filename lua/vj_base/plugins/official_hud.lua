@@ -434,16 +434,16 @@ local lerp_armor = 0
 local function VJ_HUD_Health(ply, curTime, srcW, srcH, plyAlive)
 	if vj_hud_health:GetInt() == 0 then return end
 	if !plyAlive then -- Meradz tsootsage
-		draw.RoundedBox(box_roundness_popup, 70, srcH-80, 145, 30, color(150, 0, 0, math_abs(math_sin(curTime * 6) * 200)))
-		draw.SimpleText("USER DEAD", "VJBaseMedium", 85, srcH-77, color(255, 255, 0, math_abs(math_sin(curTime * 6) * 255)), 0, 0)
+		draw.RoundedBox(box_roundness_popup, 70, srcH - 80, 145, 30, color(150, 0, 0, math_abs(math_sin(curTime * 6) * 200)))
+		draw.SimpleText("USER DEAD", "VJBaseMedium", 85, srcH - 77, color(255, 255, 0, math_abs(math_sin(curTime * 6) * 255)), 0, 0)
 	else
-		draw.RoundedBox(box_roundness, 15, srcH-130, 245, 95, color_box)
+		draw.RoundedBox(box_roundness, 15, srcH - 130, 245, 95, color_box)
 		local hp_r = 0
 		local hp_g = 255
 		local hp_b = 0
 		local hp_blink = math_abs(math_sin(curTime * 2) * 255)
-		lerp_hp = Lerp(5*FrameTime(), lerp_hp, ply:Health())
-		lerp_armor = Lerp(5*FrameTime(), lerp_armor, ply:Armor())
+		lerp_hp = Lerp(5 * FrameTime(), lerp_hp, ply:Health())
+		lerp_armor = Lerp(5 * FrameTime(), lerp_armor, ply:Armor())
 		if ply:HasGodMode() then
 			hp_r = 255
 			hp_g = 102
@@ -560,8 +560,8 @@ local function VJ_HUD_PlayerInfo(ply, curTime, srcW, srcH)
 	end
 	surface.SetMaterial(mat_run)
 	surface.SetDrawColor(color_white_muted)
-	surface.DrawTexturedRect(340, srcH-125, 28, 28)
-	draw.SimpleText(speed, "VJBaseMedium", 373, srcH-125, color_white_muted, 100, 100)
+	surface.DrawTexturedRect(340, srcH - 125, 28, 28)
+	draw.SimpleText(speed, "VJBaseMedium", 373, srcH - 125, color_white_muted, 100, 100)
 	
 	-- FPS
 	if curTime > next_fps then
@@ -570,8 +570,8 @@ local function VJ_HUD_PlayerInfo(ply, curTime, srcW, srcH)
 	end
 	surface.SetMaterial(mat_fps)
 	surface.SetDrawColor(color_white_muted)
-	surface.DrawTexturedRect(340, srcH-95, 28, 28)
-	draw.SimpleText(fps .. "fps", "VJBaseMedium", 373, srcH-93, color_white_muted, 0, 0)
+	surface.DrawTexturedRect(340, srcH - 95, 28, 28)
+	draw.SimpleText(fps .. "fps", "VJBaseMedium", 373, srcH - 93, color_white_muted, 0, 0)
 	
 	-- Ping
 	local ping = ply:Ping()
@@ -709,7 +709,7 @@ local function VJ_HUD_TraceInfo(ply, curTime, srcW, srcH)
 		
 		//if pos.visible then -- No longer needed!
 		net.Start("vj_hud_ent_info")
-		net.WriteEntity(ent)
+			net.WriteEntity(ent)
 		net.SendToServer()
 		
 		local ent_hp = ply:GetNW2Int("vj_hud_trhealth")
