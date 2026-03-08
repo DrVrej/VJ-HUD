@@ -1,8 +1,8 @@
-/*--------------------------------------------------
+/*-----------------------------------------------
 	*** Copyright (c) 2012-2026 by DrVrej, All rights reserved. ***
 	No parts of this code or any of its contents may be reproduced, copied, modified or adapted,
 	without the prior written consent of the author, unless otherwise indicated for stand-alone materials.
---------------------------------------------------*/
+-----------------------------------------------*/
 VJ.AddPlugin("VJ HUD", "HUD", "1.3.0")
 
 /*----------------------------------------------------------
@@ -227,6 +227,7 @@ local mat_controller = Material("vj_hud/controller.png", "mips smooth")
 local mat_following = Material("vj_hud/following.png", "mips smooth")
 local mat_info = Material("vj_hud/info.png", "mips smooth")
 local mat_compass = Material("vj_hud/compass.png", "smooth noclamp 1")
+local mat_compass_indicator = Material("vj_hud/compass_indicator.png", "smooth")
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------ Helpers ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -600,84 +601,42 @@ end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------ Compass ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-local texW = 1244
-local texH = 35
+local texW = 2048
+local texH = 55
 local drawW = 300
-local middleLineW = 3
+local middleLineW = 2
 --
 local function VJ_HUD_Compass(ply, curTime, srcW, srcH)
 	if vj_hud_compass:GetInt() == 0 then return end
 	
-    local x, y = srcW / 2 - drawW / 2, 10
+    local x, y = srcW / 2 - drawW / 2, 20
     local yaw = (math.NormalizeAngle(ply:EyeAngles().y) + 180) / 360
     local u1 = (yaw * texW) % texW / texW
     local u2 = ((yaw * texW + drawW) % texW) / texW
 	
-	draw.RoundedBox(box_roundness, srcW / 2 - 160, y + 3, 320, 50, color_box) -- Background
-	draw.RoundedBoxEx(box_roundness, srcW / 2 - (middleLineW / 2), y + 33, middleLineW, 18, color_white_muted) -- Middle line
+	draw.RoundedBox(box_roundness, srcW / 2 - 160, y - 5, 320, 60, color_box)
 	
+	-- Compass
     surface.SetMaterial(mat_compass)
     surface.SetDrawColor(color_white_muted)
-
     if u2 > u1 then
-        surface.DrawTexturedRectUV(x, y, drawW, texH, u1, 0, u2, 1)
+        surface.DrawTexturedRectUV(x, y - 20, drawW, texH, u1, 0, u2, 1)
     else -- Middle part between the end and start of the texture
         local w1 = (1 - u1) * texW
-        surface.DrawTexturedRectUV(x, y, w1 + 1.5, texH, u1, 0, 1, 1)
-        surface.DrawTexturedRectUV(x + w1, y, drawW - w1 + 1.5, texH, 0, 0, u2, 1)
+        surface.DrawTexturedRectUV(x, y - 20, w1 + 1.5, texH, u1, 0, 1, 1)
+        surface.DrawTexturedRectUV(x + w1, y - 20, drawW - w1 + 1.5, texH, 0, 0, u2, 1)
     end
+	
+	-- Compass indicator
+	surface.SetMaterial(mat_compass_indicator)
+    surface.SetDrawColor(color_cyan_muted)
+	surface.DrawTexturedRect(srcW / 2 - 4, y + 20, 10, 10)
 	
 	-- Distance numbers
 	local dist = ply:GetPos():Distance(getTrace(ply).HitPos)
-	draw.SimpleText(convertToRealUnit(dist), "VJBaseSmall", srcW / 2.02, 45, color_cyan, TEXT_ALIGN_RIGHT, TEXT_ALIGN_RIGHT)
-	draw.SimpleText(math_round(dist, 2) .. " WU", "VJBaseSmall", srcW / 1.98, 45, color_cyan, TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT)
-	
-	-- Very old compass code (before v1.3.0)
-	/*draw.RoundedBox(box_roundness, srcW / 2.015, 10, 60, 60, color_box)
-	local ang = ply:GetAngles().y
-	local comp_dir = "Unknown!"
-	if ang >= -18 and ang <= 18 then
-		comp_dir = "N"
-	elseif ang >= 162 and ang < 862 then
-		comp_dir = "S"
-	elseif ang <= -162 and ang > -862 then
-		comp_dir = "S"
-	elseif ang == 180 or ang == -862 then
-		comp_dir = "S"
-	elseif ang >= 72 and ang <= 108 then
-		comp_dir = "W"
-	elseif ang <= -72 and ang >= -108 then
-		comp_dir = "E"
-	elseif ang > 18 and ang < 72 then
-		comp_dir = "NW"
-	elseif ang > 108 and ang < 162 then
-		comp_dir = "SW"
-	elseif ang < -18 and ang > -72 then
-		comp_dir = "NE"
-	elseif ang < -108 and ang > -162 then
-		comp_dir = "SE"
-	end
-	draw.SimpleText(comp_dir, "VJBaseLarge", srcW / 1.955, 26, color_cyan, 1, 1)
-	local plyPos = ply:GetPos()
-	local trace = getTrace(ply)
-    local dist_converted = convertToRealUnit(plyPos:Distance(trace.HitPos))
-	local dist_convertedlen = string.len(tostring(dist_converted))
-  	local move_ft = 0
-	if dist_convertedlen > 4 then
-		move_ft = move_ft - (0.007 * (dist_convertedlen - 4))
-	end
-	draw.SimpleText(dist_converted, "VJBaseSmall", srcW / (1.985 - move_ft), 38, color_white, 0, 0)
-	local dist = math_round(plyPos:Distance(trace.HitPos), 2)
-	local distlen = string.len(tostring(dist))
-	if distlen >= 7 then
-		dist = math_round(plyPos:Distance(trace.HitPos))
-		distlen = string.len(tostring(dist))
-	end
-  	local move_wu = 0
-	if distlen > 1 then
-		move_wu = move_wu - (0.007*(distlen-1))
-	end
-	draw.SimpleText(dist .. " WU", "VJBaseTiny", srcW/(1.975-move_wu), 55, color_cyan, 0, 0)*/
+	draw.SimpleText(convertToRealUnit(dist), "VJBaseSmall", srcW / 2.02, y + 36, color_white_muted, TEXT_ALIGN_RIGHT, TEXT_ALIGN_RIGHT)
+	draw.SimpleText(math_round(dist, 2) .. " WU", "VJBaseSmall", srcW / 1.98, y + 36, color_white_muted, TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT)
+	draw.RoundedBoxEx(box_roundness, srcW / 2 - (middleLineW - 2), y + 37, middleLineW, 14, color_white_muted) -- Middle line
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------ Trace Information ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
