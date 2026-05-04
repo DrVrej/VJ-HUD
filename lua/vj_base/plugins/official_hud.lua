@@ -20,8 +20,6 @@ if SERVER then
 	gameevent.Listen("player_activate")
 	hook.Add("player_activate", "vj_hud_player_activate", function(data)
 		local ply = Player(data.userid)
-		ply:SetNW2Int("vj_hud_trhealth", 0)
-		ply:SetNW2Int("vj_hud_trmaxhealth", 0)
 		ply:SetNW2String("vj_hud_tr_npc_info", "00")
 	end)
 
@@ -29,30 +27,26 @@ if SERVER then
 	-- IsBoss | Disposition | IsGuard | IsMedic | Controlled | If traced NPC is being controlled by local player | Following Player | The Player its following
 	net.Receive("vj_hud_ent_info", function(len, ply)
 		local ent = net.ReadEntity()
-		if IsValid(ply) && IsValid(ent) then
-			ply:SetNW2Int("vj_hud_trhealth", ent:Health())
-			ply:SetNW2Int("vj_hud_trmaxhealth", ent:GetMaxHealth())
-			if ent:IsNPC() then
-				local npc_boss = (ent.VJ_ID_Boss and "1") or "0"
-				local npc_guard = (ent.IsGuard and "1") or "0"
-				local npc_medic = (ent.IsMedic and "1") or "0"
-				local npc_controlled = (ent.VJ_IsBeingControlled and "1") or "0"
-				local npc_iscontroller = ((ply.VJ_IsControllingNPC and IsValid(ply.VJ_TheControllerEntity.VJCE_NPC) and ply.VJ_TheControllerEntity.VJCE_NPC == ent) and "1") or "0"
-				local npc_following = "0"
-				local npc_followingn = "Unknown"
-				if ent.IsFollowing then
-					npc_following = "1"
-					local followEnt = ent.FollowData.Target
-					if followEnt:IsPlayer() then
-						npc_followingn = followEnt == ply and "You" or followEnt:Nick()
-					elseif followEnt:IsNPC() then
-						npc_followingn = list.Get("NPC")[followEnt:GetClass()].Name
-					else
-						npc_followingn = followEnt:GetClass()
-					end
+		if IsValid(ply) && IsValid(ent) && ent:IsNPC() then
+			local npc_boss = (ent.VJ_ID_Boss and "1") or "0"
+			local npc_guard = (ent.IsGuard and "1") or "0"
+			local npc_medic = (ent.IsMedic and "1") or "0"
+			local npc_controlled = (ent.VJ_IsBeingControlled and "1") or "0"
+			local npc_iscontroller = ((ply.VJ_IsControllingNPC and IsValid(ply.VJ_TheControllerEntity.VJCE_NPC) and ply.VJ_TheControllerEntity.VJCE_NPC == ent) and "1") or "0"
+			local npc_following = "0"
+			local npc_followingn = "Unknown"
+			if ent.IsFollowing then
+				npc_following = "1"
+				local followEnt = ent.FollowData.Target
+				if followEnt:IsPlayer() then
+					npc_followingn = followEnt == ply and "You" or followEnt:Nick()
+				elseif followEnt:IsNPC() then
+					npc_followingn = list.Get("NPC")[followEnt:GetClass()].Name
+				else
+					npc_followingn = followEnt:GetClass()
 				end
-				ply:SetNW2String("vj_hud_tr_npc_info", npc_boss .. "|" .. ent:Disposition(ply) .. "|" .. npc_guard .. "|" .. npc_medic .. "|" .. npc_controlled .. "|" .. npc_iscontroller .. "|" .. npc_following .. "|" .. npc_followingn)
 			end
+			ply:SetNW2String("vj_hud_tr_npc_info", npc_boss .. "|" .. ent:Disposition(ply) .. "|" .. npc_guard .. "|" .. npc_medic .. "|" .. npc_controlled .. "|" .. npc_iscontroller .. "|" .. npc_following .. "|" .. npc_followingn)
 		end
 	end)
 end
@@ -184,7 +178,7 @@ local color_orange = color(255, 150, 0, 255)
 local color_orange_muted = color(255, 100, 0, 150)
 local color_green = color(0, 255, 0, 255)
 local color_green_muted = color(0, 255, 0, 150)
-local color_cyan = color(0, 255, 255, 255)
+//local color_cyan = color(0, 255, 255, 255)
 local color_cyan_muted = color(0, 255, 255, 150)
 local color_cyan_under = color(0, 255, 255, 40)
 local color_box = color(0, 0, 0, 150)
@@ -671,8 +665,8 @@ local function VJ_HUD_TraceInfo(ply, curTime, srcW, srcH)
 			net.WriteEntity(ent)
 		net.SendToServer()
 		
-		local ent_hp = ply:GetNW2Int("vj_hud_trhealth")
-		local ent_hpMax = ply:GetNW2Int("vj_hud_trmaxhealth")
+		local ent_hp = ent:Health()
+		local ent_hpMax = ent:GetMaxHealth()
 		local ent_hpDraw = !ent:IsWorld() && !ent:IsVehicle() && ent_hp != 0
 		local ent_isNPC = ent:IsNPC()
 		local ent_class = ent:GetClass()
