@@ -257,6 +257,18 @@ end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------ Crosshair ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+local crosshairMats = {
+	[0] = mat_crossh1,
+	[1] = mat_crossh2,
+	[2] = mat_crossh3,
+	[3] = mat_crossh4,
+	[4] = mat_crossh5,
+	[5] = mat_crossh6,
+	[6] = mat_crossh7,
+	[7] = mat_crossh8,
+	[8] = mat_crossh9
+}
+--
 local function VJ_HUD_Crosshair(ply, curTime, srcW, srcH)
 	if vj_hud_ch_enabled:GetInt() == 0 then return end
 	if ply:InVehicle() && vj_hud_ch_invehicle:GetInt() == 0 then return end
@@ -266,27 +278,7 @@ local function VJ_HUD_Crosshair(ply, curTime, srcW, srcH)
 	local ganach = vj_hud_ch_g:GetInt()
 	local gabouyd = vj_hud_ch_b:GetInt()
 	local opacity = vj_hud_ch_opacity:GetInt()
-	local mat = vj_hud_ch_mat:GetInt()
-
-	if mat == 0 then
-		surface.SetMaterial(mat_crossh1)
-	elseif mat == 1 then
-		surface.SetMaterial(mat_crossh2)
-	elseif mat == 2 then
-		surface.SetMaterial(mat_crossh3)
-	elseif mat == 3 then
-		surface.SetMaterial(mat_crossh4)
-	elseif mat == 4 then
-		surface.SetMaterial(mat_crossh5)
-	elseif mat == 5 then
-		surface.SetMaterial(mat_crossh6)
-	elseif mat == 6 then
-		surface.SetMaterial(mat_crossh7)
-	elseif mat == 7 then
-		surface.SetMaterial(mat_crossh8)
-	elseif mat == 8 then
-		surface.SetMaterial(mat_crossh9)
-	end
+	surface.SetMaterial(crosshairMats[vj_hud_ch_mat:GetInt()])
 	surface.SetDrawColor(garmir, ganach, gabouyd, opacity)
 	surface.DrawTexturedRect(srcW / 2 - size / 2, srcH / 2 - size / 2, size, size)
 	
@@ -307,11 +299,13 @@ local function VJ_HUD_Ammo(ply, curTime, srcW, srcH)
 	end
 	
 	-- Poon abranknere
-	draw.RoundedBox(box_roundness, srcW-195, srcH-130, 180, 95, color_box)
-	//draw.SimpleText("Weapons - " .. table.Count(ply:GetWeapons()), "VJBaseSmall", srcW-340, srcH-95, color_white_muted, 0, 0) -- Kani had zenk oones
+	draw.RoundedBox(box_roundness, srcW - 195, srcH - 130, 180, 95, color_box)
+	//draw.SimpleText("Weapons - " .. table.Count(ply:GetWeapons()), "VJBaseSmall", srcW - 340, srcH - 95, color_white_muted, 0, 0) -- Kani had zenk oones
+	local pri_ammo_type = weapon:GetPrimaryAmmoType()
 	local pri_clip = weapon:Clip1() -- Remaining ammunition for the clip
-	local pri_reserve = ply:GetAmmoCount(weapon:GetPrimaryAmmoType()) -- Remaining primary fire ammunition (Reserve, not counting current clip!)
-	local sec_ammo = ply:GetAmmoCount(weapon:GetSecondaryAmmoType()) -- Remaining secondary fire ammunition
+	local pri_reserve = ply:GetAmmoCount(pri_ammo_type) -- Remaining primary fire ammunition (Reserve, not counting current clip!)
+	local sec_ammo_type = weapon:GetSecondaryAmmoType()
+	local sec_ammo = ply:GetAmmoCount(sec_ammo_type) -- Remaining secondary fire ammunition
 	local suit_power = (ply:GetSuitPower() <= 100 and ply:GetSuitPower()) or 100 -- Make sure 100 is the max!
 	local flashlight = ply:FlashlightIsOn()
 	
@@ -319,17 +313,17 @@ local function VJ_HUD_Ammo(ply, curTime, srcW, srcH)
 	if suit_power < 50 or flashlight then
 		surface.SetDrawColor(255 - (suit_power * 2.55), suit_power * 2.55, 0, (flashlight and 255) or 150)
 		surface.SetMaterial((flashlight and mat_flashlight_on) or mat_flashlight_off)
-		surface.DrawTexturedRectRotated(srcW-((flashlight and 230) or 235), srcH-54, 35, 35, 90)
-		//draw.RoundedBox(box_roundness_popup, srcW-260, srcH-75, 60, 40, color(0, (ply:FlashlightIsOn() and 255) or 0, (ply:FlashlightIsOn() and 255) or 0, 50))
-		draw.RoundedBox(box_roundness_popup, srcW-260, srcH-75, 60, 40, color(math_clamp(255 - (suit_power * 2.55), 0, 150), 0, 0, 50 - (suit_power * 0.5)))
-		draw.RoundedBox(box_roundness_popup, srcW-260, srcH-75, 60, 40, color_box)
+		surface.DrawTexturedRectRotated(srcW - ((flashlight and 230) or 235), srcH - 54, 35, 35, 90)
+		//draw.RoundedBox(box_roundness_popup, srcW - 260, srcH - 75, 60, 40, color(0, (flashlight and 255) or 0, (flashlight and 255) or 0, 50))
+		draw.RoundedBox(box_roundness_popup, srcW - 260, srcH - 75, 60, 40, color(math_clamp(255 - (suit_power * 2.55), 0, 150), 0, 0, 50 - (suit_power * 0.5)))
+		draw.RoundedBox(box_roundness_popup, srcW - 260, srcH - 75, 60, 40, color_box)
 	end
 	
 	-- Grenade count
 	surface.SetMaterial(mat_grenade)
 	surface.SetDrawColor(0, 255, 255, 150)
-	surface.DrawTexturedRect(srcW-95, srcH-70, 25, 25)
-	draw.SimpleText(ply:GetAmmoCount("grenade"), "VJBaseMediumLarge", srcW-70, srcH-70, color_cyan_muted, 0, 0)
+	surface.DrawTexturedRect(srcW - 95, srcH - 70, 25, 25)
+	draw.SimpleText(ply:GetAmmoCount("grenade"), "VJBaseMediumLarge", srcW - 70, srcH - 70, color_cyan_muted, 0, 0)
 	
 	-- Weapon name
 	if weapon:IsWeapon() then
@@ -337,7 +331,7 @@ local function VJ_HUD_Ammo(ply, curTime, srcW, srcH)
 		if string.len(name) > 22 then
 			name = string.sub(name, 1, 20) .. "..."
 		end
-		draw.SimpleText(name, "VJBaseSmall", srcW-185, srcH-125, color_white_muted, 0, 0)
+		draw.SimpleText(name, "VJBaseSmall", srcW - 185, srcH - 125, color_white_muted, 0, 0)
 	end
 	
 	local ammo_empty = true
@@ -363,18 +357,18 @@ local function VJ_HUD_Ammo(ply, curTime, srcW, srcH)
 		ammo_pri = "--- / " .. pri_reserve
 		ammo_pri_c = color(255, 0, 0, empty_blink)
 	end
-	if pri_clip == -1 && weapon:GetSecondaryAmmoType() == -1 then -- Uses primary only with no ammo reserve, ex: "weapon_rpg" or "weapon_frag"
+	if pri_clip == -1 && sec_ammo_type == -1 then -- Uses primary only with no ammo reserve, ex: "weapon_rpg" or "weapon_frag"
 		ammo_pri = pri_reserve
 		ammo_pri_c = color_green_muted
 		ammo_sec = "---"
 		ammo_sec_c = color_orange_muted
 	end
-	if weapon:GetPrimaryAmmoType() == -1 then -- Weapons that use secondary as primary, ex: "weapon_slam"
+	if pri_ammo_type == -1 then -- Weapons that use secondary as primary, ex: "weapon_slam"
 		ammo_pri = sec_ammo
 		ammo_sec = "---"
 		ammo_sec_c = color_orange_muted
 	end
-	if weapon:GetPrimaryAmmoType() == -1 && weapon:GetSecondaryAmmoType() == -1 then -- Doesn't use ammo
+	if pri_ammo_type == -1 && sec_ammo_type == -1 then -- Doesn't use ammo
 		ammo_unavailable = true
 		ammo_pri = "---"
 		ammo_pri_c = color_orange_muted
@@ -384,7 +378,7 @@ local function VJ_HUD_Ammo(ply, curTime, srcW, srcH)
 		ammo_pri = "Empty"
 		ammo_pri_c = color(255, 0, 0, empty_blink)
 	end
-	if weapon:GetSecondaryAmmoType() == -1 then -- Doesn't use secondary ammo
+	if sec_ammo_type == -1 then -- Doesn't use secondary ammo
 		ammo_sec = "---"
 		ammo_sec_c = color_orange_muted
 	elseif sec_ammo == 0 then -- Secondary empty
@@ -396,11 +390,11 @@ local function VJ_HUD_Ammo(ply, curTime, srcW, srcH)
 	if ammo_pri_len > 1 then
 		ammo_pri_pos = ammo_pri_pos + (6.5 * ammo_pri_len)
 	end
-	draw.SimpleText(ammo_pri, "VJBaseLarge", srcW-ammo_pri_pos, srcH-108, ammo_pri_c, 0, 0)
+	draw.SimpleText(ammo_pri, "VJBaseLarge", srcW - ammo_pri_pos, srcH - 108, ammo_pri_c, 0, 0)
 	surface.SetMaterial(mat_secondary)
 	surface.SetDrawColor(ammo_sec_c)
-	surface.DrawTexturedRect(srcW-190, srcH-70, 25, 25)
-	draw.SimpleText(ammo_sec, "VJBaseMediumLarge", srcW-163, srcH-70, ammo_sec_c, 0, 0)
+	surface.DrawTexturedRect(srcW - 190, srcH - 70, 25, 25)
+	draw.SimpleText(ammo_sec, "VJBaseMediumLarge", srcW - 163, srcH - 70, ammo_sec_c, 0, 0)
 	
 	-- Reloading bar
 	if !ammo_unavailable then
@@ -501,7 +495,7 @@ local function VJ_HUD_Health(ply, curTime, srcW, srcH, plyAlive)
 			draw.RoundedBox(box_roundness, 100 + box_border_thickness, srcH - 89 + box_border_thickness, 150 - box_border_thickness_adjusted, 8 - box_border_thickness_adjusted, color_under)
 			draw.RoundedBox(box_roundness, 100 + box_border_thickness, srcH - 89 + box_border_thickness, math_clamp(suit_power, 0, 100) * 1.5 - box_border_thickness_adjusted, 8 - box_border_thickness_adjusted, color(suit_r, suit_g, 0, 160))
 			//surface.SetDrawColor(suit_r, suit_g, 0, 255)
-			//surface.DrawOutlinedRect(100, srcH-89, 150, 8)
+			//surface.DrawOutlinedRect(100, srcH - 89, 150, 8)
 			draw.SimpleText("SUIT", "VJBaseTiny", 70, srcH - 89, color(suit_r, suit_g, 0, 255), 0, 0)
 		end
 	end
@@ -839,7 +833,7 @@ local AbranknerVorKedne = {
 	grenade_helicopter = {Anoon = "Bomb!", Heravorutyoun = 400, DariKouyn = color(255, 0, 0, -1), Negar = mat_skull},
 }
 local grenadeObj = {Anoon = "Grenade!", Heravorutyoun = 400, DariKouyn = color(255, 0, 0, -1), Negar = mat_grenade}
-
+--
 local function VJ_HUD_Scanner(ply, curTime, srcW, srcH)
 	if vj_hud_scanner:GetInt() == 0 then return end
 	local blinkAlpha = math_abs(math_sin(curTime * 5) * 255)
