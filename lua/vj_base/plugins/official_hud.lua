@@ -40,7 +40,7 @@ if SERVER then
 				local followEnt = ent.FollowData.Target
 				if followEnt:IsPlayer() then
 					npc_followingn = followEnt == ply and "You" or followEnt:Nick()
-				elseif followEnt:IsNPC() then
+				elseif followEnt:IsNPC() or followEnt:IsNextBot() then
 					npc_followingn = list.Get("NPC")[followEnt:GetClass()].Name
 				else
 					npc_followingn = followEnt:GetClass()
