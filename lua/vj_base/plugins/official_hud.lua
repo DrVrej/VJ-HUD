@@ -346,7 +346,7 @@ local function VJ_HUD_Ammo(ply, curTime, srcW, srcH)
 		ammo_pri_c = color(255, 0, 0, empty_blink)
 	end
 	if pri_clip == -1 && sec_ammo_type == -1 then -- Uses primary only with no ammo reserve, ex: "weapon_rpg" or "weapon_frag"
-		ammo_pri = pri_reserve
+		ammo_pri = tostring(pri_reserve)
 		ammo_pri_c = color_green_muted
 		ammo_sec = "---"
 		ammo_sec_c = color_orange_muted
