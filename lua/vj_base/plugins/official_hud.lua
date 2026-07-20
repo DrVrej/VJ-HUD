@@ -288,7 +288,7 @@ local function VJ_HUD_Ammo(ply, curTime, srcW, srcH)
 	
 	-- Poon abranknere
 	draw.RoundedBox(box_roundness, srcW - 195, srcH - 130, 180, 95, color_box)
-	//draw.SimpleText("Weapons - " .. #ply:GetWeapons(), "VJBaseSmall", srcW - 340, srcH - 95, color_white_muted, 0, 0) -- Kani had zenk oones
+	//draw.SimpleText("Weapons - " .. #ply:GetWeapons(), "VJBaseSmall", srcW - 340, srcH - 95, color_white_muted) -- Kani had zenk oones
 	local pri_ammo_type = weapon:GetPrimaryAmmoType()
 	local pri_clip = weapon:Clip1() -- Remaining ammunition for the clip
 	local pri_reserve = ply:GetAmmoCount(pri_ammo_type) -- Remaining primary fire ammunition (Reserve, not counting current clip!)
@@ -311,15 +311,17 @@ local function VJ_HUD_Ammo(ply, curTime, srcW, srcH)
 	surface.SetMaterial(mat_grenade)
 	surface.SetDrawColor(0, 255, 255, 150)
 	surface.DrawTexturedRect(srcW - 95, srcH - 70, 25, 25)
-	draw.SimpleText(ply:GetAmmoCount("grenade"), "VJBaseMediumLarge", srcW - 70, srcH - 70, color_cyan_muted, 0, 0)
+	draw.SimpleText(ply:GetAmmoCount("grenade"), "VJBaseMediumLarge", srcW - 70, srcH - 70, color_cyan_muted)
 	
 	-- Weapon name
 	if weapon:IsWeapon() then
 		local name = language.GetPhrase(weapon:GetPrintName())
-		if #name > 22 then
-			name = string.sub(name, 1, 20) .. "..."
+		surface.SetFont("VJBaseSmall")
+		local size = surface.GetTextSize(name)
+		if size > 150 then
+			name = string.sub(name, 1, math.floor(#name * 145 / size)) .. "..."
 		end
-		draw.SimpleText(name, "VJBaseSmall", srcW - 185, srcH - 125, color_white_muted, 0, 0)
+		draw.SimpleText(name, "VJBaseSmall", srcW - 185, srcH - 125, color_white_muted)
 	end
 	
 	local ammo_empty = true
@@ -378,11 +380,11 @@ local function VJ_HUD_Ammo(ply, curTime, srcW, srcH)
 	if ammo_pri_len > 1 then
 		ammo_pri_pos = ammo_pri_pos + (6.5 * ammo_pri_len)
 	end
-	draw.SimpleText(ammo_pri, "VJBaseLarge", srcW - ammo_pri_pos, srcH - 108, ammo_pri_c, 0, 0)
+	draw.SimpleText(ammo_pri, "VJBaseLarge", srcW - ammo_pri_pos, srcH - 108, ammo_pri_c)
 	surface.SetMaterial(mat_secondary)
 	surface.SetDrawColor(ammo_sec_c)
 	surface.DrawTexturedRect(srcW - 190, srcH - 70, 25, 25)
-	draw.SimpleText(ammo_sec, "VJBaseMediumLarge", srcW - 163, srcH - 70, ammo_sec_c, 0, 0)
+	draw.SimpleText(ammo_sec, "VJBaseMediumLarge", srcW - 163, srcH - 70, ammo_sec_c)
 	
 	-- Reloading bar
 	if !ammo_unavailable then
@@ -397,7 +399,7 @@ local function VJ_HUD_Ammo(ply, curTime, srcW, srcH)
 				draw.RoundedBox(box_roundness_popup, srcW - 195, srcH - 160, 180, 25, color_cyan_under)
 				draw.RoundedBox(box_roundness_popup, srcW - 195, srcH - 160, math_clamp(anim_perc, 0, 100) * 1.8, 25, color_cyan_muted)
 				draw.RoundedBox(box_roundness_popup, srcW - 195, srcH - 160, 180, 25, color_box)
-				draw.SimpleText(anim_dur .. "s (" .. anim_perc .. "%)", "VJBaseSmallMedium", srcW - 137, srcH - 156, color_white_muted, 0, 0)
+				draw.SimpleText(anim_dur .. "s (" .. anim_perc .. "%)", "VJBaseSmallMedium", srcW - 105, srcH - 155, color_white_muted, TEXT_ALIGN_CENTER)
 			end
 		end
 	end
@@ -412,7 +414,7 @@ local function VJ_HUD_Health(ply, curTime, srcW, srcH, plyAlive)
 	if vj_hud_health:GetInt() == 0 then return end
 	if !plyAlive then -- Meradz tsootsage
 		draw.RoundedBox(box_roundness_popup, 70, srcH - 80, 145, 30, color(150, 0, 0, math_abs(math_sin(curTime * 6) * 200)))
-		draw.SimpleText("USER DEAD", "VJBaseMedium", 85, srcH - 77, color(255, 255, 0, math_abs(math_sin(curTime * 6) * 255)), 0, 0)
+		draw.SimpleText("USER DEAD", "VJBaseMedium", 85, srcH - 77, color(255, 255, 0, math_abs(math_sin(curTime * 6) * 255)))
 	else
 		draw.RoundedBox(box_roundness, 15, srcH - 130, 245, 95, color_box)
 		local hp_r = 0
@@ -426,7 +428,7 @@ local function VJ_HUD_Health(ply, curTime, srcW, srcH, plyAlive)
 			hp_g = 102
 			hp_b = 255
 			draw.RoundedBox(box_roundness_popup, 15, srcH - 160, 160, 25, color_box)
-			draw.SimpleText("God Mode Enabled!", "VJBaseSmallMedium", 25, srcH - 156, color(hp_r, hp_g, hp_b, 255), 0, 0)
+			draw.SimpleText("God Mode Enabled!", "VJBaseSmallMedium", 25, srcH - 155, color(hp_r, hp_g, hp_b, 255))
 		else
 			local warning = 0
 			if lerp_hp <= 35 then
@@ -441,10 +443,10 @@ local function VJ_HUD_Health(ply, curTime, srcW, srcH, plyAlive)
 			end
 			if warning == 1 then
 				draw.RoundedBox(box_roundness_popup, 15, srcH - 160, 190, 25, color(150, 0, 0, math_abs(math_sin(curTime * 4) * 200)))
-				draw.SimpleText("WARNING: Low Health!", "VJBaseSmallMedium", 25, srcH - 156, color(255, 153, 0, math_abs(math_sin(curTime * 4) * 255)), 0, 0)
+				draw.SimpleText("WARNING: Low Health!", "VJBaseSmallMedium", 25, srcH - 155, color(255, 153, 0, math_abs(math_sin(curTime * 4) * 255)))
 			elseif warning == 2 then
 				draw.RoundedBox(box_roundness_popup, 15, srcH - 160, 222, 25, color(150, 0, 0, math_abs(math_sin(curTime * 6) * 200)))
-				draw.SimpleText("WARNING: Death Imminent!", "VJBaseSmallMedium", 25, srcH - 156, color(255, 153, 0, math_abs(math_sin(curTime * 6) * 255)), 0, 0)
+				draw.SimpleText("WARNING: Death Imminent!", "VJBaseSmallMedium", 25, srcH - 155, color(255, 153, 0, math_abs(math_sin(curTime * 6) * 255)))
 			end
 		end
 		
@@ -452,7 +454,7 @@ local function VJ_HUD_Health(ply, curTime, srcW, srcH, plyAlive)
 		surface.SetMaterial(mat_health)
 		surface.SetDrawColor(color(hp_r, hp_g, hp_b, hp_blink))
 		surface.DrawTexturedRect(22, srcH - 127, 40, 45)
-		draw.SimpleText(string.format("%.0f", lerp_hp) .. "%", "VJBaseMedium", 70, srcH - 128, color(hp_r, hp_g, hp_b, 255), 0, 0)
+		draw.SimpleText(string.format("%.0f", lerp_hp) .. "%", "VJBaseMedium", 70, srcH - 128, color(hp_r, hp_g, hp_b, 255))
 		draw.RoundedBox(box_roundness, 70, srcH - 105, 180, 15, color(hp_r, hp_g, hp_b, 255))
 		draw.RoundedBox(box_roundness, 70 + box_border_thickness, srcH - 105 + box_border_thickness, 180 - box_border_thickness_adjusted, 15 - box_border_thickness_adjusted, color_under)
 		draw.RoundedBox(box_roundness, 70 + box_border_thickness, srcH - 105 + box_border_thickness, math_clamp(lerp_hp, 0, 100) * 1.8 - box_border_thickness_adjusted, 15 - box_border_thickness_adjusted, color(hp_r, hp_g, hp_b, 255))
@@ -463,7 +465,7 @@ local function VJ_HUD_Health(ply, curTime, srcW, srcH, plyAlive)
 		surface.SetMaterial(mat_armor)
 		surface.SetDrawColor(color_cyan_muted)
 		surface.DrawTexturedRect(22, srcH - 80, 40, 40)
-		draw.SimpleText(string.format("%.0f", lerp_armor) .. "%", "VJBaseMedium", 70, srcH - 83, color_cyan_muted, 0, 0)
+		draw.SimpleText(string.format("%.0f", lerp_armor) .. "%", "VJBaseMedium", 70, srcH - 83, color_cyan_muted)
 		draw.RoundedBox(box_roundness, 70, srcH - 60, 180, 15, color_cyan_muted)
 		draw.RoundedBox(box_roundness, 70 + box_border_thickness, srcH - 60 + box_border_thickness, 180 - box_border_thickness_adjusted, 15 - box_border_thickness_adjusted, color_under)
 		draw.RoundedBox(box_roundness, 70 + box_border_thickness, srcH - 60 + box_border_thickness, math_clamp(lerp_armor, 0, 100) * 1.8 - box_border_thickness_adjusted, 15 - box_border_thickness_adjusted, color_cyan_muted)
@@ -484,7 +486,7 @@ local function VJ_HUD_Health(ply, curTime, srcW, srcH, plyAlive)
 			draw.RoundedBox(box_roundness, 100 + box_border_thickness, srcH - 89 + box_border_thickness, math_clamp(suit_power, 0, 100) * 1.5 - box_border_thickness_adjusted, 8 - box_border_thickness_adjusted, color(suit_r, suit_g, 0, 160))
 			//surface.SetDrawColor(suit_r, suit_g, 0, 255)
 			//surface.DrawOutlinedRect(100, srcH - 89, 150, 8)
-			draw.SimpleText("SUIT", "VJBaseTiny", 70, srcH - 89, color(suit_r, suit_g, 0, 255), 0, 0)
+			draw.SimpleText("SUIT", "VJBaseTiny", 70, srcH - 89, color(suit_r, suit_g, 0, 255))
 		end
 	end
 end
@@ -504,13 +506,13 @@ local function VJ_HUD_PlayerInfo(ply, curTime, srcW, srcH)
 	surface.SetMaterial(mat_knife)
 	surface.SetDrawColor(color_white_muted)
 	surface.DrawTexturedRect(260, srcH-125, 28, 28)
-	draw.SimpleText(ply:Frags(), "VJBaseMedium", 293, srcH-125, color_white_muted, 100, 100)
+	draw.SimpleText(ply:Frags(), "VJBaseMedium", 293, srcH-125, color_white_muted)
 	
 	-- Number of deaths
 	surface.SetMaterial(mat_skull)
 	surface.SetDrawColor(color_white_muted)
 	surface.DrawTexturedRect(260, srcH-95, 28, 28)
-	draw.SimpleText(ply:Deaths(), "VJBaseMedium", 293, srcH-93, color_white_muted, 100, 100)
+	draw.SimpleText(ply:Deaths(), "VJBaseMedium", 293, srcH-93, color_white_muted)
 	
 	-- Kill / death ratio
 	local kd;
@@ -526,7 +528,7 @@ local function VJ_HUD_PlayerInfo(ply, curTime, srcW, srcH)
 	surface.SetMaterial(mat_kd)
 	surface.SetDrawColor(color_white_muted)
 	surface.DrawTexturedRect(260, srcH-65, 28, 28)
-	draw.SimpleText(kd, "VJBaseMedium", 293, srcH-63, color_white_muted, 100, 100)
+	draw.SimpleText(kd, "VJBaseMedium", 293, srcH-63, color_white_muted)
 	
 	-- Movement speed
     local speed;
@@ -538,7 +540,7 @@ local function VJ_HUD_PlayerInfo(ply, curTime, srcW, srcH)
 	surface.SetMaterial(mat_run)
 	surface.SetDrawColor(color_white_muted)
 	surface.DrawTexturedRect(340, srcH - 125, 28, 28)
-	draw.SimpleText(speed, "VJBaseMedium", 373, srcH - 125, color_white_muted, 100, 100)
+	draw.SimpleText(speed, "VJBaseMedium", 373, srcH - 125, color_white_muted)
 	
 	-- FPS
 	if curTime > next_fps then
@@ -548,7 +550,7 @@ local function VJ_HUD_PlayerInfo(ply, curTime, srcW, srcH)
 	surface.SetMaterial(mat_fps)
 	surface.SetDrawColor(color_white_muted)
 	surface.DrawTexturedRect(340, srcH - 95, 28, 28)
-	draw.SimpleText(fps .. "fps", "VJBaseMedium", 373, srcH - 93, color_white_muted, 0, 0)
+	draw.SimpleText(fps .. "fps", "VJBaseMedium", 373, srcH - 93, color_white_muted)
 	
 	-- Ping
 	local ping = ply:Ping()
@@ -556,7 +558,7 @@ local function VJ_HUD_PlayerInfo(ply, curTime, srcW, srcH)
 	surface.SetMaterial(mat_ping)
 	surface.SetDrawColor(color(255, ping_calc, ping_calc, 150))
 	surface.DrawTexturedRect(340, srcH-65, 28, 28)
-	draw.SimpleText(ping .. "ms", "VJBaseMedium", 373, srcH-63, color(255, ping_calc, ping_calc, 150), 0, 0)
+	draw.SimpleText(ping .. "ms", "VJBaseMedium", 373, srcH-63, color(255, ping_calc, ping_calc, 150))
 	
 	-- Vehicle speed
 	if curVehicleValid then
@@ -571,7 +573,7 @@ local function VJ_HUD_PlayerInfo(ply, curTime, srcW, srcH)
 		surface.SetMaterial(mat_car)
 		surface.SetDrawColor(color_white_muted)
 		surface.DrawTexturedRect(320, srcH-170, 50, 50)
-		draw.SimpleText(speedVehicle, "VJBaseMedium", 373, srcH-155, color_white_muted, 100, 100)
+		draw.SimpleText(speedVehicle, "VJBaseMedium", 373, srcH-155, color_white_muted)
 	end
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -673,8 +675,8 @@ local function VJ_HUD_TraceInfo(ply, curTime, srcW, srcH)
 		if ent_name == ent_class && ent.PrintName && ent.PrintName != "" then
 			ent_name = ent.PrintName
 		end
-		draw.SimpleText(ent_name, "VJBaseMedium", pos.x, pos.y - 12, color_white, 0, 0)
-		draw.SimpleText(tostring(ent), "VJBaseSmall", pos.x, pos.y + 10, color_white_muted, 0, 0)
+		draw.SimpleText(ent_name, "VJBaseMedium", pos.x, pos.y - 12, color_white)
+		draw.SimpleText(tostring(ent), "VJBaseSmall", pos.x, pos.y + 10, color_white_muted)
 		
 		-- Move the position up if we are not drawing the health bar
 		if !ent_hpDraw then
@@ -704,7 +706,7 @@ local function VJ_HUD_TraceInfo(ply, curTime, srcW, srcH)
 				npc_disp_color = color_orange_muted
 				npc_disp_t = "IN"
 			end
-			npc_spacing = draw.SimpleText(npc_disp_t, "VJBaseMedium", pos.x + 5, pos.y + 55, npc_disp_color, 0, 0) + 12
+			npc_spacing = draw.SimpleText(npc_disp_t, "VJBaseMedium", pos.x + 5, pos.y + 55, npc_disp_color) + 12
 			
 			-- Boss Icon
 			if npc_boss == "1" then
@@ -753,7 +755,7 @@ local function VJ_HUD_TraceInfo(ply, curTime, srcW, srcH)
 				surface.DrawTexturedRect(pos.x - 2, pos.y + 83, 34, 34)
 				surface.SetDrawColor(221, 160, 221, 255)
 				surface.DrawTexturedRect(pos.x, pos.y + 85, 30, 30)
-				draw.SimpleText(npc_followingn, "VJBaseMedium", pos.x + 34, pos.y + 88, color(221, 160, 221, 255), 0, 0)
+				draw.SimpleText(npc_followingn, "VJBaseMedium", pos.x + 34, pos.y + 88, color(221, 160, 221, 255))
 			end
 		end
 		
@@ -764,19 +766,16 @@ local function VJ_HUD_TraceInfo(ply, curTime, srcW, srcH)
 			lerp_trace_hp_entid = entIndex
 			lerp_trace_hp = Lerp(8 * FrameTime(), lerp_trace_hp, ent_hp)
 			local hp_box = (190 * math_clamp(lerp_trace_hp, 0, ent_hpMax)) / ent_hpMax
-			local hp_num = (surface.GetTextSize(ent_hp .. "/" .. ent_hpMax)) / 2
-			local hp_numformat = "/" .. ent_hpMax
-			
+			local hp_format = "/" .. ent_hpMax
 			if ent:IsPlayer() then
 				hp_box = math_clamp(lerp_trace_hp, 0, 100) * 1.9
-				hp_num = (surface.GetTextSize(ent_hp .. "/100")) / 2
-				hp_numformat = "%"
+				hp_format = "%"
 			end
 			
 			draw.RoundedBox(box_roundness, pos.x, pos.y + 30, 190, 20, color_cyan_muted)
 			draw.RoundedBox(box_roundness, pos.x + box_border_thickness, pos.y + 30 + box_border_thickness, 190 - box_border_thickness_adjusted, 20 - box_border_thickness_adjusted, color_under)
 			draw.RoundedBox(box_roundness, pos.x + box_border_thickness, pos.y + 30 + box_border_thickness, hp_box - box_border_thickness_adjusted, 20 - box_border_thickness_adjusted, color_cyan_muted)
-			draw.SimpleText(string.format("%.0f",  lerp_trace_hp) .. hp_numformat,  "VJBaseSmall", (pos.x + 105) - hp_num, pos.y + 31, color_white)
+			draw.SimpleText(string.format("%.0f",  lerp_trace_hp) .. hp_format,  "VJBaseSmall", pos.x + 95, pos.y + 31.5, color_white, TEXT_ALIGN_CENTER)
 		end
 	end
 	//end
@@ -836,13 +835,13 @@ local function VJ_HUD_Scanner(ply, curTime, srcW, srcH)
 			if dist < entInfo.Heravorutyoun then
 				local startPos = ent:LocalToWorld(ent:OBBCenter()):ToScreen()
 				local matColor = (entInfo.DariKouyn.a == -1 and color(entInfo.DariKouyn.r, entInfo.DariKouyn.g, entInfo.DariKouyn.b, blinkAlpha)) or entInfo.DariKouyn
-				draw.SimpleText(entInfo.Anoon, "VJBaseMedium", startPos.x + 1, startPos.y + 1, matColor, 0, 0)
-				draw.SimpleText(convertToRealUnit(dist), "HudHintTextLarge", startPos.x + 30, startPos.y + 25, color_white, 0, 0)
+				draw.SimpleText(entInfo.Anoon, "VJBaseMedium", startPos.x, startPos.y, matColor)
+				draw.SimpleText(convertToRealUnit(dist), "HudHintTextLarge", startPos.x, startPos.y + 25, color_white, TEXT_ALIGN_LEFT)
 				
 				-- Goghme negar ge tsetsen e
 				surface.SetMaterial(entInfo.Negar)
 				surface.SetDrawColor(matColor)
-				surface.DrawTexturedRect(startPos.x - 32, startPos.y, 30, 30)
+				surface.DrawTexturedRect(startPos.x - 35, startPos.y, 30, 30)
 			end
 		end
 	end
