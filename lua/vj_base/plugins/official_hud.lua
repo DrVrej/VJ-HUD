@@ -671,11 +671,7 @@ local function VJ_HUD_TraceInfo(ply, curTime, srcW, srcH)
 		end
 		
 		-- Attempt to get the entity name
-		local ent_name = language.GetPhrase(ent_class)
-		if ent_name == ent_class && ent.PrintName && ent.PrintName != "" then
-			ent_name = ent.PrintName
-		end
-		draw.SimpleText(ent_name, "VJBaseMedium", pos.x, pos.y - 12, color_white)
+		draw.SimpleText(VJ.GetName(ent), "VJBaseMedium", pos.x, pos.y - 12, color_white)
 		draw.SimpleText(tostring(ent), "VJBaseSmall", pos.x, pos.y + 10, color_white_muted)
 		
 		-- Move the position up if we are not drawing the health bar
