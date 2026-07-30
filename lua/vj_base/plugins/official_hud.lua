@@ -653,7 +653,6 @@ local function VJ_HUD_TraceInfo(ply, curTime, srcW, srcH)
 		local ent_hpMax = ent:GetMaxHealth()
 		local ent_hpDraw = !ent:IsWorld() && !ent:IsVehicle() && ent_hp != 0
 		local ent_isNPC = ent:IsNPC()
-		local ent_class = ent:GetClass()
 		
 		local npc_info = string_explode("|", ply:GetNW2String("vj_hud_tr_npc_info"))
 		local npc_boss = npc_info[1]
