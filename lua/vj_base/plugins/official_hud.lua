@@ -42,7 +42,7 @@ if SERVER then
 					npc_followingn = followEnt == ply and "You" or followEnt:Nick()
 				elseif followEnt:IsNPC() or followEnt:IsNextBot() then
 					npc_followingn = list.Get("NPC")[followEnt:GetClass()].Name
-				else
+				elseif IsValid(followEnt) then
 					npc_followingn = followEnt:GetClass()
 				end
 			end
