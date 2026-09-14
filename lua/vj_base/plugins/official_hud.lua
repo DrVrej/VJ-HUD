@@ -150,10 +150,10 @@ end)
 ------ Static Variables ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local defaultHUD_Elements = {
-    ["CHudHealth"] = true,
-    ["CHudBattery"] = true,
+	["CHudHealth"] = true,
+	["CHudBattery"] = true,
 	["CHudSuitPower"] = true,
-    ["CHudAmmo"] = true,
+	["CHudAmmo"] = true,
 	["CHudSecondaryAmmo"] = true
 }
 
@@ -531,7 +531,7 @@ local function VJ_HUD_PlayerInfo(ply, curTime, srcW, srcH)
 	draw.SimpleText(kd, "VJBaseMedium", 293, srcH-63, color_white_muted)
 	
 	-- Movement speed
-    local speed;
+	local speed;
 	if usingMetric == 1 then
 		speed = math_round(ply:GetVelocity():Length() * 0.06861061108) .. "kph"
 	else
@@ -587,27 +587,27 @@ local middleLineW = 2
 local function VJ_HUD_Compass(ply, curTime, srcW, srcH)
 	if vj_hud_compass:GetInt() == 0 then return end
 	
-    local x, y = srcW / 2 - drawW / 2, 20
-    local yaw = (math.NormalizeAngle(ply:EyeAngles().y) + 180) / 360
-    local u1 = (yaw * texW) % texW / texW
-    local u2 = ((yaw * texW + drawW) % texW) / texW
+	local x, y = srcW / 2 - drawW / 2, 20
+	local yaw = (math.NormalizeAngle(ply:EyeAngles().y) + 180) / 360
+	local u1 = (yaw * texW) % texW / texW
+	local u2 = ((yaw * texW + drawW) % texW) / texW
 	
 	draw.RoundedBox(box_roundness, srcW / 2 - 160, y - 5, 320, 60, color_box)
 	
 	-- Compass
-    surface.SetMaterial(mat_compass)
-    surface.SetDrawColor(color_white_muted)
-    if u2 > u1 then
-        surface.DrawTexturedRectUV(x, y - 20, drawW, texH, u1, 0, u2, 1)
-    else -- Middle part between the end and start of the texture
-        local w1 = (1 - u1) * texW
-        surface.DrawTexturedRectUV(x, y - 20, w1 + 1.5, texH, u1, 0, 1, 1)
-        surface.DrawTexturedRectUV(x + w1, y - 20, drawW - w1 + 1.5, texH, 0, 0, u2, 1)
-    end
+	surface.SetMaterial(mat_compass)
+	surface.SetDrawColor(color_white_muted)
+	if u2 > u1 then
+		surface.DrawTexturedRectUV(x, y - 20, drawW, texH, u1, 0, u2, 1)
+	else -- Middle part between the end and start of the texture
+		local w1 = (1 - u1) * texW
+		surface.DrawTexturedRectUV(x, y - 20, w1 + 1.5, texH, u1, 0, 1, 1)
+		surface.DrawTexturedRectUV(x + w1, y - 20, drawW - w1 + 1.5, texH, 0, 0, u2, 1)
+	end
 	
 	-- Compass indicator
 	surface.SetMaterial(mat_compass_indicator)
-    surface.SetDrawColor(color_cyan_muted)
+	surface.SetDrawColor(color_cyan_muted)
 	surface.DrawTexturedRect(srcW / 2 - 4, y + 20, 10, 10)
 	
 	-- Distance numbers
