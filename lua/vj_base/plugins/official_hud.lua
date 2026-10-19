@@ -31,8 +31,8 @@ if SERVER then
 			local npc_boss = (ent.VJ_ID_Boss and "1") or "0"
 			local npc_guard = (ent.IsGuard and "1") or "0"
 			local npc_medic = (ent.IsMedic and "1") or "0"
-			local npc_controlled = (ent.VJ_IsBeingControlled and "1") or "0"
-			local npc_iscontroller = ((ply.VJ_IsControllingNPC and IsValid(ply.VJ_TheControllerEntity:GetNPC()) and ply.VJ_TheControllerEntity:GetNPC() == ent) and "1") or "0"
+			local npc_controlled = (ent.VJ_Controlled and "1") or "0"
+			local npc_iscontroller = ((ply.VJ_Controlling and IsValid(ply.VJ_Controller:GetNPC()) and ply.VJ_Controller:GetNPC() == ent) and "1") or "0"
 			local npc_following = "0"
 			local npc_followingn = "Unknown"
 			if ent.IsFollowing then
