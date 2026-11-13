@@ -5,16 +5,14 @@
 -----------------------------------------------*/
 VJ.AddPlugin("VJ HUD", "HUD", "1.3.0")
 
-/*----------------------------------------------------------
+--[[---------------------------------------------------------
 	-- Screen Helper --
 	Down = Positive
 	Up = Negative
 	Right = Positive
 	Left = Negative
-----------------------------------------------------------*/
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
------- SERVER ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------]]
+
 if SERVER then
 	-- Initialize player's networked variables
 	gameevent.Listen("player_activate")
@@ -27,7 +25,7 @@ if SERVER then
 	-- IsBoss | Disposition | IsGuard | IsMedic | Controlled | If traced NPC is being controlled by local player | Following Player | The Player its following
 	net.Receive("vj_hud_ent_info", function(len, ply)
 		local ent = net.ReadEntity()
-		if IsValid(ply) && IsValid(ent) && ent:IsNPC() then
+		if IsValid(ply) and IsValid(ent) and ent:IsNPC() then
 			local npc_boss = (ent.VJ_ID_Boss and "1") or "0"
 			local npc_guard = (ent.IsGuard and "1") or "0"
 			local npc_medic = (ent.IsMedic and "1") or "0"
@@ -52,9 +50,8 @@ if SERVER then
 end
 
 if !CLIENT then return end
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
------- ConVars ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--------------------------------------=[ CONVARS ]=--------------------------------------
 -- Main Components
 local vj_hud_enabled = VJ.AddClientConVar("vj_hud_enabled", 1, "Enable VJ HUD")
 local vj_hud_health = VJ.AddClientConVar("vj_hud_health", 1, "Enable health and suit")
@@ -81,9 +78,8 @@ local vj_hud_disablegmod = VJ.AddClientConVar("vj_hud_disablegmod", 1, "Disable 
 local vj_hud_disablegmodcross = VJ.AddClientConVar("vj_hud_disablegmodcross", 1, "Disable Garry's Mod Crosshair")
 
 local cl_drawhud = GetConVar("cl_drawhud")
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
------- Menu ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--------------------------------------=[ MENU ]=--------------------------------------
 hook.Add("PopulateToolMenu", "VJ_ADDTOMENU_HUD_SETTINGS", function()
 	spawnmenu.AddToolMenuOption("DrVrej", "HUDs", "VJ HUD Settings", "Settings", "", "", function(panel)
 		panel:AddControl("Button", {Text = "#vjbase.menu.general.reset.everything", Command = "vj_hud_enabled 1\n vj_hud_disablegmod 1\n vj_hud_health 1\n vj_hud_ammo 1\n vj_hud_playerinfo 1\n vj_hud_trace 1\n vj_hud_compass 1\n vj_hud_scanner 1\n vj_hud_metric 0\n vj_hud_disablegmodcross 1\n vj_hud_ch_enabled 1\n vj_hud_ch_size 50\n vj_hud_ch_opacity 255\n vj_hud_ch_r 0\n vj_hud_ch_g 255\n vj_hud_ch_b 0\n vj_hud_ch_mat 0\n vj_hud_ch_invehicle 1\n vj_hud_trace_limited 0"})
@@ -146,9 +142,8 @@ hook.Add("PopulateToolMenu", "VJ_ADDTOMENU_HUD_SETTINGS", function()
 		panel:NumSlider("Crosshair Opacity", "vj_hud_ch_opacity", 0, 255, 0)
 	end)
 end)
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
------- Static Variables ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--------------------------------------=[ STATIC VARIABLES ]=--------------------------------------
 local defaultHUD_Elements = {
 	["CHudHealth"] = true,
 	["CHudBattery"] = true,
@@ -219,9 +214,8 @@ local mat_following = Material("vj_hud/following.png", "mips smooth")
 local mat_info = Material("vj_hud/info.png", "mips smooth")
 local mat_compass = Material("vj_hud/compass.png", "smooth noclamp 1")
 local mat_compass_indicator = Material("vj_hud/compass_indicator.png", "smooth")
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
------- Helpers ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--------------------------------------=[ HELPERS ]=--------------------------------------
 local usingMetric = 0
 -- Convert Source world unit to a real unit (meters / feet)
 local function convertToRealUnit(worldUnit)
@@ -231,7 +225,7 @@ local function convertToRealUnit(worldUnit)
 		return math_round(worldUnit * 0.0625, 2) .. " FT"
 	end
 end
----------------------------------------------------------------------------------------------------------------------------------------------
+
 local traceMask = bit.bor(CONTENTS_SOLID, CONTENTS_MOVEABLE, CONTENTS_MONSTER, CONTENTS_WINDOW, CONTENTS_GRATE, CONTENTS_DEBRIS, CONTENTS_HITBOX)
 --
 local function getTrace(ply)
@@ -250,9 +244,8 @@ local function getTrace(ply)
 	ply.VJ_PlayerTrace = tr
 	return tr
 end
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
------- Crosshair ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--------------------------------------=[ CROSSHAIR ]=--------------------------------------
 local crosshairMats = {
 	[0] = mat_crossh1,
 	[1] = mat_crossh2,
@@ -267,19 +260,18 @@ local crosshairMats = {
 --
 local function VJ_HUD_Crosshair(ply, curTime, srcW, srcH)
 	if vj_hud_ch_enabled:GetInt() == 0 then return end
-	if ply:InVehicle() && vj_hud_ch_invehicle:GetInt() == 0 then return end
+	if ply:InVehicle() and vj_hud_ch_invehicle:GetInt() == 0 then return end
 	
 	local size = vj_hud_ch_size:GetInt()
 	surface.SetMaterial(crosshairMats[vj_hud_ch_mat:GetInt()])
 	surface.SetDrawColor(vj_hud_ch_r:GetInt(), vj_hud_ch_g:GetInt(), vj_hud_ch_b:GetInt(), vj_hud_ch_opacity:GetInt())
 	surface.DrawTexturedRect(srcW / 2 - size / 2, srcH / 2 - size / 2, size, size)
 end
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
------- Ammo ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--------------------------------------=[ AMMO ]=--------------------------------------
 local function VJ_HUD_Ammo(ply, curTime, srcW, srcH)
 	if vj_hud_ammo:GetInt() == 0 then return end
-	if ply:InVehicle() && !ply:GetAllowWeaponsInVehicle() then return end -- If in a vehicle and can't use weapon, then don't draw
+	if ply:InVehicle() and !ply:GetAllowWeaponsInVehicle() then return end -- If in a vehicle and can't use weapon, then don't draw
 	
 	local weapon = ply:GetActiveWeapon()
 	if !IsValid(weapon) then
@@ -334,7 +326,7 @@ local function VJ_HUD_Ammo(ply, curTime, srcW, srcH)
 	local max_ammo = weapon:GetMaxClip1()
 	
 	if max_ammo == nil or max_ammo == 0 or max_ammo == -1 then max_ammo = false end
-	if pri_clip <= 0 && pri_reserve <= 0 then ammo_empty = false end
+	if pri_clip <= 0 and pri_reserve <= 0 then ammo_empty = false end
 	
 	if max_ammo != false then // If the current weapon has a proper clip size, then continue...
 		local perc_left = math_clamp((pri_clip / max_ammo) * 255, 2, 255) -- Find the percentage of the mag left in respect to the max ammo (proportional) | Clamp at min: 2, max: 255
@@ -343,11 +335,11 @@ local function VJ_HUD_Ammo(ply, curTime, srcW, srcH)
 		end
 	end
 		
-	if ammo_empty && pri_clip <= 0 then -- Mag is empty but has reserve
+	if ammo_empty and pri_clip <= 0 then -- Mag is empty but has reserve
 		ammo_pri = "--- / " .. pri_reserve
 		ammo_pri_c = color(255, 0, 0, empty_blink)
 	end
-	if pri_clip == -1 && sec_ammo_type == -1 then -- Uses primary only with no ammo reserve, ex: "weapon_rpg" or "weapon_frag"
+	if pri_clip == -1 and sec_ammo_type == -1 then -- Uses primary only with no ammo reserve, ex: "weapon_rpg" or "weapon_frag"
 		ammo_pri = tostring(pri_reserve)
 		ammo_pri_c = color_green_muted
 		ammo_sec = "---"
@@ -358,7 +350,7 @@ local function VJ_HUD_Ammo(ply, curTime, srcW, srcH)
 		ammo_sec = "---"
 		ammo_sec_c = color_orange_muted
 	end
-	if pri_ammo_type == -1 && sec_ammo_type == -1 then -- Doesn't use ammo
+	if pri_ammo_type == -1 and sec_ammo_type == -1 then -- Doesn't use ammo
 		ammo_unavailable = true
 		ammo_pri = "---"
 		ammo_pri_c = color_orange_muted
@@ -390,7 +382,7 @@ local function VJ_HUD_Ammo(ply, curTime, srcW, srcH)
 	if !ammo_unavailable then
 		local model_vm = ply:GetViewModel()
 		if weapon.CW_VM then model_vm = weapon.CW_VM end -- For CW 2.0 weapons
-		if weapon.Base == "mg_base" && weapon:HasFlag("Reloading") then model_vm = weapon:GetViewModel() end -- For MW Base weapons
+		if weapon.Base == "mg_base" and weapon:HasFlag("Reloading") then model_vm = weapon:GetViewModel() end -- For MW Base weapons
 		if model_vm:GetSequenceActivity(model_vm:GetSequence()) == ACT_VM_RELOAD or string.match(model_vm:GetSequenceName(model_vm:GetSequence()), "reload") then
 			local anim_perc = math_ceil(model_vm:GetCycle() * 100) -- Get the percentage of how long the reload animation is
 			local anim_dur = model_vm:SequenceDuration() - (model_vm:SequenceDuration() * model_vm:GetCycle()) -- Get the number of seconds until it finishes reloading
@@ -404,9 +396,8 @@ local function VJ_HUD_Ammo(ply, curTime, srcW, srcH)
 		end
 	end
 end
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
------- Health ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--------------------------------------=[ HEALTH ]=--------------------------------------
 local lerp_hp = 0
 local lerp_armor = 0
 --
@@ -490,9 +481,8 @@ local function VJ_HUD_Health(ply, curTime, srcW, srcH, plyAlive)
 		end
 	end
 end
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
------- Player Information ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--------------------------------------=[ PLAYER INFORMATION ]=--------------------------------------
 local fps = 0
 local next_fps = 0
 --
@@ -516,7 +506,7 @@ local function VJ_HUD_PlayerInfo(ply, curTime, srcW, srcH)
 	
 	-- Kill / death ratio
 	local kd;
-	if ply:Frags() == 0 && ply:Deaths() == 0 then
+	if ply:Frags() == 0 and ply:Deaths() == 0 then
 		kd = 0
 	elseif ply:Deaths() == 0 then
 		kd = ply:Frags()
@@ -576,9 +566,8 @@ local function VJ_HUD_PlayerInfo(ply, curTime, srcW, srcH)
 		draw.SimpleText(speedVehicle, "VJBaseMedium", 373, srcH-155, color_white_muted)
 	end
 end
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
------- Compass ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--------------------------------------=[ COMPASS ]=--------------------------------------
 local texW = 2048
 local texH = 55
 local drawW = 300
@@ -616,9 +605,8 @@ local function VJ_HUD_Compass(ply, curTime, srcW, srcH)
 	draw.SimpleText(math_round(dist, 2) .. " WU", "VJBaseSmall", srcW / 1.98, y + 36, color_white_muted, TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT)
 	draw.RoundedBoxEx(box_roundness, srcW / 2 - (middleLineW - 2), y + 37, middleLineW, 14, color_white_muted) -- Middle line
 end
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
------- Trace Information ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--------------------------------------=[ TRACE INFORMATION ]=--------------------------------------
 local lerp_trace_hp = 0
 local lerp_trace_hp_entid = 0
 --
@@ -629,14 +617,14 @@ local function VJ_HUD_TraceInfo(ply, curTime, srcW, srcH)
 	//PrintTable(trace)
 	if IsValid(trace.Entity) then
 		-- If trace limiting is enabled, then skip entities that are not NPCs or Players
-		if !ent.VJ_ID_Living && vj_hud_trace_limited:GetInt() == 1 then return end
+		if !ent.VJ_ID_Living and vj_hud_trace_limited:GetInt() == 1 then return end
 		
 		-- Skip the vehicle that the player is currently in
 		local curVehicle = ply:GetVehicle()
 		if IsValid(curVehicle) then
 			if ent == curVehicle then return end
 			local curVehicleParent = curVehicle:GetParent()
-			if IsValid(curVehicleParent) && ent == curVehicleParent then return end
+			if IsValid(curVehicleParent) and ent == curVehicleParent then return end
 		end
 		
 		-- Determine the main position and ensure that it stays within the screen bounds
@@ -651,7 +639,7 @@ local function VJ_HUD_TraceInfo(ply, curTime, srcW, srcH)
 		
 		local ent_hp = ent:Health()
 		local ent_hpMax = ent:GetMaxHealth()
-		local ent_hpDraw = !ent:IsWorld() && !ent:IsVehicle() && ent_hp != 0
+		local ent_hpDraw = !ent:IsWorld() and !ent:IsVehicle() and ent_hp != 0
 		local ent_isNPC = ent:IsNPC()
 		
 		local npc_info = string_explode("|", ply:GetNW2String("vj_hud_tr_npc_info"))
@@ -665,7 +653,7 @@ local function VJ_HUD_TraceInfo(ply, curTime, srcW, srcH)
 		local npc_followingn = npc_info[8]
 		
 		-- Don't trace the NPC we are controlling!
-		if ent_isNPC && npc_iscontroller == "1" then
+		if ent_isNPC and npc_iscontroller == "1" then
 			return
 		end
 		
@@ -775,9 +763,8 @@ local function VJ_HUD_TraceInfo(ply, curTime, srcW, srcH)
 	end
 	//end
 end
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
------- Proximity Scanner ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--------------------------------------=[ PROXIMITY SCANNER ]=--------------------------------------
 local AbranknerVorKedne = {
 	-- Barz Abrankner --
 	gmod_button = {Anoon = "Button", Heravorutyoun = 200, DariKouyn = color_white_muted, Negar = mat_info},
@@ -822,7 +809,7 @@ local function VJ_HUD_Scanner(ply, curTime, srcW, srcH)
 	local plyPos = ply:GetPos()
 	for _, ent in ipairs(ents.FindInSphere(plyPos, 320)) do
 		local entInfo = AbranknerVorKedne[ent:GetClass()]
-		if ent.VJ_ID_Grenade && !entInfo then -- Check for grenade tag if no entity is found
+		if ent.VJ_ID_Grenade and !entInfo then -- Check for grenade tag if no entity is found
 			entInfo = grenadeObj
 		end
 		if entInfo then
@@ -841,11 +828,10 @@ local function VJ_HUD_Scanner(ply, curTime, srcW, srcH)
 		end
 	end
 end
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
------- Main ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--------------------------------------=[ MAIN ]=--------------------------------------
 hook.Add("HUDPaint", "vj_hud", function()
-	if vj_hud_enabled:GetInt() != 0 && cl_drawhud:GetInt() == 1 then
+	if vj_hud_enabled:GetInt() != 0 and cl_drawhud:GetInt() == 1 then
 		local ply = LocalPlayer()
 		local curTime = CurTime()
 		local srcW = ScrW()
@@ -863,9 +849,9 @@ hook.Add("HUDPaint", "vj_hud", function()
 		VJ_HUD_Health(ply, curTime, srcW, srcH, plyAlive)
 	end
 end)
----------------------------------------------------------------------------------------------------------------------------------------------
+
 -- Control GMod's default HUD elements
 hook.Add("HUDShouldDraw", "vj_hud_hidegmod", function(name)
-	if vj_hud_disablegmod:GetInt() == 1 && defaultHUD_Elements[name] then return false end
-	if vj_hud_disablegmodcross:GetInt() == 1 && name == "CHudCrosshair" then return false end
+	if vj_hud_disablegmod:GetInt() == 1 and defaultHUD_Elements[name] then return false end
+	if vj_hud_disablegmodcross:GetInt() == 1 and name == "CHudCrosshair" then return false end
 end)
